@@ -22,12 +22,15 @@ const MusicViewer = ({ song, onBack }) => {
   const [activePartKey, setActivePartKey] = useState('full');
   const [showSettings, setShowSettings] = useState(false);
   const [audioFormat, setAudioFormat] = useState('flac');
+  const [isPerformanceMode, setIsPerformanceMode] = useState(false);
   const drawMeasureNumbers = settings.drawMeasureNumbers ?? true;
 
   // Media Player State
   const [activeTrack, setActiveTrack] = useState(null); // { type: 'audio' | 'video', url: string, partName: string }
 
   const webAudio = useWebAudio(activeTrack?.type === 'audio' ? activeTrack.url : null);
+  const [measureMap, setMeasureMap] = useState([]);
+  const [currentX, setCurrentX] = useState(0);
 
 
   useEffect(() => {
@@ -40,8 +43,11 @@ const MusicViewer = ({ song, onBack }) => {
         drawLyrics: true, 
         coloringEnabled: true, 
         followCursor: false,
-        renderSingleHorizontalStaffline: false
+        renderSingleHorizontalStaffline: isPerformanceMode
       });
+    } else {
+      // Re-configure horizontal mode if it changed
+      osmdRef.current.setOptions({ renderSingleHorizontalStaffline: isPerformanceMode });
     }
 
     const osmd = osmdRef.current;
@@ -66,7 +72,26 @@ const MusicViewer = ({ song, onBack }) => {
         osmd.EngravingRules.PageTopMargin = 5.0;
         osmd.EngravingRules.PageBottomMargin = 5.0;
         
+        
         osmd.render();
+
+        // Build Measure Map for Performance Mode paging
+        if (isPerformanceMode) {
+          const mList = [];
+          const graphicMeasures = osmd.GraphicSheet.MeasureList;
+          for (let i = 0; i < graphicMeasures.length; i++) {
+            const m = graphicMeasures[i][0]; // First staff's measure
+            if (m) {
+              mList.push({
+                index: i,
+                x: m.PositionAndShape.AbsolutePosition.x * 10 // Convert to pixels (OSMD units * 10)
+              });
+            }
+          }
+          setMeasureMap(mList);
+          setCurrentX(0);
+        }
+
         setLoading(false);
       } catch (err) { 
         console.error("OSMD Render Error:", err);
@@ -74,7 +99,7 @@ const MusicViewer = ({ song, onBack }) => {
         setLoading(false); 
       }
     })();
-  }, [song, activePartKey, drawMeasureNumbers]);
+  }, [song, activePartKey, drawMeasureNumbers, isPerformanceMode]);
 
   // UX Fix: Reset audio player when format changes to ensure new format is picked up
   useEffect(() => {
@@ -105,13 +130,154 @@ const MusicViewer = ({ song, onBack }) => {
     }
   };
 
+  // Performance Mode Unified Gesture Engine
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [initialX, setInitialX] = useState(0);
+  const dragStartTime = useRef(0);
+  const dragDistance = useRef(0);
+
+  const wasDragging = useRef(false);
+
+  const goToNextPage = useCallback((fromX = currentX) => {
+    if (!isPerformanceMode || measureMap.length === 0) return;
+    const viewportWidth = window.innerWidth;
+    const targetX = fromX + (viewportWidth * 0.85);
+    const nextMeasure = measureMap.find(m => m.x >= targetX);
+    if (nextMeasure) setCurrentX(nextMeasure.x);
+  }, [isPerformanceMode, measureMap, currentX]);
+
+  const goToPrevPage = useCallback((fromX = currentX) => {
+    if (!isPerformanceMode || measureMap.length === 0) return;
+    const viewportWidth = window.innerWidth;
+    const targetX = fromX - (viewportWidth * 0.85);
+    const prevMeasure = [...measureMap].reverse().find(m => m.x <= targetX);
+    setCurrentX(prevMeasure ? Math.max(0, prevMeasure.x) : 0);
+  }, [isPerformanceMode, measureMap, currentX]);
+
+  const handleGestureStart = (e) => {
+    if (!isPerformanceMode) return;
+    
+    // Only allow dragging to start if the target is the score or a child of the score
+    // This prevents dragging from starting in the empty margins or over the fixed title
+    const scoreElement = containerRef.current?.querySelector('.performance-score');
+    if (scoreElement && !scoreElement.contains(e.target)) return;
+
+    // Prevent browser default behavior (like swipe-to-back)
+    if (e.cancelable) e.preventDefault();
+
+    setIsDragging(true);
+    wasDragging.current = false;
+    dragStartTime.current = Date.now();
+    dragDistance.current = 0;
+    
+    const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    setDragStartX(clientX);
+    setInitialX(currentX);
+  };
+
+  const handleGestureMove = (e) => {
+    if (!isDragging) return;
+    
+    // Prevent browser default behavior (like swipe-to-back)
+    if (e.cancelable) e.preventDefault();
+
+    const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+    const delta = clientX - dragStartX;
+    dragDistance.current = Math.abs(delta);
+    
+    if (dragDistance.current > 10) {
+      wasDragging.current = true;
+    }
+    
+    setCurrentX(Math.max(0, initialX - delta));
+  };
+
+  const handleGestureEnd = (e) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const clientX = e.type.startsWith('touch') ? (e.changedTouches?.[0]?.clientX || dragStartX) : e.clientX;
+    const delta = clientX - dragStartX;
+    const duration = Date.now() - dragStartTime.current;
+    const viewportWidth = window.innerWidth;
+
+    // FLICK: Fast movement -> Page Turn from INITIAL position
+    if (duration < 250 && dragDistance.current > 50) {
+      if (delta < 0) goToNextPage(initialX);
+      else goToPrevPage(initialX);
+      return;
+    }
+
+    // DRAG: Snap to nearest measure (Only if we actually moved significantly)
+    if (wasDragging.current) {
+      const nearest = measureMap.reduce((prev, curr) => 
+        Math.abs(curr.x - currentX) < Math.abs(prev.x - currentX) ? curr : prev, 
+        measureMap[0]
+      );
+      setCurrentX(nearest ? nearest.x : initialX);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isPerformanceMode) return;
+      
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        goToNextPage(currentX);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        goToPrevPage(currentX);
+      } else if (e.key === 'Escape') {
+        // Allow browser to handle native full-screen exit while we handle app exit
+        setIsPerformanceMode(false);
+      }
+    };
+
+    const handleFullScreenChange = () => {
+      // If we are no longer in native full-screen but still in Performance Mode, exit performance mode
+      if (!document.fullscreenElement && isPerformanceMode) {
+        setIsPerformanceMode(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [isPerformanceMode, currentX, goToNextPage, goToPrevPage]);
+
   return (
-    <div className="viewer-container">
+    <div className={`viewer-container ${isPerformanceMode ? 'performance-mode' : ''}`}>
       <header className="viewer-header">
         <button onClick={onBack} className="btn-back">← Back</button>
         <div className="song-title-group"><h3>{song.title}</h3></div>
         <div className="viewer-actions">
-          <button className="btn-gear" onClick={() => setShowSettings(!showSettings)}>⚙️</button>
+          <button 
+            className={`btn-performance ${isPerformanceMode ? 'active' : ''}`} 
+            data-tooltip="Performance Mode"
+            onClick={() => {
+              const nextState = !isPerformanceMode;
+              setIsPerformanceMode(nextState);
+              if (nextState) {
+                document.documentElement.requestFullscreen().catch(() => {});
+              } else if (document.fullscreenElement) {
+                document.exitFullscreen().catch(() => {});
+              }
+            }}
+            title="Toggle Performance Mode"
+          >
+            ⛶
+          </button>
+          <button 
+            className="btn-gear" 
+            data-tooltip="Settings"
+            onClick={() => setShowSettings(!showSettings)}
+          >⚙️</button>
         </div>
       </header>
 
@@ -224,8 +390,61 @@ const MusicViewer = ({ song, onBack }) => {
 
       {loading && <div className="viewer-overlay"><div className="loader">Loading...</div></div>}
       
-      <div ref={wrapperRef} className="osmd-scroll-wrapper">
-        <div ref={containerRef} className="osmd-container" />
+      <div 
+        ref={wrapperRef} 
+        className={`osmd-scroll-wrapper ${isDragging ? 'dragging' : ''}`}
+        onMouseDown={handleGestureStart}
+        onMouseMove={handleGestureMove}
+        onMouseUp={handleGestureEnd}
+        onMouseLeave={handleGestureEnd}
+        onTouchStart={handleGestureStart}
+        onTouchMove={handleGestureMove}
+        onTouchEnd={handleGestureEnd}
+      >
+        <div 
+          ref={containerRef} 
+          className={`osmd-container ${isPerformanceMode ? 'performance-score' : ''}`}
+          style={{ '--performance-x': `-${currentX}px` }} 
+        />
+        
+        {isPerformanceMode && (
+          <div className="performance-overlay">
+            <div className="performance-title">{song.title}</div>
+            
+            <button 
+              className="performance-exit-btn" 
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPerformanceMode(false);
+              }}
+              title="Exit Performance Mode"
+            >
+              ×
+            </button>
+            
+            <div className="performance-nav-pill glass">
+              <button 
+                className="nav-pill-btn prev" 
+                onClick={(e) => { e.stopPropagation(); goToPrevPage(currentX); }}
+                title="Previous Measures"
+              >
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <div className="nav-pill-divider"></div>
+              <button 
+                className="nav-pill-btn next" 
+                onClick={(e) => { e.stopPropagation(); goToNextPage(currentX); }}
+                title="Next Measures"
+              >
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {activeTrack?.type === 'audio' && (

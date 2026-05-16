@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SettingsProvider, useSettings } from "./SettingsContext";
 import SettingsView from "./SettingsView";
 import MusicViewer from "./MusicViewer";
+import About from "./About";
 
 
 function AppContent() {
@@ -68,10 +69,19 @@ function AppContent() {
       {!selectedSong && (
         <nav className={`sidebar ${!isSidebarOpen ? "collapsed" : ""}`}>
             <div className="branding">
-              <h1 className="sidebar-title">Choral Songbook</h1>
-              <p className="sidebar-subtitle">
-                Military Voices of East Tennessee
-              </p>
+              <div className="branding-text">
+                <h1 className="sidebar-title">Choral Songbook</h1>
+                <p className="sidebar-subtitle">
+                  Military Voices of East Tennessee
+                </p>
+              </div>
+              <button 
+                className="sidebar-close-btn"
+                onClick={toggleSidebar}
+                aria-label="Close sidebar"
+              >
+                ✕
+              </button>
             </div>
             <ul className="nav-links">
               <li
@@ -94,6 +104,16 @@ function AppContent() {
               >
                 <span>⚙️</span> Settings
               </li>
+              <li
+                className={activeTab === "about" ? "active" : ""}
+                onClick={() => {
+                  setActiveTab("about");
+                  // On mobile, close sidebar after selecting
+                  if (window.innerWidth <= 900) setIsSidebarOpen(false);
+                }}
+              >
+                <span>🛡️</span> About & Legal
+              </li>
             </ul>
           </nav>
       )}
@@ -101,14 +121,16 @@ function AppContent() {
       <main className="main-content">
         {!selectedSong && (
           <header className="view-header">
-            <button 
-              className="sidebar-toggle" 
-              onClick={toggleSidebar}
-              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-            >
-              {isSidebarOpen ? "✕" : "☰"}
-            </button>
-            <div className="header-titles" style={{ flex: 1 }}>
+            {!isSidebarOpen && (
+              <button 
+                className="sidebar-toggle" 
+                onClick={toggleSidebar}
+                aria-label="Expand sidebar"
+              >
+                ☰
+              </button>
+            )}
+            <div className="header-titles" style={{ flex: 1, marginLeft: isSidebarOpen ? '0' : '1rem' }}>
               <h2>Choral Songbook</h2>
               <p>Military Voices of East Tennessee</p>
             </div>
@@ -205,6 +227,10 @@ function AppContent() {
           )}
 
           {activeTab === "settings" && !selectedSong && <SettingsView />}
+
+          {activeTab === "about" && !selectedSong && (
+            <About onBack={() => setActiveTab("browser")} />
+          )}
 
           {selectedSong && (
             <MusicViewer song={selectedSong} onBack={handleBackToLibrary} />
