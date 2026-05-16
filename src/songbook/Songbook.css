@@ -1808,6 +1808,22 @@
   touch-action: none;
 }
 
+/* THE SEAMLESS FIX: Kill all internal OSMD page artifacts and shadows */
+.performance-score {
+  max-width: none !important;      /* Uncap the 1200px container limit */
+  width: max-content !important;    /* Allow infinite horizontal growth */
+  box-shadow: none !important;      /* Kill the vertical 'seam' shadow */
+  background: transparent !important; /* Prevent layer color mismatches */
+}
+
+.performance-score * {
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
 /* THE ATOMIC FIX: Force the SVG to fit the viewport height perfectly */
 .performance-score svg {
   height: 86vh !important; /* Force fit within title/nav margins */

@@ -43,12 +43,13 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Metadata Hardening & Engraver Extraction (v1.1.13)
 - [x] Horizontal Centering Optimization (Asymmetric Margin Fix)
 - [x] Handheld Hardening & Atomic Vertical Fit (v1.1.65)
+- [x] Infinite Canvas & Artifact Elimination (v1.1.68)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
 - **Site ID**: `0c13f55a-3eb5-4763-8d8b-eb8b4476277d`
 - **Automation**: Use `.agents/skills/deploy_netlify/SKILL.md` and `.agents/skills/web_audio_precision_sync/SKILL.md` for core workflows.
-- **Precision**: v1.1.65 implements the Atomic Vertical Fit (86vh) for landscape mobile stability.
+- **Precision**: v1.1.68 implements the Atomic Vertical Fit (86vh) and Infinite Canvas (uncapped max-width) for flawless landscape mobile stability.
 - **Visuals**: Use the "Golden Ratio" asymmetric margins (2.0L / 10.0R) in OSMD to ensure score centering on virtual paper.
 
 ## Next Steps

@@ -63,7 +63,11 @@ const MusicViewer = ({ song, onBack }) => {
           drawSubtitle: false,
           drawComposer: false,
           drawLyrics: true,
-          renderSingleHorizontalStaffline: true
+          renderSingleHorizontalStaffline: true,
+          drawPageBackground: false, 
+          drawPageBackgrounds: false, // Cover all variations
+          drawPageShadows: false,     // Specifically kill shadows
+          pageBackgroundColor: 'transparent' 
         });
       } else {
         osmd.setOptions({
