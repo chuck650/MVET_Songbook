@@ -1,0 +1,67 @@
+[
+  {
+    "id": "Armed_Forces_Medley_72_SATB",
+    "title": "Armed Forces Medley '72 (SATB)",
+    "composer": "Unknown Composer",
+    "arranger": "Veteran Arrangement",
+    "copyright": "",
+    "key": "",
+    "files": {
+      "mscz": "/songs/Armed_Forces_Medley_72_SATB/Armed_Forces_Medley_72_SATB.mscz",
+      "mxl": "/songs/Armed_Forces_Medley_72_SATB/Armed_Forces_Medley_72_SATB.mxl",
+      "pdf": "/songs/Armed_Forces_Medley_72_SATB/Armed_Forces_Medley_72_SATB.pdf"
+    }
+  },
+  {
+    "id": "God_Bless_America",
+    "title": "God Bless America",
+    "composer": "Irving Berlin",
+    "arranger": "Traditional SATB",
+    "copyright": "© 1938 Irving Berlin Music Corp.",
+    "key": "",
+    "files": {
+      "mscz": "/songs/God_Bless_America/God_Bless_America.mscz",
+      "mxl": "/songs/God_Bless_America/God_Bless_America.mxl",
+      "pdf": "/songs/God_Bless_America/God_Bless_America.pdf"
+    }
+  },
+  {
+    "id": "God_Bless_America-G_Major",
+    "title": "God Bless America",
+    "composer": "Irving Berlin",
+    "arranger": "Veteran Arrangement",
+    "copyright": "© 1938,1939 by the Irving Berlin Music Company\nwith proceeds to benefit the Boy Scouts and Girl Scouts of America",
+    "key": "G Major",
+    "files": {
+      "mscz": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz",
+      "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl",
+      "pdf": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.pdf"
+    }
+  },
+  {
+    "id": "Star_Spangled_Banner",
+    "title": "Star Spangled Banner",
+    "composer": "Francis Scott Key, John Stafford Smith",
+    "arranger": "Veteran Arrangement",
+    "copyright": "",
+    "key": "A♭ Major",
+    "files": {
+      "mscz": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz",
+      "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl",
+      "pdf": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.pdf"
+    }
+  },
+  {
+    "id": "Stars_and_Stripes_Forever",
+    "title": "Stars and Stripes Forever",
+    "composer": "John Philiip Sousa",
+    "arranger": "Veteran Arrangement",
+    "copyright": "",
+    "key": "A♭ Major",
+    "files": {
+      "mscz": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz",
+      "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl",
+      "pdf": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.pdf"
+    }
+  }
+]

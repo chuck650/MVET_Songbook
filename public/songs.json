@@ -1,0 +1,182 @@
+[
+  {
+    "id": "Armed_Forces_Medley_72",
+    "title": "Armed Forces Medley '72",
+    "composer": "Unknown Composer",
+    "arranger": "Jason Hardy",
+    "engraver": "Chuck Nelson",
+    "copyright": "",
+    "key": "Eb major",
+    "mtime": "2026-05-16 07:31",
+    "files": {
+      "mscz": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz",
+      "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl",
+      "pdf": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.pdf",
+      "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp3",
+      "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.flac",
+      "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp4"
+    },
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp4"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp4"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp4"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp4"
+        }
+      }
+    },
+    "hashes": {
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.flac": "3ecb8dbf2560ae06c448acf91f02f488ea7abb65412a478258f28548b40322b0",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp3": "4b760581ef70e193877578b15245324935a4689f8165d847f27f2affa629047e",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp4": "105e15305a456d4ae474940d394a42b0cc6082486e14e6efcefc475118135d5e",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mxl": "a5f74aa1fdc41b1ec9632d26bcd1648d350842e900f3f1bdbf9be8dc39456bc8",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.flac": "2d91ca04ea8cccc93e1b221882e7dd020c3f66cea18e59708ad3b5a9dbc19e42",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp3": "874f2017aa885c8feb6cee1c16e4e050da388651088a9c85c74eac687e3e35c8",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp4": "69f6fbaf62cb07d6d239cf7614fd9d9aef2bef8b809299d4472ca33b05530e37",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mxl": "fb5896b405a01b2318463a5f5dbfc5592ace0b5f8e5ea4e782bae1a420c21adf",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.pdf": "08b1d4b5499678cebb84065abeda47953c17e65c9830e67109645b5020973031",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.flac": "ee79a38e95ffb9faba732aaf4ca7f60829e487cafc4b372f2cda57ca0e994d1e",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp3": "6f151fea798cab1cc92aaf885ab5d11106421fcd1dc3ac04c9413c711c1db5a2",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp4": "9027431033ca2f8d8a85f26c6ca8994ee1c39b6b9bb383f26330aec35e45d7dc",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mxl": "95299f806da3a21d0cbcb925baf698a18ae6b5f0fd409ed6536457f8fbf21020",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.flac": "2f7cbffb8fa28e3628753837f54887a54f23ae34760bba3ef60add23340657aa",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp3": "3c6e6ed0abe02a284bdfb825990ebb12595153319f2c7c1eacbce37a79721bd8",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp4": "8cae04863ee4242ffea36c6d2e9f88ee8afe9cc2b66706fa4f90df1da6cbd766",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mxl": "e74ee36ddc70fd121ba648dedba9a2525887bd084c40c49d2950e0dbce9aa25f",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.flac": "453fd8b9076a8b39033f493c6412f8cf41ba51e1c0a5f3ff49b6c60bb67a87a1",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp3": "a386b9fc1d94f33874e690dc5d8978995587144e4beb4dba23874a640acb8ea5",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp4": "b2075afa00f4b4605b2eb2a112f5ecdf1a26daa64e92b1d4f6054346ebd4e0ce",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz": "2f0b53fcbc1bee7cae3315a474d3c755337ba21455ab242c52a677dc19b42769",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl": "327aebf08aeef0eefca9175392c0c7cfd82b09819715d54d59839f64302013b7",
+      "/songs/Armed_Forces_Medley_72/thumbnail.png": "5a5e9f674e6058a097651ff2ebea31b075637af284e83338ce602f57512cb592",
+      "/songs/Armed_Forces_Medley_72/timing.json": "76c931a39616455633322527458c33e170a869b75e70ee895e14aad8b72fe8f6"
+    },
+    "thumbnail": "/songs/Armed_Forces_Medley_72/thumbnail.png"
+  },
+  {
+    "id": "God_Bless_America",
+    "title": "God Bless America",
+    "composer": "Irving Berlin",
+    "arranger": "Traditional SATB",
+    "engraver": "",
+    "copyright": "© 1938 Irving Berlin Music Corp.",
+    "key": "G major",
+    "mtime": "2026-05-10 10:41",
+    "files": {
+      "mscz": "/songs/God_Bless_America/God_Bless_America.mscz",
+      "mxl": "/songs/God_Bless_America/God_Bless_America.mxl",
+      "pdf": "/songs/God_Bless_America/God_Bless_America.pdf"
+    },
+    "parts": {},
+    "hashes": {
+      "/songs/God_Bless_America/God_Bless_America.mscz": "efa90b052761d8e4c36b64aadc01a246e38cbea9e3597b6fbcbfc8670009aec4",
+      "/songs/God_Bless_America/God_Bless_America.mxl": "50ae53fc58bed8a5a825159d4280bbde280f1e6b9f928d24d7a294a07451efa7",
+      "/songs/God_Bless_America/God_Bless_America.pdf": "520a7a27f04dc4ae01a7f7aca7f159e95d1b579eb7fa0c810243300eba6734bb",
+      "/songs/God_Bless_America/metadata.json": "237d26532e7df6ab69bde154436d5c99aed7b373751878d65d42a2154b4fda40",
+      "/songs/God_Bless_America/thumbnail.png": "a50da5b3e3938d246a24b61186f78b2791f8d49760e3f8a592cbc6fb39a5c6cb",
+      "/songs/God_Bless_America/timing.json": "df11975fb529b9b17ea975c77bca4fb6a1657f40693e399a653c66b727da3dfd"
+    },
+    "thumbnail": "/songs/God_Bless_America/thumbnail.png"
+  },
+  {
+    "id": "God_Bless_America-G_Major",
+    "title": "God Bless America",
+    "composer": "Irving Berlin",
+    "arranger": "Veteran Arrangement",
+    "engraver": "",
+    "copyright": "© 1938,1939 by the Irving Berlin Music Company\nwith proceeds to benefit the Boy Scouts and Girl Scouts of America",
+    "key": "G major",
+    "mtime": "2026-05-10 06:40",
+    "files": {
+      "mscz": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz",
+      "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl",
+      "pdf": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.pdf"
+    },
+    "parts": {},
+    "hashes": {
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz": "56e6a2e7d85d62df6af28c663960b85bfce3aefe5db15ac1c3199481cabc16c4",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl": "83ef895f640142d72a6088c34cbcca6c7c12c114b1d5dc371341226bff8c1ab0",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.pdf": "5b1429ada6c500e0a950a0f5859d40ef06472a89cdc36908c75600143d960dff",
+      "/songs/God_Bless_America-G_Major/thumbnail.png": "640e0e17a751831bca38e5e13c562ccc41f65213eb6d9e5cf1fe02d732c8b39f",
+      "/songs/God_Bless_America-G_Major/timing.json": "e48a0307599602b23ced998dd26cdadfbb0740857763bbc6c78a09a64d092d68"
+    },
+    "thumbnail": "/songs/God_Bless_America-G_Major/thumbnail.png"
+  },
+  {
+    "id": "Star_Spangled_Banner",
+    "title": "Star Spangled Banner",
+    "composer": "Francis Scott Key, John Stafford Smith",
+    "arranger": "Veteran Arrangement",
+    "engraver": "",
+    "copyright": "",
+    "key": "A♭ major",
+    "mtime": "2026-05-10 06:31",
+    "files": {
+      "mscz": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz",
+      "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl",
+      "pdf": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.pdf"
+    },
+    "parts": {},
+    "hashes": {
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz": "f963e74ae5b62fc293f2a017c5d8ca987d63bda76538ef582ba813834a8c4245",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl": "c191c93af3abad6343a98baf0d55d785549c697e392e3fba8e1e88b708c17349",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.pdf": "1067ce3290b5956222c0167f20edecabd5fb31ec273fe5ebb4789eff19b056a8",
+      "/songs/Star_Spangled_Banner/thumbnail.png": "8196bf6531b2a4cab7677707f03523c81ba193730ccbfce7b73080de0169cf3d",
+      "/songs/Star_Spangled_Banner/timing.json": "25aaf2c34eb8057bebc2acd09403a6335c7c8dbe9a1848112f8ab1ac175dc114"
+    },
+    "thumbnail": "/songs/Star_Spangled_Banner/thumbnail.png"
+  },
+  {
+    "id": "Stars_and_Stripes_Forever",
+    "title": "Stars and Stripes Forever",
+    "composer": "John Philiip Sousa",
+    "arranger": "Veteran Arrangement",
+    "engraver": "",
+    "copyright": "",
+    "key": "A♭ major",
+    "mtime": "2026-05-10 06:47",
+    "files": {
+      "mscz": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz",
+      "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl",
+      "pdf": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.pdf"
+    },
+    "parts": {},
+    "hashes": {
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz": "5c14f714253fdadbfe2b3553a68eeffbd7cc541c9bd0622bd109adc2a39288d9",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl": "b36235af6d01689b05e9ff8a28bf63901d168c5c684eec956a8c63ef59af82f2",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.pdf": "dc2767734d44a49d5cf34a5c24014ff1e35ecec1e842227cfbb378ae49d3de80",
+      "/songs/Stars_and_Stripes_Forever/thumbnail.png": "79f17af9b37cca24053b7b882c0425544c9798d44a74e84683cdcdda1e629d39",
+      "/songs/Stars_and_Stripes_Forever/timing.json": "4a4938d48022f62cb6b5c7c840a21ca10e4ad34f42b1d0bf02937879f1265859"
+    },
+    "thumbnail": "/songs/Stars_and_Stripes_Forever/thumbnail.png"
+  }
+]

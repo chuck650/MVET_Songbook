@@ -1,0 +1,27 @@
+{
+  "name": "mvet-songbook",
+  "private": true,
+  "version": "1.1.25",
+  "type": "module",
+  "scripts": {
+    "bump-version": "node scripts/bump-version.cjs",
+    "generate-manifest": "node scripts/generate-manifest.cjs && node scripts/generate-timing-maps.cjs",
+    "dev": "npm run generate-manifest && vite",
+    "build": "npm run bump-version && npm run generate-manifest && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "fast-xml-parser": "^5.7.3",
+    "opensheetmusicdisplay": "^1.9.9",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.1",
+    "vite-plugin-pwa": "^0.20.0"
+  }
+}

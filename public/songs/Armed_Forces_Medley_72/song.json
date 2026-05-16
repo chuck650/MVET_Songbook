@@ -1,0 +1,48 @@
+{
+  "files": {
+    "mscz": "Armed_Forces_Medley_72.mscz",
+    "mxl": "Armed_Forces_Medley_72.mxl",
+    "pdf": "Armed_Forces_Medley_72-SATB.pdf",
+    "mp3": "Armed_Forces_Medley_72.mp3",
+    "flac": "Armed_Forces_Medley_72.flac",
+    "mp4": "Armed_Forces_Medley_72.mp4"
+  },
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Alto.mxl",
+        "mp3": "Armed_Forces_Medley_72-Alto.mp3",
+        "flac": "Armed_Forces_Medley_72-Alto.flac",
+        "mp4": "Armed_Forces_Medley_72-Alto.mp4"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Bass.mxl",
+        "mp3": "Armed_Forces_Medley_72-Bass.mp3",
+        "flac": "Armed_Forces_Medley_72-Bass.flac",
+        "mp4": "Armed_Forces_Medley_72-Bass.mp4"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Soprano.mxl",
+        "mp3": "Armed_Forces_Medley_72-Soprano.mp3",
+        "flac": "Armed_Forces_Medley_72-Soprano.flac",
+        "mp4": "Armed_Forces_Medley_72-Soprano.mp4"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Tenor.mxl",
+        "mp3": "Armed_Forces_Medley_72-Tenor.mp3",
+        "flac": "Armed_Forces_Medley_72-Tenor.flac",
+        "mp4": "Armed_Forces_Medley_72-Tenor.mp4"
+      }
+    }
+  }
+}
