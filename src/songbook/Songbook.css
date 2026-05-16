@@ -1792,24 +1792,27 @@
 }
 
 .performance-score {
+  /* Combined transform: Performance X movement */
   transform: translateX(var(--performance-x, 0px));
+  transform-origin: left center;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: grab; /* Idle direct-manipulation icon - active only on paper */
+  cursor: grab;
   background: #fff;
   width: max-content; 
   min-width: 100vw;
-  height: auto !important; /* Force content-only height */
-  min-height: auto !important; /* Override legacy stretching */
-  align-self: center; /* Prevent stretching to full viewport height */
-  margin: 0;
-  padding: 0;
-  box-shadow: none;
-  border-radius: 0;
+  height: 100vh !important; /* Force container to viewport height */
   display: flex;
   align-items: center; 
   justify-content: flex-start;
   box-sizing: border-box;
-  touch-action: none; /* Restricted to the score surface */
+  touch-action: none;
+}
+
+/* THE ATOMIC FIX: Force the SVG to fit the viewport height perfectly */
+.performance-score svg {
+  height: 86vh !important; /* Force fit within title/nav margins */
+  width: auto !important; /* Maintain musical aspect ratio */
+  display: block;
 }
 
 .osmd-scroll-wrapper.dragging .performance-score {
@@ -1845,19 +1848,19 @@
 /* Floating Navigation Pill */
 .performance-nav-pill {
   position: absolute;
-  bottom: 40px;
+  bottom: 16px; /* Moved lower to stay near the screen edge */
   left: 50%;
   transform: translateX(-50%);
   height: 56px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.04); /* Exact match to exit button */
+  border: none;
   border-radius: 28px;
   display: flex;
   align-items: center;
   padding: 0 8px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: none; /* Exact match to exit button */
   pointer-events: auto; /* Catch taps for buttons */
+  z-index: 1300;
 }
 
 .nav-pill-btn {
@@ -1868,7 +1871,7 @@
   justify-content: center;
   background: transparent;
   border: none;
-  color: #334155;
+  color: #475569; /* Exact match to exit button icon color */
   cursor: pointer;
   border-radius: 20px;
   transition: all 0.2s ease;
@@ -1893,8 +1896,8 @@
 /* Performance Mode Exit Button */
 .performance-exit-btn {
   position: absolute;
-  top: 24px;
-  left: 24px;
+  top: 12px; /* Moved higher to clear the top margin */
+  left: 12px;
   width: 44px;
   height: 44px;
   border-radius: 50%;

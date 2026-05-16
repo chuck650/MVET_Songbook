@@ -45,12 +45,39 @@ const MusicViewer = ({ song, onBack }) => {
         followCursor: false,
         renderSingleHorizontalStaffline: isPerformanceMode
       });
-    } else {
-      // Re-configure horizontal mode if it changed
-      osmdRef.current.setOptions({ renderSingleHorizontalStaffline: isPerformanceMode });
     }
 
     const osmd = osmdRef.current;
+    try {
+      if (!osmd) return;
+
+      // Set performance-specific options
+      if (isPerformanceMode) {
+        // High-resolution baseline for Performance Mode
+        // The 'Atomic Vertical Fit' in CSS handles the exact scaling to the viewport height.
+        const optimalZoom = 0.8;
+        
+        osmd.setOptions({
+          zoom: optimalZoom,
+          drawTitle: false,
+          drawSubtitle: false,
+          drawComposer: false,
+          drawLyrics: true,
+          renderSingleHorizontalStaffline: true
+        });
+      } else {
+        osmd.setOptions({
+          zoom: 1.0,
+          drawTitle: true,
+          drawSubtitle: true,
+          drawComposer: true,
+          drawLyrics: true,
+          renderSingleHorizontalStaffline: false
+        });
+      }
+    } catch (e) {
+        console.error("OSMD Option Update Error:", e);
+    }
     
     (async () => {
       setLoading(true);
@@ -91,9 +118,10 @@ const MusicViewer = ({ song, onBack }) => {
           setMeasureMap(mList);
           setCurrentX(0);
         }
-
+        osmd.render();
         setLoading(false);
-      } catch (err) { 
+      } catch (err) {
+ 
         console.error("OSMD Render Error:", err);
         setError("Render Fail"); 
         setLoading(false); 

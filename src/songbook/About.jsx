@@ -1,5 +1,6 @@
 import React from 'react';
 import './About.css';
+import { VERSION } from '../version';
 
 const About = ({ onBack }) => {
   return (
@@ -78,7 +79,7 @@ const About = ({ onBack }) => {
       </main>
 
       <footer className="about-footer">
-        <p>© 2026 MVET Songbook Project • v1.1.53</p>
+        <p>© 2026 MVET Songbook Project • v{VERSION}</p>
       </footer>
     </div>
   );
