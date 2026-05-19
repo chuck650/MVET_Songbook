@@ -48,6 +48,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Universal Symmetric Margins & Decoupled Performance Scroller (v1.2.12)
 - [x] Production Deployment of v1.2.13 (Hardened Margins & Performance Mode Scroller)
 - [x] GitHub Pages Migration & Dynamic Path Resolution Hardening (v1.2.14)
+- [x] ESM, TypeScript & ESLint Modernization (Strict TSC/Linter Compilation passing)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -56,11 +57,12 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - **Precision**: v1.1.68 implements the Atomic Vertical Fit (86vh) and Infinite Canvas (uncapped max-width) for flawless landscape mobile stability.
 - **Visuals**: Universal symmetric margins (4.0L / 4.0R) ensure the sheet music is flawlessly centered under the title across all device types and orientations, preventing any right-skew or overflow.
 - **Performance Mode**: Unconstrained `:not(.performance-mode)` SVG scaling ensures the single horizontal staffline renders at its full crisp width without vertical squishing.
+- **Type-Safety & Code Standards**: TypeScript strict mode compiles flawlessly with a robust ESLint v9 configuration to guard all Web Audio and score parsing interfaces.
 
 ## Next Steps
-1. Implement real-time metronome overlay synced to the Web Audio clock.
-2. Finalize Web Audio gain/panning for S/A and T/B part isolation.
-3. Optimize PWA caching for decoded AudioBuffers.
+1. Decompose the monolithic `MusicViewer.tsx` into clean, atomic subcomponents (`AudioMiniPlayer.tsx`, `RehearsalDrawer.tsx`, etc.).
+2. Segment the modular stylesheets for isolated components from `Songbook.css`.
+3. Finalize Web Audio gain/panning for Soprano/Alto and Tenor/Bass isolated track mix adjustments.
 
 ---
 *Last updated by Antigravity on 2026-05-19*
