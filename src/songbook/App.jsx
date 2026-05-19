@@ -156,7 +156,7 @@ function AppContent() {
                   >
                     <div className="song-card-preview">
                       {song.thumbnail ? (
-                        <img src={song.thumbnail} alt={song.title} />
+                        <img src={resolvePath(song.thumbnail)} alt={song.title} />
                       ) : (
                         <div className="preview-placeholder">
                           <div className="music-staff-lines"></div>
