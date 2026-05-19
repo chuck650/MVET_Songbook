@@ -12,7 +12,18 @@
  */
 export function resolvePath(path?: string): string {
   if (!path) return '';
-  const base = import.meta.env.BASE_URL || '/';
+  
+  let base = '/';
+  if (typeof window !== 'undefined') {
+    const isGitHubPagesHost = window.location.hostname.endsWith('github.io');
+    const hasSubdirectory = window.location.pathname.startsWith('/MVET_Songbook');
+    
+    if (isGitHubPagesHost || hasSubdirectory) {
+      base = '/MVET_Songbook/';
+    }
+  } else {
+    base = import.meta.env.BASE_URL || '/';
+  }
   
   if (path.startsWith('/')) {
     // Slice off trailing slash from base if present (e.g. '/MVET_Songbook/' -> '/MVET_Songbook')

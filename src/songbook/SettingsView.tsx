@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSettings } from './SettingsContext';
 import { Song } from '../types/songbook';
+import { resolvePath } from '../utils/resolvePath';
 
 interface DownloadItem {
   url: string;
@@ -19,7 +20,7 @@ const SettingsView: React.FC = () => {
       setSyncStatus('syncing');
       setSyncProgress(0);
       
-      const response = await fetch('/songs.json');
+      const response = await fetch(resolvePath('/songs.json'));
       const songs: Song[] = await response.json();
       
       // Load local hash manifest to detect changes
