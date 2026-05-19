@@ -6,11 +6,12 @@
     "arranger": "Jason Hardy",
     "engraver": "Chuck Nelson",
     "copyright": "",
-    "key": "Eb major",
-    "mtime": "2026-05-16 15:18",
+    "key": "",
+    "mtime": "2026-05-18 12:15",
     "files": {
       "mscz": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz",
       "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl",
+      "osmd": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.mxl",
       "pdf": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.pdf",
       "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp3",
       "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.flac",
@@ -52,33 +53,60 @@
           "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.flac",
           "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp4"
         }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mp4"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mxl": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mxl",
+          "mp3": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mp3",
+          "flac": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.flac",
+          "mp4": "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mp4"
+        }
       }
     },
     "hashes": {
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.flac": "575fb7039e5844279bc272177e5885f1ee1d94539b03075440cfe61c878314f8",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp3": "4b760581ef70e193877578b15245324935a4689f8165d847f27f2affa629047e",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp4": "6009a376c681720c9b62f08f5510d41c25c36f5a87da5e31087fa34d194f803b",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mxl": "cb03aa253a0c62236b7c204114bffb4b8184437a97ceac91e7b94670da514f11",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.flac": "791164c189575dc764e02e997c6a8d6a8940ba4dc65d599df3092a52a709f2a9",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp3": "874f2017aa885c8feb6cee1c16e4e050da388651088a9c85c74eac687e3e35c8",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp4": "dad77a96bb21ca981cc0a5b0e8f3f8e9c9c19fee9a955a35edeb717b370cae54",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mxl": "51cb99b9d97de7a0ab4accb89803aadba4a5429a99e176e460fd3f26b7ba3595",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.pdf": "bbc92d44fe002a5f35327b3616d66c8b891abe450c1c3e4ae36c1576a97d9b45",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.flac": "a8b50560cbc90ed11bae0a918336e7833a259818362e7b3d3486c93c373ad1da",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp3": "6f151fea798cab1cc92aaf885ab5d11106421fcd1dc3ac04c9413c711c1db5a2",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp4": "ec1c55abdb54b0fe52f6108848f3cc36352a01646be8f24f836eeb91cc35d489",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mxl": "8db9a51a1b086c293710dcebfae292dc4812d1ea7003e7fc14f86d4ba6b50fe3",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.flac": "a221c3f0dd94a7c71dab624b3f5371cb8ec440fc8b72af317627b0586111a710",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp3": "3c6e6ed0abe02a284bdfb825990ebb12595153319f2c7c1eacbce37a79721bd8",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp4": "0dc106788b0c89be70138a1ae7f3721578782bce08f5cb5765afc88e9ac790f7",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mxl": "a38a2ffbdf2760716530e2afb22dbba313fc6c6d13473fde42909e5741857620",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.flac": "78e11db37d3fe5d2aa721167f77c9f4fd49393a463562be9faf00dd9ae3bfd42",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp3": "a386b9fc1d94f33874e690dc5d8978995587144e4beb4dba23874a640acb8ea5",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp4": "7d996b650ad385f22876ab1abbbab5cf290ad41691d2f8237760e58c45fb1626",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz": "e9be112044bcd80d963de5f0e58aeebb1e16d0fc677f2e29e3ed1536294cd2ec",
-      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl": "0b6a809b851372325cacfd6789042ec9a3794825606db7312515a38ab48534e5",
-      "/songs/Armed_Forces_Medley_72/thumbnail.png": "5a5e9f674e6058a097651ff2ebea31b075637af284e83338ce602f57512cb592",
-      "/songs/Armed_Forces_Medley_72/timing.json": "76c931a39616455633322527458c33e170a869b75e70ee895e14aad8b72fe8f6"
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.flac": "1b723fbf9739379750300b0e1e33fbedfa6ce2a1a01ee36b7b8b3034781df9a3",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp3": "0cf3a087cde592e531ded6e538162ecb8fb181a79bc70e8cf31bae190f978fd9",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mp4": "a049de0056fca384fad493ab3118e8434492a2bb15d626575b7bef54ccc998c9",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Alto.mxl": "c02051b898259710b674c8fe391250b2fd870350b84fabac5d074a2eb00a7239",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.flac": "811796a5df2cddc56378875bd6bc81633f49eaf90935977055fca66f0ee64bf6",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp3": "7e96770fe16d4a6a025b701c54e17ba2b50d3afa41302c80a2e300d942dcc3fe",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mp4": "9e4ace03734af84d572ccc7a2029f286de5c9b7f46f50b115a333b16b6d834cb",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Bass.mxl": "92082dea8d28c33b8c1255b227b602c5e471af419652cf740553d454faf90fd2",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.flac": "8198e219fb4d1baa5664b794e45e2122e3f80158494c45d3e8979717361a0fb9",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mp3": "b019a231cf78b40616c78f24024f2dff431ff9987d333b854d52b79fdcba6506",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mp4": "4d4e92995ae8eb42aa12be9fe8a3a80b46a8b11a0064e9ea9b1836c2bbeb7eb0",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Men.mxl": "9bf753100995408871e3ca80fcc776de3474fc8c23c260fc3b9c2d88c9ba92de",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.mscz": "3625a2bb25ff23ce4aadf91aaf918c27d0200e92243a52c1c9f983531b2d8eba",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.mxl": "06f4abed5dd553f4cb8b0ccac5f52e65d83ac5db0c36186fad9bddfd9b8e7b75",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-SATB.pdf": "8a5ff38d6812b28af0a6119b92abc18971006f8f583ca76dcfbf4a68b9d13519",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.flac": "957f29c2999d0e5f4ee6abf25ed39891269880cf84c79509084e24152defcd38",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp3": "f7b26c62ed65203ad14e9d187b28d265bcde8076795f915922b6cdd1a78e9c6a",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mp4": "5f3a785d6e11539cc95dba681e3a8abaff72ef0bb7162e4a27a5c473470da7e3",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Soprano.mxl": "cf2d72e24cfe069790c9c469e7a7d8e490dd1d4adc47029961d947909706727d",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.flac": "c55e66d4046fde7feb9d0641ff9117183723b0ef046e0bf28a987df524b23605",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp3": "25b56e2f9493f105437d3adc3e7f3927936bbb31a9a42139350e011c405bb5d3",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mp4": "f0699e0c16cc224da8bfa6c68af212c3232a73e7fb5d70dbe306839e1313063f",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Tenor.mxl": "f7193f848744d38f14cfbc7d11715f4201be93ea9337a22a3ff2a5ebacb80c26",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.flac": "fdbaeea9113abacff5faf06837f4eef5122cc240c7dee5c3b8a078dd5746eb0c",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mp3": "e729794693db2410a06274f73a09a185afb4537c1e6480cfc970e776e3a335ae",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mp4": "bbc43214a0853c9257609be3d95bfbec3ccd3acc5cf185918927f9dad62d7247",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72-Women.mxl": "ad56f864d5cff9c68fd60e9b9461677f6d8ab379985dfe3f0ca21ab1de362dd5",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.flac": "74f4289fa5c4dab7ca15d76d850ec8c0be2e4653df9c2b74e53ac8ec2411eb1d",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp3": "9f7511134482199dcc428427f165fc1d6e2acb047e10f4b0db2357d1a3dfe051",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp4": "ca6ea9a7eabc3efaadeed335473b7b94c1a0bf63aca7be4309375f72f08e7aa2",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz": "235c97f3d06bae5e5061a77d5096624f9c1fd4ac1fd74d5b2e503d498f0690da",
+      "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl": "794af49de22486b051c7ed7ecd98473bce8c1be4f049f59edd3239fd8f4977c9",
+      "/songs/Armed_Forces_Medley_72/thumbnail.png": "5a5e9f674e6058a097651ff2ebea31b075637af284e83338ce602f57512cb592"
     },
     "thumbnail": "/songs/Armed_Forces_Medley_72/thumbnail.png"
   },
@@ -87,23 +115,109 @@
     "title": "God Bless America",
     "composer": "Irving Berlin",
     "arranger": "Traditional SATB",
-    "engraver": "",
+    "engraver": "Chuck Nelson",
     "copyright": "© 1938 Irving Berlin Music Corp.",
-    "key": "G major",
-    "mtime": "2026-05-10 10:41",
+    "key": "E♭ major",
+    "mtime": "2026-05-18 11:20",
     "files": {
       "mscz": "/songs/God_Bless_America/God_Bless_America.mscz",
       "mxl": "/songs/God_Bless_America/God_Bless_America.mxl",
-      "pdf": "/songs/God_Bless_America/God_Bless_America.pdf"
+      "osmd": "/songs/God_Bless_America/God_Bless_America-SATB.mxl",
+      "pdf": "/songs/God_Bless_America/God_Bless_America-SATB.pdf",
+      "mp3": "/songs/God_Bless_America/God_Bless_America.mp3",
+      "flac": "/songs/God_Bless_America/God_Bless_America.flac",
+      "mp4": "/songs/God_Bless_America/God_Bless_America.mp4"
     },
-    "parts": {},
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Soprano.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Soprano.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Soprano.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Soprano.mp4"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Alto.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Alto.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Alto.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Alto.mp4"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Tenor.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Tenor.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Tenor.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Tenor.mp4"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Bass.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Bass.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Bass.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Bass.mp4"
+        }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Women.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Women.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Women.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Women.mp4"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mxl": "/songs/God_Bless_America/God_Bless_America-Men.mxl",
+          "mp3": "/songs/God_Bless_America/God_Bless_America-Men.mp3",
+          "flac": "/songs/God_Bless_America/God_Bless_America-Men.flac",
+          "mp4": "/songs/God_Bless_America/God_Bless_America-Men.mp4"
+        }
+      }
+    },
     "hashes": {
-      "/songs/God_Bless_America/God_Bless_America.mscz": "efa90b052761d8e4c36b64aadc01a246e38cbea9e3597b6fbcbfc8670009aec4",
-      "/songs/God_Bless_America/God_Bless_America.mxl": "50ae53fc58bed8a5a825159d4280bbde280f1e6b9f928d24d7a294a07451efa7",
-      "/songs/God_Bless_America/God_Bless_America.pdf": "520a7a27f04dc4ae01a7f7aca7f159e95d1b579eb7fa0c810243300eba6734bb",
+      "/songs/God_Bless_America/God_Bless_America-Alto.flac": "a46062f11ac6f86a4d5a0906fd5aafe4152f845db47bb84e2fc40db8f0b1a752",
+      "/songs/God_Bless_America/God_Bless_America-Alto.mp3": "c8cc91b6595d057291e4ce9813b60b3ba031c151c865058eaaa941231a1b119d",
+      "/songs/God_Bless_America/God_Bless_America-Alto.mp4": "3d17653bf35f950fbf5f4983ceebca24f0ac08c915e0b005a12df2ef56b2245e",
+      "/songs/God_Bless_America/God_Bless_America-Alto.mxl": "66d92211995fcdc7a182035b94971892857cbe726cd6a79215a2670906eb2dcd",
+      "/songs/God_Bless_America/God_Bless_America-Bass.flac": "e91beb65c2abfc0f39043090d325b427dd6bf55e6a893d6e274b7ea03deff108",
+      "/songs/God_Bless_America/God_Bless_America-Bass.mp3": "6cde46c986a079c8ce046cd4e348cf5a417bc437f2e97769798c483442fde87f",
+      "/songs/God_Bless_America/God_Bless_America-Bass.mp4": "f2cb9e0617285234f3aa3b285fcc63844881e40f19d994f094ef161a3f8025d3",
+      "/songs/God_Bless_America/God_Bless_America-Bass.mxl": "ae6075a34259eedb0a0c1509e5d43014cff00086a7355e1b67ffb8920cb5a4ea",
+      "/songs/God_Bless_America/God_Bless_America-Men.flac": "0e7c09de22437d501b3d7373d990ef98a375902d919a4ba546cbd4f738620bdd",
+      "/songs/God_Bless_America/God_Bless_America-Men.mp3": "a7536ed390a1aa7ac8fe77ce5143852de4071ed80e5c2af23e501f614be42e3e",
+      "/songs/God_Bless_America/God_Bless_America-Men.mp4": "1f504f9d98118f0f65fbc5e6231b18329091ca2f90f94118bf93f38545c87fc8",
+      "/songs/God_Bless_America/God_Bless_America-Men.mxl": "bec90c30b3dea7e74926d6eb71714c10b009815324556700f4a2268649941422",
+      "/songs/God_Bless_America/God_Bless_America-SATB.mxl": "8ab009361558594fbd4df7500c373be021b593e303e5158a554d4fc3745404c0",
+      "/songs/God_Bless_America/God_Bless_America-SATB.pdf": "c997543e54c2d3c1e267c41a7d1b3c7471caba28c2a883678e7bf708f31b8ba0",
+      "/songs/God_Bless_America/God_Bless_America-Soprano.flac": "878a9a727f949995fcdc489b3f29ab5c80e4a42f26a32db4e00a7b7cabaee645",
+      "/songs/God_Bless_America/God_Bless_America-Soprano.mp3": "309c0093c4b7495eea38db4116ae1c35739c24680b081a6f530169706835c0fe",
+      "/songs/God_Bless_America/God_Bless_America-Soprano.mp4": "740d6749405256530276d350291357a76bf71eb8668b564c59296dfa9981b880",
+      "/songs/God_Bless_America/God_Bless_America-Soprano.mxl": "ea11c9902a81eafbc0f54819996a7573f8c657a73a3a882404a28f36b938e6b3",
+      "/songs/God_Bless_America/God_Bless_America-Tenor.flac": "8569e1b1995337555a570e98c050b907a947eef50f7f85f54e13b23a40f86758",
+      "/songs/God_Bless_America/God_Bless_America-Tenor.mp3": "4a3f99547b19a332d34cacbeecde28c2aef7351fd4f7be0f9b08bb36ae44d802",
+      "/songs/God_Bless_America/God_Bless_America-Tenor.mp4": "6e3e5cbd85acc711a5437892f310eb33ffa84c065b0e55e568752d958d294a3a",
+      "/songs/God_Bless_America/God_Bless_America-Tenor.mxl": "bb7c8d9d28f946fa9d218767e20e269624ac3208e327c604498964c0235dee0d",
+      "/songs/God_Bless_America/God_Bless_America-Women.flac": "6a700ef8f0bc259dc2088818fa6a13900bdb5a586eaa8c194b58efaac697aa9d",
+      "/songs/God_Bless_America/God_Bless_America-Women.mp3": "3dad4f054e3c09b58a3f06e183fc470302d55e0f95f80a2962e75a97efbff7f6",
+      "/songs/God_Bless_America/God_Bless_America-Women.mp4": "149b8f3691bfcc905664bec8e0d87396cb1b1aaa71441f8e7805e61390e10168",
+      "/songs/God_Bless_America/God_Bless_America-Women.mxl": "8b71850085e3202ed66d0da480fff9128133fc91787ab6c902a24b91b895cbad",
+      "/songs/God_Bless_America/God_Bless_America.flac": "053bbb10c42b9106a57e155e2ec0a4550ba4c963b526ca3fafb94cdaf5d86061",
+      "/songs/God_Bless_America/God_Bless_America.mp3": "ebe681c07ac5bc309786fb40cc604f13d73958d552ee947ce0c22af8c320afc5",
+      "/songs/God_Bless_America/God_Bless_America.mp4": "bfa6ffbd12bf6a92ed83b6e88b773a11ca289f58c3917ac7f5ef19119c15eb00",
+      "/songs/God_Bless_America/God_Bless_America.mscz": "f90d11ab7fad6814017f03104a9373ecc790c9f5e4a2c1a7b625091002b39309",
+      "/songs/God_Bless_America/God_Bless_America.mxl": "2acd5fc09a02480630a736ddd3679ceb8e06484c5ca5407d1b89444301eb6b8b",
       "/songs/God_Bless_America/metadata.json": "237d26532e7df6ab69bde154436d5c99aed7b373751878d65d42a2154b4fda40",
-      "/songs/God_Bless_America/thumbnail.png": "a50da5b3e3938d246a24b61186f78b2791f8d49760e3f8a592cbc6fb39a5c6cb",
-      "/songs/God_Bless_America/timing.json": "df11975fb529b9b17ea975c77bca4fb6a1657f40693e399a653c66b727da3dfd"
+      "/songs/God_Bless_America/thumbnail.png": "a50da5b3e3938d246a24b61186f78b2791f8d49760e3f8a592cbc6fb39a5c6cb"
     },
     "thumbnail": "/songs/God_Bless_America/thumbnail.png"
   },
@@ -111,23 +225,109 @@
     "id": "God_Bless_America-G_Major",
     "title": "God Bless America",
     "composer": "Irving Berlin",
-    "arranger": "Veteran Arrangement",
-    "engraver": "",
+    "arranger": "Jason Hardy",
+    "engraver": "Chuck Nelson",
     "copyright": "© 1938,1939 by the Irving Berlin Music Company\nwith proceeds to benefit the Boy Scouts and Girl Scouts of America",
     "key": "G major",
-    "mtime": "2026-05-10 06:40",
+    "mtime": "2026-05-18 11:21",
     "files": {
       "mscz": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz",
       "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl",
-      "pdf": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.pdf"
+      "osmd": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-SATB.mxl",
+      "pdf": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-SATB.pdf",
+      "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mp3",
+      "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.flac",
+      "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mp4"
     },
-    "parts": {},
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mp4"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mp4"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mp4"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mp4"
+        }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mp4"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mxl": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mxl",
+          "mp3": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mp3",
+          "flac": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.flac",
+          "mp4": "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mp4"
+        }
+      }
+    },
     "hashes": {
-      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz": "56e6a2e7d85d62df6af28c663960b85bfce3aefe5db15ac1c3199481cabc16c4",
-      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl": "83ef895f640142d72a6088c34cbcca6c7c12c114b1d5dc371341226bff8c1ab0",
-      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.pdf": "5b1429ada6c500e0a950a0f5859d40ef06472a89cdc36908c75600143d960dff",
-      "/songs/God_Bless_America-G_Major/thumbnail.png": "640e0e17a751831bca38e5e13c562ccc41f65213eb6d9e5cf1fe02d732c8b39f",
-      "/songs/God_Bless_America-G_Major/timing.json": "e48a0307599602b23ced998dd26cdadfbb0740857763bbc6c78a09a64d092d68"
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.flac": "03709b32b5faf5060f56ed77a8e5e71e0c037854bdf05af9154048dd0ad90e48",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mp3": "e87e1134d351e0abc97a5f7682fe6c7bd03eb647f897fe556ab3740094b8f18e",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mp4": "685f84daddba5af40f4311beb7cabf78768066eee012e43f00c76e0958d62f25",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Alto.mxl": "05649d85f8c86b05eec7134007b84c17b4b4b298177e10a98ec18a2aa7bbb5d4",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.flac": "c169caea76957fcf1d733befeffa3a55c57e473ff091c8a12561b6272ef11e8c",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mp3": "0f9bb2dc3be1c8052269a9ccc87e909917ae840fc0c4e836aa8a884a2998cd51",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mp4": "b1cd07a022bc5688cbde28a2f78a1c0606b0317c4c1f233cc1fadabbb35641e9",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Bass.mxl": "697f9ee9860d4339aec0f2931b00b8ef239fee5b1a0ed233ac47a026ccbca70e",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.flac": "a60874ecb629a4fd9added31bc0177387916607a46c638e306b46db38c3ef07f",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mp3": "38913a41776212292a5d103826412c783560704676c24dd8bb812a0029312ef4",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mp4": "a12ac31d2e7cb83f8c7823e780b4e0e3a49d7c051080e59a4d7e206c0d885f47",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Men.mxl": "1f2852607d4e5f080ae811db4a16b6b0aa2d438b835464c953efb9c11381aa30",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-SATB.mxl": "84770c59fe39b5529973a1ab16295b078dcb37d14ed006018aaa0f776f3f16be",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-SATB.pdf": "0fb6a18a12299bcdcd3a9a04518fdf0e8ebe539b9ef46deaf4731337f4acd4b0",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.flac": "85bd3e85cbc416d9a6623610bbf2857c65917dafcdae0a5d3082cea975da5f64",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mp3": "0d8e9dcd79590770ac0e6bf9ccafad75acc511a6bf10a187982641ee8a77bae8",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mp4": "ee7c1ea03b13ad6a2c658fc9e1bf33fc1b42cb17d352158926bb49aa6a017bc2",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Soprano.mxl": "4327536ed058cf1e17da49f535b0a3ea46265f1c05d473ddc104f5f1a84d472e",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.flac": "6f741ce59f0583d67add3eb24278b88dbf34919c29dd435850d7322643fbcd9a",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mp3": "5c76ec6964ab72589c2d1c4f093ec24b42a66ea3d60f5f1c26d494e833ec9ff7",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mp4": "7e0d2e5ef94ff218b7905f206a0c4df2e5e990f74bc4a72fcb1b48eea0e6d488",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Tenor.mxl": "df0a1f80d3a836a190c2c7002ac40c8072024da5e3d475a8e3b503daa2fec3cf",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.flac": "2e24e736bf5fad310ce1c19dbce5fed4fcdeddf0f305d4ffb205909244f68938",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mp3": "46b0f72a20554b41b12873b1c99bf1d3277d4a34d922bb847a09619031abe307",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mp4": "52db693c3a7b5376d4b3e024d3779476ebdba04635c0d6cc32f7a6da3063336b",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major-Women.mxl": "d9fcab2e6b8a20a80c20ad52bcd032387f98200f97bc5e0af05260435e115a4f",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.flac": "206a13ba2c42b4f264dc28f56c9680d437c51b5c3f93f8b6e6b1dc0d7acc8bf7",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mp3": "6d00456478512ef45fc3095bf64ac5127b5ec55f5ce83ae583073e67c9939b86",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mp4": "abf02ea9053e0e02963defc3ebfec4caa53bce7690ccacf05212f946533f2f10",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mscz": "4260929e92860391af88600095584bda363f013f12721ff939d1d1fb38cc60d9",
+      "/songs/God_Bless_America-G_Major/God_Bless_America-G_Major.mxl": "105f4b416a009c9709972478eb71a3a33b51e3d626f403d510e336965cab5beb",
+      "/songs/God_Bless_America-G_Major/thumbnail.png": "640e0e17a751831bca38e5e13c562ccc41f65213eb6d9e5cf1fe02d732c8b39f"
     },
     "thumbnail": "/songs/God_Bless_America-G_Major/thumbnail.png"
   },
@@ -135,23 +335,109 @@
     "id": "Star_Spangled_Banner",
     "title": "Star Spangled Banner",
     "composer": "Francis Scott Key, John Stafford Smith",
-    "arranger": "Veteran Arrangement",
-    "engraver": "",
+    "arranger": "Jason Hardy",
+    "engraver": "Chuck Nelson",
     "copyright": "",
     "key": "A♭ major",
-    "mtime": "2026-05-10 06:31",
+    "mtime": "2026-05-18 13:27",
     "files": {
       "mscz": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz",
       "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl",
-      "pdf": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.pdf"
+      "osmd": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-SATB.mxl",
+      "pdf": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-SATB.pdf",
+      "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.flac",
+      "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mp4",
+      "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mp3"
     },
-    "parts": {},
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mxl",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mp4",
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mp3"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mxl",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mp4",
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mp3"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mxl",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mp4",
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mp3"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mxl",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mp4",
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mp3"
+        }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mp3",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mp4",
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mxl"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mp3": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mp3",
+          "flac": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.flac",
+          "mp4": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mp4",
+          "mxl": "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mxl"
+        }
+      }
+    },
     "hashes": {
-      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz": "f963e74ae5b62fc293f2a017c5d8ca987d63bda76538ef582ba813834a8c4245",
-      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl": "c191c93af3abad6343a98baf0d55d785549c697e392e3fba8e1e88b708c17349",
-      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.pdf": "1067ce3290b5956222c0167f20edecabd5fb31ec273fe5ebb4789eff19b056a8",
-      "/songs/Star_Spangled_Banner/thumbnail.png": "8196bf6531b2a4cab7677707f03523c81ba193730ccbfce7b73080de0169cf3d",
-      "/songs/Star_Spangled_Banner/timing.json": "25aaf2c34eb8057bebc2acd09403a6335c7c8dbe9a1848112f8ab1ac175dc114"
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.flac": "a607b0576fe6e0db0142cc46fa37a72296d74b1b56c677d17595f695eb2bd917",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mp3": "95f338bf306f6ccd7ab1ae021c4a4e285845e903da53bac0fa66fa1d84dfac88",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mp4": "2ee59609d8699986b1ca5c035cd3674e534465c1b13b805248427229e3ef4042",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Alto.mxl": "c33e7f619cf60d7e30bd9ca88326bdab29ba0ea9aacaf6833eb7d033ccac0f24",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.flac": "a89c5cad5705ac4dd484a6d6ede027401c8c5baece62f731b24e1f161f3c8df1",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mp3": "c210ba745be4109be82c1448b9406d2101f4cd139e45ed3cd2fedd9f519439ef",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mp4": "40eabe9c34bb90cb5696c0ac01fccf277909b47b556a19e56d7ae98f0c00cb99",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Bass.mxl": "b556eef7339fecb0b8e719ffad52a20c1cc85ce6bcb989e4866c7b1c66de0b77",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.flac": "8f3521608c60669e94d4cc39ab4c9a1b3a00d669352306f735ee06ffbe5389b6",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mp3": "869caaa9cbf5f565932b2d9b354a61a74c6d6bd659cac6cc0d9a3900d858befb",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mp4": "cec6824b4f866cdb63f688e49bca67777e175d7d1753ebc35bef4870ed0a69fc",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Men.mxl": "c6e7a54aa9cd82fd1bc56bd364829240ded707e123bc1be5ea45140191ac1de1",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-SATB.mxl": "9b93a3bb548d27e0a0f1d4c166f0d38447e0717e58d4eb5252baadae211b4f04",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-SATB.pdf": "a444f23d119a9393671fe1160cfcbb866a5469d928a37f19178df42823411aa7",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.flac": "ee4aa860152f9af3a99731c59c00beb2e5655ad9dc1c659c43ba0ecd44babdb8",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mp3": "3aaff4802d47b0154105a3b05ee81b69ff2bf53994c049784ae30b4a4ea5440b",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mp4": "871c6c558da9b5a6f6dcf8e9f002c7c798cbbb710ef7939dc6a0184747005ccf",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Soprano.mxl": "301689c1b55059a546a31f6b329c63481a0ea8160161f6e4982062f94091fb2e",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.flac": "25fb7a8e8ca72e6345c45b17d1a425b6e104606316b8923b46371299b2278796",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mp3": "7ab011a4b9999c09ef20f7aff37a4095e0a69a1bede4c9d1e7a1a142d29cff6c",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mp4": "c10d700a3351da51be3a6dad937223c0e193bb4a83436d6a41c1242461f46dd5",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Tenor.mxl": "bc1362cc3b5f7498c69436094e423ffb45e1d5eafa30b83ebb4b8861527860ab",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.flac": "676b0943036b12f7abdd98b6037143454ef32ff65f1ce4ce7b53489c5e1a83fc",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mp3": "34c08f2d939816f3766b45cd3644662a218166d802923e8bbd4c50b27412a6d3",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mp4": "b2682366af9afa38b65bafebf448b3caef448a607c8ef6ec95e9037e9a85b854",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner-Women.mxl": "d59c7dbd91e3a900626c76babf6ae191b1f40460a1f51c812f432dac0b0d4fe6",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.flac": "98bc95326a84dfa536566dea7b4e3f024d5b1dfaa62270eca2a3c8bd22990cdb",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mp3": "00a7b495cb6916c91b26e49dcf586c070991917a448b9670d697705129986704",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mp4": "7bf1c65b4c15c536ea05182cade364ce988831a2494b8cfac805445cf5dcea90",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mscz": "3088fb257826857e740fce9df2227fae1239d86925ed1442663bd54f74db34d2",
+      "/songs/Star_Spangled_Banner/Star_Spangled_Banner.mxl": "19a12b840a860f086a45254e31400265ec1777b8b882dc4349a99e8f42ed8d95",
+      "/songs/Star_Spangled_Banner/thumbnail.png": "8196bf6531b2a4cab7677707f03523c81ba193730ccbfce7b73080de0169cf3d"
     },
     "thumbnail": "/songs/Star_Spangled_Banner/thumbnail.png"
   },
@@ -163,19 +449,106 @@
     "engraver": "",
     "copyright": "",
     "key": "A♭ major",
-    "mtime": "2026-05-10 06:47",
+    "mtime": "2026-05-18 11:22",
     "files": {
       "mscz": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz",
       "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl",
-      "pdf": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.pdf"
+      "osmd": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-SATB.mxl",
+      "pdf": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-SATB.pdf",
+      "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_forever.mp3",
+      "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.flac",
+      "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mp4"
     },
-    "parts": {},
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mp4"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mp4"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mp4"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mp4"
+        }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mp4"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mxl": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mxl",
+          "mp3": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mp3",
+          "flac": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.flac",
+          "mp4": "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mp4"
+        }
+      }
+    },
     "hashes": {
-      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz": "5c14f714253fdadbfe2b3553a68eeffbd7cc541c9bd0622bd109adc2a39288d9",
-      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl": "b36235af6d01689b05e9ff8a28bf63901d168c5c684eec956a8c63ef59af82f2",
-      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.pdf": "dc2767734d44a49d5cf34a5c24014ff1e35ecec1e842227cfbb378ae49d3de80",
-      "/songs/Stars_and_Stripes_Forever/thumbnail.png": "79f17af9b37cca24053b7b882c0425544c9798d44a74e84683cdcdda1e629d39",
-      "/songs/Stars_and_Stripes_Forever/timing.json": "4a4938d48022f62cb6b5c7c840a21ca10e4ad34f42b1d0bf02937879f1265859"
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.flac": "c8d7edb1c089dfacfe3c387cf474a18641223fdf05e6cc6ee5813eab5e51e502",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mp3": "158990e448f5e3d5607253e5adc689a631c5ca60f168472a9cfc9d353fedd80f",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mp4": "37d724ee93b1b296f716c4f93bcc04d9a851a478378af99c302b1e0b268cb530",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Alto.mxl": "43b99e49c286fe1b512b593d07f11dd0ddf4caae80fa3f0cee152c357cc9797d",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.flac": "8330e2bb986535d6e3528981330c7b6fc660ab20712ff80316c57ce6b9913bba",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mp3": "c0e5ff9bcf883e214798de4d3d203e03a6803b81e504f191f70980f5d2f7ba2e",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mp4": "7e40b4399696440a7a1cdbe331d3f5e80e3e3fd96b5f0a27eb8235a9c71f3cf9",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Bass.mxl": "247ef2c36af6c59a6fc881c170c93c3c09cb9dc56a2d51c2ff67151f6ccebb42",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.flac": "9c528b3b90cd33fcc4821475d85f628d6eeb2b174fd407e566e5e53b07525629",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mp3": "4ce492208acca644bc6d30f880ef7a3798ac528a7c3d6a58bd8b8c2ac98716c4",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mp4": "1f36e48a5394c1d4da637b4c048c7808d01684c521479b30bbcf056e5c2d124e",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Men.mxl": "7a61b291aea2f9f53fb24fcc1f5ec1d3f42b9989064b9e97fb6bbb34657b88e3",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-SATB.mxl": "7e0945150ef6d76b28d5b3cffea67bd73a3e943052b5f12fb608444aeb384f07",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-SATB.pdf": "1992eac5cb8db0a28feca182a84b0212c7617bfd094b2b40287f75c49e14fd0e",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.flac": "e8a87caaf8009e9e1220bd9685a08ff59ff4e17abac7ee5c156db2cb341c8bde",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mp3": "fc9dac4e7af7b63d60682b3e11ba3092ecbec7d59c3890edd03552806e3565bb",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mp4": "636fee79e69d37ee9fddd235076b1ba132482a17e660a81dfeaa68c83cc43ddc",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Soprano.mxl": "0eb32e4a04f14bf932c4f08c77dc347cf955f297d6ed5ef88a8dbfac5f998ba7",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.flac": "27e9fe9d389b11119b97843eafd5d9022009e9ea47c6c77221d8b2bbd1f41c72",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mp3": "f73d46173247cea61a4483028a84283206e225b5222ca3adc8d7d812bf724e03",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mp4": "0ef076d8cd73292f94b94eec1b921b91149f16a240b412c97c70c45d7128dd60",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Tenor.mxl": "6cb86706357057c96fb9a79ce49a86fd7950d5e1739b0cfc86f9b1f365bb8209",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.flac": "daf96e138df9693d1df865c0306dd592469f6acbe654a57460cc0c3a11208f34",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mp3": "e35ff437c66f214843147b1a138b8f270cc3e0c670329d242de5ccb1387a6a88",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mp4": "eff4f54d148f17c9352ca2277c7e8819eb34e15e75147a162e9ab8bb6ae1e342",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever-Women.mxl": "cd8b42cf4e1c2ace357dab95fd5bfa4ad979cf36ef8bc4f7c8781a4de70c3d58",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.flac": "6b63a2bc0168489b46c01005384f2483a47a288b3e821625f9d9e1fbd635f1ce",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mp3": "1ea1989261a55d7902af0b1dcd87fae31aa32bb2b89c4a7a4725a168e0c3bf10",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mp4": "73678c86cdeb9c69af324b3255e1d220ddb583e245785bb495454d5573f76a72",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mscz": "787211273b91d4b5ce3210cfc0bdbc055226b1e8d12e6557f5f20c1e5c3e30e3",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_Forever.mxl": "9b6e415216bbfe8289e35feef4f37b9f68f960bf06e8eef87038c87f42c18ac0",
+      "/songs/Stars_and_Stripes_Forever/Stars_and_Stripes_forever.mp3": "650d4abc9e133d3cd9b69c7653d9a7ff0bf535c09794e975678faf303651efc1",
+      "/songs/Stars_and_Stripes_Forever/thumbnail.png": "79f17af9b37cca24053b7b882c0425544c9798d44a74e84683cdcdda1e629d39"
     },
     "thumbnail": "/songs/Stars_and_Stripes_Forever/thumbnail.png"
   }

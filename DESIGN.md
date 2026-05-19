@@ -21,16 +21,16 @@ The platform is designed to be lean and responsive:
 ## 2. Key Architectural Decisions
 
 ### 2.1 The "Pre-rendered Sync" Strategy
-Early versions explored real-time browser-side synchronization between the score and audio (using timing maps and cursor loops). This was abandoned in favor of **MuseScore 4.7 Video Exports**.
-- **Rationale**: Browser-side sync is fragile across different hardware/browser combinations. Pre-rendering the score-tracking "playhead" into a video file guarantees 100% synchronization accuracy with zero CPU overhead for the client.
+Early versions explored real-time browser-side synchronization between the score and audio (using custom timing maps and cursor loops). This was completely abandoned and deprecated in favor of **MuseScore 4.7 Video Exports**.
+- **Rationale**: Browser-side sync is fragile across different hardware/browser combinations. Pre-rendering the score-tracking "playhead" into an MP4 video file guarantees 100% synchronization accuracy natively within the browser's video player, with zero CPU overhead for the client. As a result, all `timing.json` map generations were purged from the build process.
 
 ### 2.2 Web Audio API over HTML5 Audio
 We chose the **Web Audio API** for rehearsal track playback.
-- **Rationale**: Native `<audio>` tags provide limited control over the underlying audio buffer. The Web Audio API allows us to force a specific sample rate (48kHz), implement high-resolution metering (Equalizer), and ensure precise transport controls without the latency or "seeking" issues common in standard audio elements.
+- **Rationale**: Native `<audio>` tags provide limited control over the underlying audio buffer. The Web Audio API allows us to force a specific sample rate (48kHz), implement high-resolution metering (Equalizer), and execute a **Network-Aware Auto-Play** architecture that triggers playback immediately upon decoding, preventing the latency or "seeking" issues common in standard audio elements.
 
-### 2.3 The Sidecar Manifest Pattern
-Each song directory contains a `song.json` sidecar that maps file roles (PDF, MP4, etc.) to actual filenames.
-- **Rationale**: This allows for human-curated file management while supporting automated build-time manifest generation. It prevents the need for strict naming conventions on assets while ensuring the global `songs.json` manifest is always accurate.
+### 2.3 The Sidecar Manifest Pattern (Split-Role Architecture)
+Each song directory contains a `song.json` sidecar that maps file roles (PDF, MP4, etc.) to actual filenames. We utilize a **Split-Role Architecture** for MusicXML.
+- **Rationale**: This allows for human-curated file management while supporting automated build-time manifest generation. By splitting the MusicXML roles into `"mxl"` (for raw file downloads) and `"osmd"` (for the visual rendering engine, usually set to a `*-SATB.mxl` conductor layout), we maintain strict control over both the visual layout and the downloadable payloads without forcing strict naming conventions on the user.
 
 ---
 
@@ -43,6 +43,10 @@ The aesthetic uses deep navy backgrounds (`#0f172a`) with sky blue accents (`#38
 ### 3.2 The "Golden Ratio" Centering
 We discovered that OSMD SVGs are inherently asymmetric due to part label positioning.
 - **Rationale**: To center the score on the virtual "paper," we apply an asymmetric margin split (**2.0 Left / 10.0 Right**). This compensates for the implicit label space and ensures the staves are visually centered in the container.
+
+### 3.3 Performance Mode (86vh Atomic Vertical Fit)
+A dedicated "Performance Mode" was built specifically for tablet and mobile landscape use during live performances.
+- **Rationale**: Rendering long SVG documents on mobile browsers can cause vertical scrolling tears or zooming issues. By establishing an "Infinite Canvas" with an exact `86vh` vertical constraint, the score securely locks to the screen bounds without scrolling, while custom on-screen gesture areas provide safe page-turning.
 
 ---
 

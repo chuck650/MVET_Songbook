@@ -8,9 +8,9 @@ MVET Songbook is a high-fidelity rehearsal platform and sheet music library dedi
 
 ## 🚀 Key Features
 
-- **High-Fidelity Rehearsal Suite**: Precision-engineered audio (48kHz FLAC) and pre-rendered video tracking for flawless practice sessions.
-- **Interactive Sheet Music**: Dynamic MusicXML rendering via OpenSheetMusicDisplay (OSMD) with zoom and part isolation.
-- **Veteran-Optimized Arrangements**: Authentic SATB transcriptions with sustainable vocal ranges (Bb3–E4 for Tenors).
+- **High-Fidelity Rehearsal Suite**: Precision-engineered audio (48kHz FLAC) with Network-Aware Auto-Play and pre-rendered video tracking for flawless practice sessions.
+- **Interactive Sheet Music**: Dynamic MusicXML rendering via OpenSheetMusicDisplay (OSMD) with part isolation and a dedicated **Performance Mode** (Infinite Canvas & 86vh vertical fit) for live tablet use.
+- **Veteran-Optimized Arrangements**: Authentic SATB transcriptions (including isolated Men and Women parts) with sustainable vocal ranges.
 - **Offline Reliable (PWA)**: Full Progressive Web App support ensures your library is available in rehearsal spaces with no Wi-Fi.
 - **Surgical Sync**: SHA-256 hash-based cache management ensures you always have the latest scores and audio tracks.
 
@@ -34,6 +34,12 @@ git clone https://github.com/chuck/MVET_Songbook.git
 cd MVET_Songbook
 npm install
 ```
+
+### Local Content Syncing
+```bash
+npm run sync
+```
+*Securely synchronizes local exported assets (from MuseScore) into the web project.*
 
 ### Local Development
 ```bash

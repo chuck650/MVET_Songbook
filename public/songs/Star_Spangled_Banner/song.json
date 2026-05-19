@@ -2,7 +2,66 @@
   "files": {
     "mscz": "Star_Spangled_Banner.mscz",
     "mxl": "Star_Spangled_Banner.mxl",
-    "pdf": "Star_Spangled_Banner.pdf"
+    "osmd": "Star_Spangled_Banner-SATB.mxl",
+    "pdf": "Star_Spangled_Banner-SATB.pdf",
+    "flac": "Star_Spangled_Banner.flac",
+    "mp4": "Star_Spangled_Banner.mp4",
+    "mp3": "Star_Spangled_Banner.mp3"
   },
-  "parts": {}
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "Star_Spangled_Banner-Alto.mxl",
+        "flac": "Star_Spangled_Banner-Alto.flac",
+        "mp4": "Star_Spangled_Banner-Alto.mp4",
+        "mp3": "Star_Spangled_Banner-Alto.mp3"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "Star_Spangled_Banner-Bass.mxl",
+        "flac": "Star_Spangled_Banner-Bass.flac",
+        "mp4": "Star_Spangled_Banner-Bass.mp4",
+        "mp3": "Star_Spangled_Banner-Bass.mp3"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "Star_Spangled_Banner-Soprano.mxl",
+        "flac": "Star_Spangled_Banner-Soprano.flac",
+        "mp4": "Star_Spangled_Banner-Soprano.mp4",
+        "mp3": "Star_Spangled_Banner-Soprano.mp3"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "Star_Spangled_Banner-Tenor.mxl",
+        "flac": "Star_Spangled_Banner-Tenor.flac",
+        "mp4": "Star_Spangled_Banner-Tenor.mp4",
+        "mp3": "Star_Spangled_Banner-Tenor.mp3"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mp3": "Star_Spangled_Banner-Men.mp3",
+        "flac": "Star_Spangled_Banner-Men.flac",
+        "mp4": "Star_Spangled_Banner-Men.mp4",
+        "mxl": "Star_Spangled_Banner-Men.mxl"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mp3": "Star_Spangled_Banner-Women.mp3",
+        "flac": "Star_Spangled_Banner-Women.flac",
+        "mp4": "Star_Spangled_Banner-Women.mp4",
+        "mxl": "Star_Spangled_Banner-Women.mxl"
+      }
+    }
+  }
 }

@@ -55,8 +55,9 @@ interface SongManifest {
 }
 
 interface FileGroup {
-  mxl?: string;      // Interactive Score
-  pdf?: string;      // Print Score
+  mxl?: string;      // Raw Score (Download)
+  osmd?: string;     // Interactive Score (Conductor Layout for Render)
+  pdf?: string;      // Print Score (-SATB.pdf)
   mscz?: string;     // Source Project
   mp3?: string;      // Rehearsal Audio (Compressed)
   flac?: string;     // Rehearsal Audio (Lossless)
@@ -82,6 +83,7 @@ interface PartEntry {
 ### 3.1 Web Audio Engine
 - **Clock**: Synchronized to the browser's hardware clock.
 - **Sample Rate**: Forced to **48000 Hz** to match high-resolution source files (MuseScore 4.7 exports).
+- **Network-Aware Auto-Play**: The engine monitors its own asynchronous download state. It triggers playback precisely when the audio buffer finishes decoding, ensuring a seamless one-click experience without arbitrary timeouts.
 - **Format Support**: 
     - **FLAC**: Primary format (24-bit/48kHz).
     - **MP3**: Fallback format.
@@ -126,7 +128,10 @@ interface PartEntry {
 
 ## 6. Build & Lifecycle
 
-### 6.1 Build Pipeline
+### 6.1 Content Syncing
+1. `npm run sync`: A dedicated pre-build script that securely synchronizes local exported assets (from MuseScore) into the web project without breaking cloud CI builds.
+
+### 6.2 Build Pipeline
 1. `npm run bump-version`: Increments the minor build version.
 2. `npm run generate-manifest`: Scans the song library and updates `public/songs.json` with hashes and metadata.
 3. `vite build`: Compiles the application into `dist/`.
@@ -141,6 +146,10 @@ interface PartEntry {
 
 | Version | Key Milestone |
 |---------|---------------|
+| 1.1.80  | **Split-Role Architecture**. Separated raw MXL downloads from OSMD render files (-SATB.mxl). |
+| 1.1.77  | **Asset Syncing & Parts**. Added support for 'women' and 'men' vocal groups, added `npm run sync`. |
+| 1.1.72  | **Network-Aware Auto-Play**. Engineered exact-time auto-playback for WebAudio following network load. |
+| 1.1.68  | **Performance Mode**. Implemented Infinite Canvas and 86vh Atomic Vertical Fit for landscape mobile. |
 | 1.1.16  | **Horizontal Centering Optimization**. Implemented the Golden Ratio asymmetric margin fix. |
 | 1.1.13  | **Metadata Hardening**. Integrated Engraver extraction from MuseScore properties. |
 | 1.1.11  | **SHA-256 Cache-Busting**. Added manifest hashing to resolve Edge/browser caching issues. |

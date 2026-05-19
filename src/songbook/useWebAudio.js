@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 /**
  * Hardened Web Audio Engine v3.8.0
  */
-export const useWebAudio = (url) => {
+export const useWebAudio = (url, autoPlay = false) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -19,6 +19,9 @@ export const useWebAudio = (url) => {
   const startTimeRef = useRef(0);
   const pauseOffsetRef = useRef(0);
   const requestRef = useRef();
+  
+  // Track if we've auto-played the current URL
+  const hasAutoPlayedRef = useRef(false);
 
   const initAudio = useCallback(() => {
     if (!audioCtxRef.current) {
@@ -60,6 +63,7 @@ export const useWebAudio = (url) => {
     pauseOffsetRef.current = 0;
     startTimeRef.current = 0;
     audioBufferRef.current = null;
+    hasAutoPlayedRef.current = false;
     
     if (!url) return;
     
@@ -180,6 +184,14 @@ export const useWebAudio = (url) => {
     setCurrentTime(pauseOffsetRef.current);
     if (was) play(pauseOffsetRef.current);
   }, [isPlaying, pause, play, duration]);
+
+  // Handle auto-play once the buffer is fully loaded
+  useEffect(() => {
+    if (autoPlay && !isLoading && audioBufferRef.current && !isPlaying && !hasAutoPlayedRef.current) {
+      hasAutoPlayedRef.current = true;
+      play();
+    }
+  }, [autoPlay, isLoading, isPlaying, play]);
 
   return { 
     play, 

@@ -31,10 +31,10 @@ const SONGS_DIR   = path.join(__dirname, '../public/songs');
 const OUTPUT_FILE = path.join(__dirname, '../public/songs.json');
 
 // Canonical part keys in display order (OPENSPEC §1.2.3)
-const PART_KEYS = ['soprano', 'alto', 'tenor', 'bass'];
+const PART_KEYS = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
 
 // Display names keyed by lowercase part key
-const PART_NAMES = { soprano: 'Soprano', alto: 'Alto', tenor: 'Tenor', bass: 'Bass' };
+const PART_NAMES = { soprano: 'Soprano', alto: 'Alto', tenor: 'Tenor', bass: 'Bass', women: 'Women', men: 'Men' };
 
 // Known media/score extensions handled per role
 const ROLE_EXTENSIONS = {
@@ -56,6 +56,8 @@ const PART_PATTERNS = [
   { key: 'alto',    patterns: ['alto',    '-A-', '-A.'] },
   { key: 'tenor',   patterns: ['tenor',   '-T-', '-T.'] },
   { key: 'bass',    patterns: ['bass',    '-B-', '-B.'] },
+  { key: 'women',   patterns: ['women',   '-W-', '-W.'] },
+  { key: 'men',     patterns: ['men',     '-M-', '-M.'] },
 ];
 
 // ---------------------------------------------------------------------------
@@ -188,19 +190,6 @@ function extractMXLMetadata(xmlStr) {
     } else if (misc) {
       if (misc['@_name'] === 'key') key = misc['#text'] || misc;
       if (misc['@_name'] === 'engraver') engraver = misc['#text'] || misc;
-    }
-
-    // Try to find key in score attributes if not in identification
-    if (!key && score?.part) {
-      const firstPart = Array.isArray(score.part) ? score.part[0] : score.part;
-      const firstMeasure = Array.isArray(firstPart.measure) ? firstPart.measure[0] : firstPart.measure;
-      const attributes = firstMeasure?.attributes;
-      const keyObj = attributes?.key;
-      if (keyObj) {
-        const fifths = parseInt(keyObj.fifths);
-        const mode = keyObj.mode || 'major';
-        key = getMusicXMLKey(fifths, mode);
-      }
     }
 
     return { title: movementTitle || workTitle || '', composer, arranger, engraver, copyright, key };

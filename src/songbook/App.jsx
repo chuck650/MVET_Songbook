@@ -70,10 +70,7 @@ function AppContent() {
         <nav className={`sidebar ${!isSidebarOpen ? "collapsed" : ""}`}>
             <div className="branding">
               <div className="branding-text">
-                <h1 className="sidebar-title">Choral Songbook</h1>
-                <p className="sidebar-subtitle">
-                  Military Voices of East Tennessee
-                </p>
+                <img src="/favicon.png" alt="MVET Choral Songbook" className="sidebar-logo" />
               </div>
               <button 
                 className="sidebar-close-btn"
@@ -88,8 +85,7 @@ function AppContent() {
                 className={activeTab === "browser" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("browser");
-                  // On mobile, close sidebar after selecting
-                  if (window.innerWidth <= 900) setIsSidebarOpen(false);
+                  setIsSidebarOpen(false);
                 }}
               >
                 <span>📚</span> Library
@@ -98,8 +94,7 @@ function AppContent() {
                 className={activeTab === "settings" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("settings");
-                  // On mobile, close sidebar after selecting
-                  if (window.innerWidth <= 900) setIsSidebarOpen(false);
+                  setIsSidebarOpen(false);
                 }}
               >
                 <span>⚙️</span> Settings
@@ -108,8 +103,7 @@ function AppContent() {
                 className={activeTab === "about" ? "active" : ""}
                 onClick={() => {
                   setActiveTab("about");
-                  // On mobile, close sidebar after selecting
-                  if (window.innerWidth <= 900) setIsSidebarOpen(false);
+                  setIsSidebarOpen(false);
                 }}
               >
                 <span>🛡️</span> About & Legal
@@ -121,20 +115,17 @@ function AppContent() {
       <main className="main-content">
         {!selectedSong && (
           <header className="view-header">
-            {!isSidebarOpen && (
-              <button 
-                className="sidebar-toggle" 
-                onClick={toggleSidebar}
-                aria-label="Expand sidebar"
-              >
-                ☰
-              </button>
-            )}
-            <div className="header-titles" style={{ flex: 1, marginLeft: isSidebarOpen ? '0' : '1rem' }}>
+            <button 
+              className="sidebar-toggle" 
+              onClick={toggleSidebar}
+              aria-label="Expand sidebar"
+            >
+              ☰
+            </button>
+            <div className="header-titles" style={{ flex: 1, marginLeft: '1rem' }}>
               <h2>Choral Songbook</h2>
               <p>Military Voices of East Tennessee</p>
             </div>
-            <div className="user-profile">PWA Active</div>
           </header>
         )}
 

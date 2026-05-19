@@ -28,7 +28,18 @@ const MusicViewer = ({ song, onBack }) => {
   // Media Player State
   const [activeTrack, setActiveTrack] = useState(null); // { type: 'audio' | 'video', url: string, partName: string }
 
-  const webAudio = useWebAudio(activeTrack?.type === 'audio' ? activeTrack.url : null);
+  const [zoomLevel, setZoomLevel] = useState(window.innerWidth <= 600 ? 0.75 : 1.0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const webAudio = useWebAudio(activeTrack?.type === 'audio' ? activeTrack.url : null, true);
   const [measureMap, setMeasureMap] = useState([]);
   const [currentX, setCurrentX] = useState(0);
 
@@ -43,11 +54,18 @@ const MusicViewer = ({ song, onBack }) => {
         drawLyrics: true, 
         coloringEnabled: true, 
         followCursor: false,
+        drawPartNames: false,
+        drawPartAbbreviations: false,
         renderSingleHorizontalStaffline: isPerformanceMode
       });
     }
 
     const osmd = osmdRef.current;
+    
+    // Set all EngravingRules before loading to ensure they are respected during parsing
+    osmd.EngravingRules.RenderPartNames = false;
+    osmd.EngravingRules.RenderPartAbbreviations = false;
+
     try {
       if (!osmd) return;
 
@@ -62,7 +80,10 @@ const MusicViewer = ({ song, onBack }) => {
           drawTitle: false,
           drawSubtitle: false,
           drawComposer: false,
+          drawCredits: false,
           drawLyrics: true,
+          drawPartNames: false,
+          drawPartAbbreviations: false,
           renderSingleHorizontalStaffline: true,
           drawPageBackground: false, 
           drawPageBackgrounds: false, // Cover all variations
@@ -70,12 +91,15 @@ const MusicViewer = ({ song, onBack }) => {
           pageBackgroundColor: 'transparent' 
         });
       } else {
+        osmd.Zoom = zoomLevel;
         osmd.setOptions({
-          zoom: 1.0,
-          drawTitle: true,
-          drawSubtitle: true,
-          drawComposer: true,
+          drawTitle: false,      // Suppress redundant title since we display it in the header
+          drawSubtitle: false,
+          drawComposer: false,
+          drawCredits: false,    // Suppress arranger/lyricist credits to prevent overlapping with system text
           drawLyrics: true,
+          drawPartNames: false,
+          drawPartAbbreviations: false,
           renderSingleHorizontalStaffline: false
         });
       }
@@ -87,7 +111,7 @@ const MusicViewer = ({ song, onBack }) => {
       setLoading(true);
       try {
         const mRelative = activePartKey === 'full' 
-          ? song.files.mxl 
+          ? (song.files.osmd || song.files.mxl) 
           : song.parts?.[activePartKey]?.files?.mxl || song.files.mxl;
         
         // Cache-buster using hash to ensure sanitization is applied
@@ -97,41 +121,55 @@ const MusicViewer = ({ song, onBack }) => {
         await osmd.load(m);
         osmd.setOptions({ drawMeasureNumbers: !!drawMeasureNumbers });
         
-        // Horizontal Centering Fix: Apply asymmetric margins to compensate for SVG bounding box offset
-        osmd.EngravingRules.PageLeftMargin = 2.0;
-        osmd.EngravingRules.PageRightMargin = 10.0;
-        osmd.EngravingRules.PageTopMargin = 5.0;
-        osmd.EngravingRules.PageBottomMargin = 5.0;
-        
-        
-        osmd.render();
-
-        // Build Measure Map for Performance Mode paging
-        if (isPerformanceMode) {
-          const mList = [];
-          const graphicMeasures = osmd.GraphicSheet.MeasureList;
-          for (let i = 0; i < graphicMeasures.length; i++) {
-            const m = graphicMeasures[i][0]; // First staff's measure
-            if (m) {
-              mList.push({
-                index: i,
-                x: m.PositionAndShape.AbsolutePosition.x * 10 // Convert to pixels (OSMD units * 10)
-              });
-            }
-          }
-          setMeasureMap(mList);
-          setCurrentX(0);
-        }
-        osmd.render();
+        // The responsive render effect will handle the margins, zoom, and render call
         setLoading(false);
       } catch (err) {
- 
         console.error("OSMD Render Error:", err);
         setError("Render Fail"); 
         setLoading(false); 
       }
     })();
   }, [song, activePartKey, drawMeasureNumbers, isPerformanceMode]);
+
+  // Responsive Margins and Zooming Effect - Re-renders without reloading XML
+  useEffect(() => {
+    const osmd = osmdRef.current;
+    if (osmd && osmd.sheet && !loading) {
+      // Universal Clean Symmetric Margins:
+      // Having suppressed all part names/abbreviations, there is no starting offset skew.
+      // Setting symmetric margins universally keeps staves perfectly centered and balanced across
+      // mobile portrait, mobile landscape, and large desktop screens alike.
+      osmd.EngravingRules.PageLeftMargin = 4.0;
+      osmd.EngravingRules.PageRightMargin = 4.0;
+      osmd.EngravingRules.PageTopMargin = 5.0;
+      osmd.EngravingRules.PageBottomMargin = 5.0;
+      
+      osmd.Zoom = zoomLevel;
+      
+      try {
+        osmd.render();
+        
+        // Build Measure Map for Performance Mode paging if active
+        if (isPerformanceMode) {
+          const mList = [];
+          const graphicMeasures = osmd.GraphicSheet.MeasureList;
+          for (let i = 0; i < graphicMeasures.length; i++) {
+            const m = graphicMeasures[i][0];
+            if (m) {
+              mList.push({
+                index: i,
+                x: m.PositionAndShape.AbsolutePosition.x * 10
+              });
+            }
+          }
+          setMeasureMap(mList);
+          setCurrentX(0);
+        }
+      } catch (e) {
+        console.error("OSMD Responsive Render Error:", e);
+      }
+    }
+  }, [windowWidth, zoomLevel, loading, isPerformanceMode]);
 
   // UX Fix: Reset audio player when format changes to ensure new format is picked up
   useEffect(() => {
@@ -140,7 +178,7 @@ const MusicViewer = ({ song, onBack }) => {
     }
   }, [audioFormat]);
 
-  const partOrder = ['soprano', 'alto', 'tenor', 'bass'];
+  const partOrder = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
   const rehearsalParts = [
     { key: 'full', name: 'Full Score', files: song.files },
     ...partOrder
@@ -157,9 +195,6 @@ const MusicViewer = ({ song, onBack }) => {
     const finalUrl = `${url}?v=${hash}`;
     
     setActiveTrack({ type, url: finalUrl, partName: part.name });
-    if (type === 'audio') {
-      setTimeout(() => webAudio.play(), 50);
-    }
   };
 
   // Performance Mode Unified Gesture Engine
@@ -286,7 +321,10 @@ const MusicViewer = ({ song, onBack }) => {
   return (
     <div className={`viewer-container ${isPerformanceMode ? 'performance-mode' : ''}`}>
       <header className="viewer-header">
-        <button onClick={onBack} className="btn-back">← Back</button>
+        <button onClick={onBack} className="btn-back">
+          <span className="icon">←</span>
+          <span className="text">Back</span>
+        </button>
         <div className="song-title-group"><h3>{song.title}</h3></div>
         <div className="viewer-actions">
           <button 
@@ -337,6 +375,21 @@ const MusicViewer = ({ song, onBack }) => {
                   <input type="checkbox" checked={drawMeasureNumbers} onChange={(e) => updateSetting('drawMeasureNumbers', e.target.checked)} />
                   Show Measure Numbers
                 </label>
+              </div>
+              <div className="setting-group" style={{ marginTop: '20px' }}>
+                <label>Score Zoom</label>
+                <div className="slider-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <input 
+                    type="range" 
+                    min="0.3" 
+                    max="1.5" 
+                    step="0.05" 
+                    value={zoomLevel} 
+                    onChange={(e) => setZoomLevel(parseFloat(e.target.value))} 
+                    style={{ flex: 1 }}
+                  />
+                  <span>{Math.round(zoomLevel * 100)}%</span>
+                </div>
               </div>
             </section>
 
@@ -521,7 +574,6 @@ const MusicViewer = ({ song, onBack }) => {
       )}
 
       <footer className="viewer-footer">
-        <div className="footer-left"><span>© MVET Songbook</span></div>
         <div className="footer-center">
           {(song.arranger || song.engraver || song.key || song.mtime) && (
             <div className="metadata-pill">
@@ -531,9 +583,6 @@ const MusicViewer = ({ song, onBack }) => {
               {song.mtime && <><span className="dot">•</span><span>Updated: {song.mtime}</span></>}
             </div>
           )}
-        </div>
-        <div className="footer-right">
-          <div className="version-badge">v{VERSION}</div>
         </div>
       </footer>
     </div>

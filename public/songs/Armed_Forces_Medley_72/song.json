@@ -2,6 +2,7 @@
   "files": {
     "mscz": "Armed_Forces_Medley_72.mscz",
     "mxl": "Armed_Forces_Medley_72.mxl",
+    "osmd": "Armed_Forces_Medley_72-SATB.mxl",
     "pdf": "Armed_Forces_Medley_72-SATB.pdf",
     "mp3": "Armed_Forces_Medley_72.mp3",
     "flac": "Armed_Forces_Medley_72.flac",
@@ -42,6 +43,24 @@
         "mp3": "Armed_Forces_Medley_72-Tenor.mp3",
         "flac": "Armed_Forces_Medley_72-Tenor.flac",
         "mp4": "Armed_Forces_Medley_72-Tenor.mp4"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Men.mxl",
+        "mp3": "Armed_Forces_Medley_72-Men.mp3",
+        "flac": "Armed_Forces_Medley_72-Men.flac",
+        "mp4": "Armed_Forces_Medley_72-Men.mp4"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mxl": "Armed_Forces_Medley_72-Women.mxl",
+        "mp3": "Armed_Forces_Medley_72-Women.mp3",
+        "flac": "Armed_Forces_Medley_72-Women.flac",
+        "mp4": "Armed_Forces_Medley_72-Women.mp4"
       }
     }
   }

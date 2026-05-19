@@ -2,7 +2,66 @@
   "files": {
     "mscz": "God_Bless_America.mscz",
     "mxl": "God_Bless_America.mxl",
-    "pdf": "God_Bless_America.pdf"
+    "osmd": "God_Bless_America-SATB.mxl",
+    "pdf": "God_Bless_America-SATB.pdf",
+    "mp3": "God_Bless_America.mp3",
+    "flac": "God_Bless_America.flac",
+    "mp4": "God_Bless_America.mp4"
   },
-  "parts": {}
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "God_Bless_America-Alto.mxl",
+        "mp3": "God_Bless_America-Alto.mp3",
+        "flac": "God_Bless_America-Alto.flac",
+        "mp4": "God_Bless_America-Alto.mp4"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "God_Bless_America-Bass.mxl",
+        "mp3": "God_Bless_America-Bass.mp3",
+        "flac": "God_Bless_America-Bass.flac",
+        "mp4": "God_Bless_America-Bass.mp4"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mxl": "God_Bless_America-Men.mxl",
+        "mp3": "God_Bless_America-Men.mp3",
+        "flac": "God_Bless_America-Men.flac",
+        "mp4": "God_Bless_America-Men.mp4"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "God_Bless_America-Soprano.mxl",
+        "mp3": "God_Bless_America-Soprano.mp3",
+        "flac": "God_Bless_America-Soprano.flac",
+        "mp4": "God_Bless_America-Soprano.mp4"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "God_Bless_America-Tenor.mxl",
+        "mp3": "God_Bless_America-Tenor.mp3",
+        "flac": "God_Bless_America-Tenor.flac",
+        "mp4": "God_Bless_America-Tenor.mp4"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mxl": "God_Bless_America-Women.mxl",
+        "mp3": "God_Bless_America-Women.mp3",
+        "flac": "God_Bless_America-Women.flac",
+        "mp4": "God_Bless_America-Women.mp4"
+      }
+    }
+  }
 }

@@ -44,13 +44,16 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Horizontal Centering Optimization (Asymmetric Margin Fix)
 - [x] Handheld Hardening & Atomic Vertical Fit (v1.1.65)
 - [x] Infinite Canvas & Artifact Elimination (v1.1.68)
+- [x] Viewport-Proportional Margins & Manual Zoom Engine (v1.2.7)
+- [x] Universal Symmetric Margins & Decoupled Performance Scroller (v1.2.12)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
 - **Site ID**: `0c13f55a-3eb5-4763-8d8b-eb8b4476277d`
 - **Automation**: Use `.agents/skills/deploy_netlify/SKILL.md` and `.agents/skills/web_audio_precision_sync/SKILL.md` for core workflows.
 - **Precision**: v1.1.68 implements the Atomic Vertical Fit (86vh) and Infinite Canvas (uncapped max-width) for flawless landscape mobile stability.
-- **Visuals**: Use the "Golden Ratio" asymmetric margins (2.0L / 10.0R) in OSMD to ensure score centering on virtual paper.
+- **Visuals**: Universal symmetric margins (4.0L / 4.0R) ensure the sheet music is flawlessly centered under the title across all device types and orientations, preventing any right-skew or overflow.
+- **Performance Mode**: Unconstrained `:not(.performance-mode)` SVG scaling ensures the single horizontal staffline renders at its full crisp width without vertical squishing.
 
 ## Next Steps
 1. Implement real-time metronome overlay synced to the Web Audio clock.
@@ -58,4 +61,4 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 3. Optimize PWA caching for decoded AudioBuffers.
 
 ---
-*Last updated by Antigravity on 2026-05-16*
+*Last updated by Antigravity on 2026-05-19*

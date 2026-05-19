@@ -2,7 +2,66 @@
   "files": {
     "mscz": "Stars_and_Stripes_Forever.mscz",
     "mxl": "Stars_and_Stripes_Forever.mxl",
-    "pdf": "Stars_and_Stripes_Forever.pdf"
+    "osmd": "Stars_and_Stripes_Forever-SATB.mxl",
+    "pdf": "Stars_and_Stripes_Forever-SATB.pdf",
+    "mp3": "Stars_and_Stripes_forever.mp3",
+    "flac": "Stars_and_Stripes_Forever.flac",
+    "mp4": "Stars_and_Stripes_Forever.mp4"
   },
-  "parts": {}
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Alto.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Alto.mp3",
+        "flac": "Stars_and_Stripes_Forever-Alto.flac",
+        "mp4": "Stars_and_Stripes_Forever-Alto.mp4"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Bass.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Bass.mp3",
+        "flac": "Stars_and_Stripes_Forever-Bass.flac",
+        "mp4": "Stars_and_Stripes_Forever-Bass.mp4"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Men.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Men.mp3",
+        "flac": "Stars_and_Stripes_Forever-Men.flac",
+        "mp4": "Stars_and_Stripes_Forever-Men.mp4"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Soprano.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Soprano.mp3",
+        "flac": "Stars_and_Stripes_Forever-Soprano.flac",
+        "mp4": "Stars_and_Stripes_Forever-Soprano.mp4"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Tenor.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Tenor.mp3",
+        "flac": "Stars_and_Stripes_Forever-Tenor.flac",
+        "mp4": "Stars_and_Stripes_Forever-Tenor.mp4"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mxl": "Stars_and_Stripes_Forever-Women.mxl",
+        "mp3": "Stars_and_Stripes_Forever-Women.mp3",
+        "flac": "Stars_and_Stripes_Forever-Women.flac",
+        "mp4": "Stars_and_Stripes_Forever-Women.mp4"
+      }
+    }
+  }
 }

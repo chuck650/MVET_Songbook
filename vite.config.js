@@ -2,10 +2,21 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
+import fs from 'fs';
+
+// Read our single source of truth for the version
+const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+const appVersion = packageJson.version;
 
 export default defineConfig({
   plugins: [
     react(),
+    {
+      name: 'version-logger',
+      closeBundle() {
+        console.log(`\n✅ Built MVET Songbook App Version: v${appVersion}\n`);
+      }
+    },
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',

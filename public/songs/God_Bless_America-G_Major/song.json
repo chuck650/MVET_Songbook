@@ -2,7 +2,66 @@
   "files": {
     "mscz": "God_Bless_America-G_Major.mscz",
     "mxl": "God_Bless_America-G_Major.mxl",
-    "pdf": "God_Bless_America-G_Major.pdf"
+    "osmd": "God_Bless_America-G_Major-SATB.mxl",
+    "pdf": "God_Bless_America-G_Major-SATB.pdf",
+    "mp3": "God_Bless_America-G_Major.mp3",
+    "flac": "God_Bless_America-G_Major.flac",
+    "mp4": "God_Bless_America-G_Major.mp4"
   },
-  "parts": {}
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Alto.mxl",
+        "mp3": "God_Bless_America-G_Major-Alto.mp3",
+        "flac": "God_Bless_America-G_Major-Alto.flac",
+        "mp4": "God_Bless_America-G_Major-Alto.mp4"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Bass.mxl",
+        "mp3": "God_Bless_America-G_Major-Bass.mp3",
+        "flac": "God_Bless_America-G_Major-Bass.flac",
+        "mp4": "God_Bless_America-G_Major-Bass.mp4"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Men.mxl",
+        "mp3": "God_Bless_America-G_Major-Men.mp3",
+        "flac": "God_Bless_America-G_Major-Men.flac",
+        "mp4": "God_Bless_America-G_Major-Men.mp4"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Soprano.mxl",
+        "mp3": "God_Bless_America-G_Major-Soprano.mp3",
+        "flac": "God_Bless_America-G_Major-Soprano.flac",
+        "mp4": "God_Bless_America-G_Major-Soprano.mp4"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Tenor.mxl",
+        "mp3": "God_Bless_America-G_Major-Tenor.mp3",
+        "flac": "God_Bless_America-G_Major-Tenor.flac",
+        "mp4": "God_Bless_America-G_Major-Tenor.mp4"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mxl": "God_Bless_America-G_Major-Women.mxl",
+        "mp3": "God_Bless_America-G_Major-Women.mp3",
+        "flac": "God_Bless_America-G_Major-Women.flac",
+        "mp4": "God_Bless_America-G_Major-Women.mp4"
+      }
+    }
+  }
 }

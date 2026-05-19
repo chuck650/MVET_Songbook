@@ -18,34 +18,37 @@
   flex-direction: column;
   flex-shrink: 0;
   height: 100vh;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1200;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar.collapsed {
-  width: 0;
-  min-width: 0;
-  max-width: 0;
-  padding-left: 0;
-  padding-right: 0;
   transform: translateX(-100%);
-  border-right-width: 0;
-  overflow: hidden;
 }
 
 .branding {
-  padding: 1.5rem;
+  margin-top: 48px;
   margin-bottom: 2rem;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  position: relative;
-  text-align: left;
+  justify-content: center;
+  width: 100%;
 }
 
 .branding-text {
-  flex: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar-logo {
+  width: 96px;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .sidebar-title {
@@ -71,13 +74,7 @@
   overflow: hidden;
 }
 
-.sidebar-logo {
-  width: 100%;
-  max-width: 180px; /* Specific constraint to prevent overflow */
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(56, 189, 248, 0.2));
-}
+
 
 .nav-links {
   list-style: none;
@@ -124,6 +121,7 @@
   gap: var(--spacing-md);
   border-bottom: 1px solid var(--glass-border);
   flex-shrink: 0;
+  position: relative;
 }
 
 .sidebar-toggle {
@@ -139,7 +137,10 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 1.2rem;
-  z-index: 1300;
+  z-index: 1100;
+  position: absolute;
+  top: 18px;
+  left: 18px;
 }
 
 .sidebar-toggle:hover {
@@ -506,9 +507,25 @@
   box-sizing: border-box;
 }
 
-.osmd-container svg {
-  margin: 0 auto !important;
+.viewer-container:not(.performance-mode) .osmd-container svg {
+  margin: 0 auto;
   display: block;
+  max-width: 100%;
+  
+  /* Library Override: OSMD generates inline 'height' attributes on the SVG element.
+     We must use !important to override the inline style and ensure the aspect ratio 
+     scales down proportionally when max-width is constrained. */
+  height: auto !important;
+}
+
+/* In Performance Mode, we want the single horizontal staffline SVG to render at its natural full width to allow horizontal scrolling */
+.viewer-container.performance-mode .osmd-container svg {
+  margin: 0 auto;
+  display: block;
+  max-width: none;
+  
+  /* Library Override: Ensure the single horizontal staffline maintains proportional scaling */
+  height: auto !important;
 }
 
 .viewer-footer {
@@ -523,7 +540,7 @@
   border-left: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 var(--spacing-lg);
   color: var(--color-text-muted);
   font-size: 0.85rem;
@@ -822,7 +839,10 @@
   cursor: pointer;
   font-size: 1.25rem;
   transition: all 0.2s ease;
-  margin-left: 1rem;
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  margin: 0;
   flex-shrink: 0;
 }
 
@@ -856,7 +876,13 @@
 
 /* Hero Banner Styles */
 .library-welcome {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 1200px) {
+  .library-welcome {
+    margin-bottom: var(--spacing-md);
+  }
 }
 
 .hero-banner {
@@ -1563,7 +1589,16 @@
 }
 
 @media (max-width: 768px) {
-  .footer-center {
+  .metadata-pill {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 8px;
+    border-radius: 8px;
+    padding: 6px 10px;
+    line-height: 1.2;
+  }
+  
+  .metadata-pill .dot {
     display: none;
   }
 }
@@ -1582,6 +1617,15 @@
     gap: 8px;
   }
 
+  .header-titles {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-left: 0 !important;
+    pointer-events: none;
+  }
+
   .header-titles h2 {
     font-size: 1rem !important;
     white-space: nowrap;
@@ -1591,6 +1635,30 @@
 
   .header-titles p {
     display: none; /* Hide subtitle on phones to prevent overlap */
+  }
+
+  .viewer-header,
+  .viewer-footer {
+    padding: 0 12px;
+  }
+
+  .osmd-scroll-wrapper {
+    padding-top: 60px; /* Exact height of mobile header */
+    padding-bottom: 60px; /* Exact height of mobile footer */
+  }
+
+  .osmd-container {
+    width: 100%;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .btn-back .text {
+    display: none;
+  }
+
+  .song-title-group h3 {
+    font-size: 0.9rem;
   }
 
   .user-profile {
@@ -1969,10 +2037,12 @@
   pointer-events: none;
 }
 
-[data-tooltip]:hover::after {
-  opacity: 1 !important;
-  visibility: visible !important;
-  bottom: -50px;
+@media (hover: hover) {
+  [data-tooltip]:hover::after {
+    opacity: 1 !important;
+    visibility: visible !important;
+    bottom: -50px;
+  }
 }
 
 /* Specific adjustment for performance mode tooltips (against white background) */
