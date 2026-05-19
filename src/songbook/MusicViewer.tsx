@@ -381,7 +381,7 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
                   Show Measure Numbers
                 </label>
               </div>
-              <div className="setting-group" style={{ marginTop: '20px' }}>
+              <div className="setting-group">
                 <label>Score Zoom</label>
                 <div className="slider-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <input 

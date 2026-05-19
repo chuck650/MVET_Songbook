@@ -1034,6 +1034,24 @@
   gap: var(--spacing-md);
 }
 
+.drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.drawer-section h5 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
 .setting-group {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 {
   "name": "mvet-songbook",
   "private": true,
-  "version": "1.2.19",
+  "version": "1.2.20",
   "type": "module",
   "scripts": {
     "sync": "bash scripts/sync-all-songs.sh",
