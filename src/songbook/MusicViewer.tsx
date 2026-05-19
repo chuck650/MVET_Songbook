@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
-import { useSettings } from "./SettingsContext";
-import { useWebAudio } from "./useWebAudio";
-import { resolvePath } from "../utils/resolvePath";
-import { Song } from "../types/songbook";
-
-interface MusicViewerProps {
-  song: Song;
-  onBack: () => void;
-}
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
+import { useSettings } from './SettingsContext';
+import { useWebAudio } from './useWebAudio';
+import { resolvePath } from '../utils/resolvePath';
+import { Song, RehearsalFiles } from '../types/songbook';
 
 interface ActiveTrack {
-  type: 'video' | 'audio';
+  type: 'audio' | 'video';
   url: string;
   partName: string;
 }
@@ -19,370 +14,391 @@ interface ActiveTrack {
 interface RehearsalPart {
   key: string;
   name: string;
-  files: {
-    mxl?: string;
-    mp3?: string;
-    flac?: string;
-    mp4?: string;
-    [key: string]: string | undefined;
-  };
+  files: RehearsalFiles;
+}
+
+interface MusicViewerProps {
+  song: Song;
+  onBack: () => void;
 }
 
 const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
-  const { settings } = useSettings();
-  const [activePartKey, setActivePartKey] = useState<string>("All");
-  const [audioFormat, setAudioFormat] = useState<"flac" | "mp3">("flac");
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // Performance Navigation States
-  const [isPerformanceMode, setIsPerformanceMode] = useState<boolean>(false);
-  const [currentX, setCurrentX] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const isDraggingRef = useRef<boolean>(false);
-
-  // Rehearsal Tracks
-  const [activeTrack, setActiveTrack] = useState<ActiveTrack | null>(null);
-
-  const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { settings, updateSetting } = useSettings();
+  
+  const [activePartKey, setActivePartKey] = useState<string>('full');
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [audioFormat, setAudioFormat] = useState<'flac' | 'mp3'>('flac');
+  const [isPerformanceMode, setIsPerformanceMode] = useState<boolean>(false);
+  const drawMeasureNumbers = settings.drawMeasureNumbers ?? true;
 
-  // Web Audio isolator hooks
-  const webAudio = useWebAudio(
-    activeTrack?.type === 'audio' ? activeTrack.url : undefined,
-    true // Autoplay on load
-  );
+  // Media Player State
+  const [activeTrack, setActiveTrack] = useState<ActiveTrack | null>(null);
 
-  // Wake Lock Ref
-  const wakeLockRef = useRef<unknown>(null);
+  const [zoomLevel, setZoomLevel] = useState<number>(window.innerWidth <= 600 ? 0.75 : 1.0);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
-  // Performance scrolling configurations
-  const dragStartX = useRef<number>(0);
-  const dragStartScroll = useRef<number>(0);
-  const lastX = useRef<number>(0);
-  const lastTime = useRef<number>(0);
-  const velocity = useRef<number>(0);
-  const animationFrame = useRef<number>();
-
-  // Extract rehearsal parts
-  const rehearsalParts: RehearsalPart[] = [];
-  if (song.parts) {
-    Object.entries(song.parts).forEach(([key, val]) => {
-      if (val) {
-        rehearsalParts.push({
-          key,
-          name: val.name,
-          files: val.files
-        });
-      }
-    });
-  }
-
-  // Handle Screen Wake Lock
   useEffect(() => {
-    if (!settings.keepScreenAwake) {
-      if (wakeLockRef.current) {
-        try {
-          (wakeLockRef.current as { release: () => void }).release();
-        } catch (e) {
-          // ignore
-        }
-        wakeLockRef.current = null;
-      }
-      return;
-    }
-
-    const requestWakeLock = async () => {
-      if ('wakeLock' in navigator) {
-        try {
-          const wl = await (navigator as unknown as { wakeLock: { request: (type: string) => Promise<unknown> } }).wakeLock.request('screen');
-          wakeLockRef.current = wl;
-          console.log("Wake Lock acquired successfully.");
-        } catch (err) {
-          console.warn("Wake Lock failed to acquire:", err);
-        }
-      }
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-    void requestWakeLock();
+  const webAudio = useWebAudio(activeTrack?.type === 'audio' ? activeTrack.url : undefined, true);
+  const [measureMap, setMeasureMap] = useState<Array<{ index: number; x: number }>>([]);
+  const [currentX, setCurrentX] = useState<number>(0);
 
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        void requestWakeLock();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibility);
-      if (wakeLockRef.current) {
-        try {
-          (wakeLockRef.current as { release: () => void }).release();
-        } catch (e) {
-          // ignore
-        }
-      }
-    };
-  }, [settings.keepScreenAwake]);
-
-  // Set default isolator voice part from global settings
   useEffect(() => {
-    if (settings.primaryPart && settings.primaryPart !== "All") {
-      const match = rehearsalParts.find(p => p.name.toLowerCase() === settings.primaryPart.toLowerCase());
-      if (match) {
-        setActivePartKey(match.key);
-      }
-    }
-  }, [settings.primaryPart, song]);
-
-  // Handle Performance Mode Key bindings
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsPerformanceMode(false);
-      } else if (e.key === "ArrowRight" || e.key === "PageDown") {
-        goToNextPage(currentX);
-      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
-        goToPrevPage(currentX);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPerformanceMode, currentX]);
-
-  // Load XML Score
-  const loadScore = useCallback(async () => {
     if (!containerRef.current) return;
-    setLoading(true);
+    
+    if (!osmdRef.current) {
+      osmdRef.current = new OpenSheetMusicDisplay(containerRef.current, { 
+        autoResize: true, 
+        drawTitle: false, 
+        drawLyrics: true, 
+        coloringEnabled: true, 
+        followCursor: false,
+        drawPartNames: false,
+        drawPartAbbreviations: false,
+        renderSingleHorizontalStaffline: isPerformanceMode
+      });
+    }
 
-    // Clean prior rendering context
-    containerRef.current.innerHTML = "";
-    osmdRef.current = null;
+    const osmd = osmdRef.current;
+    
+    // Set all EngravingRules before loading to ensure they are respected during parsing
+    osmd.EngravingRules.RenderPartNames = false;
+    osmd.EngravingRules.RenderPartAbbreviations = false;
 
     try {
-      const targetMxl = activePartKey === "All" 
-        ? song.files.osmd || song.files.mxl
-        : song.parts?.[activePartKey]?.files?.mxl || song.files.osmd || song.files.mxl;
+      if (!osmd) return;
 
-      if (!targetMxl) {
-        throw new Error("No notation file found.");
-      }
-
-      console.log(`OSMD: Loading notation score: ${targetMxl}`);
-      
-      const response = await fetch(resolvePath(targetMxl));
-      const arrayBuffer = await response.arrayBuffer();
-
-      const osmd = new OpenSheetMusicDisplay(containerRef.current, {
-        autoResize: true,
-        drawTitle: true,
-        drawSubtitle: false,
-        drawComposer: false,
-        drawCredits: false,
-        drawPartNames: true,
-        drawMeasureNumbers: settings.drawMeasureNumbers,
-        coloringEnabled: true,
-        alignRhythm: true,
-        fillEmptyMeasuresWithWholeRests: true,
-        backend: "svg"
-      } as any);
-
-      // Spurious volta cancellations override
-      const rules = (osmd as any).rules || (osmd as any).EnginePlayBackRules;
-      if (rules) {
-        rules.DrawingDoubleKeySignatureChange = settings.modernKeyChanges;
-        rules.FingeringPosition = 2; // Above note
-      }
-
-      await osmd.load(arrayBuffer as unknown as string);
-      
-      // Calibrate Zoom scale
-      osmd.Zoom = settings.zoomLevel;
-      osmd.render();
-
-      osmdRef.current = osmd;
-      setLoading(false);
-      
-      // Reset Performance positioning
-      setCurrentX(0);
-      if (wrapperRef.current) {
-        wrapperRef.current.scrollLeft = 0;
-      }
-    } catch (err) {
-      console.error("OSMD Loading Error:", err);
-      setLoading(false);
-    }
-  }, [activePartKey, song, settings.drawMeasureNumbers, settings.modernKeyChanges, settings.zoomLevel]);
-
-  useEffect(() => {
-    void loadScore();
-  }, [loadScore]);
-
-  // Safe Navigation calculations
-  const getMaxScroll = (): number => {
-    if (!containerRef.current || !wrapperRef.current) return 0;
-    const padding = 150; // Viewport padding protection
-    return Math.max(0, containerRef.current.scrollWidth - wrapperRef.current.clientWidth + padding);
-  };
-
-  const goToNextPage = (curr: number) => {
-    if (!wrapperRef.current) return;
-    const maxScroll = getMaxScroll();
-    const stride = wrapperRef.current.clientWidth * 0.85; // 85% viewport glide
-    const nextVal = Math.min(maxScroll, curr + stride);
-    glideTo(nextVal);
-  };
-
-  const goToPrevPage = (curr: number) => {
-    const stride = wrapperRef.current?.clientWidth ? wrapperRef.current.clientWidth * 0.85 : 400;
-    const nextVal = Math.max(0, curr - stride);
-    glideTo(nextVal);
-  };
-
-  // Smooth scroll animator loop
-  const glideTo = (target: number) => {
-    if (animationFrame.current !== undefined) cancelAnimationFrame(animationFrame.current);
-    
-    let start: number | null = null;
-    const duration = 250; // Milliseconds transition
-    const initX = currentX;
-
-    const step = (timestamp: number) => {
-      if (!start) start = timestamp;
-      const progress = timestamp - start;
-      const t = Math.min(progress / duration, 1);
-      
-      // Ease out Cubic glide
-      const ease = 1 - Math.pow(1 - t, 3);
-      const val = initX + (target - initX) * ease;
-      
-      setCurrentX(val);
-      if (wrapperRef.current) {
-        wrapperRef.current.scrollLeft = val;
-      }
-
-      if (t < 1) {
-        animationFrame.current = requestAnimationFrame(step);
+      // Set performance-specific options
+      if (isPerformanceMode) {
+        // High-resolution baseline for Performance Mode
+        const optimalZoom = 0.8;
+        (osmd as any).Zoom = optimalZoom;
+        
+        osmd.setOptions({
+          drawTitle: false,
+          drawSubtitle: false,
+          drawComposer: false,
+          drawCredits: false,
+          drawLyrics: true,
+          drawPartNames: false,
+          drawPartAbbreviations: false,
+          renderSingleHorizontalStaffline: true,
+          drawPageBackground: false, 
+          drawPageBackgrounds: false, // Cover all variations
+          drawPageShadows: false,     // Specifically kill shadows
+          pageBackgroundColor: 'transparent' 
+        } as any);
       } else {
-        setCurrentX(target);
+        (osmd as any).Zoom = zoomLevel;
+        osmd.setOptions({
+          drawTitle: false,      // Suppress redundant title since we display it in the header
+          drawSubtitle: false,
+          drawComposer: false,
+          drawCredits: false,    // Suppress arranger/lyricist credits to prevent overlapping with system text
+          drawLyrics: true,
+          drawPartNames: false,
+          drawPartAbbreviations: false,
+          renderSingleHorizontalStaffline: false
+        });
       }
-    };
-    animationFrame.current = requestAnimationFrame(step);
-  };
+    } catch (e) {
+      console.error("OSMD Option Update Error:", e);
+    }
+    
+    void (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const mRelative = activePartKey === 'full' 
+          ? (song.files.osmd || song.files.mxl) 
+          : song.parts?.[activePartKey]?.files?.mxl || song.files.mxl;
+        
+        if (!mRelative) {
+          throw new Error("No MusicXML file specified");
+        }
 
-  // Performance Scrolling gesture tracking
+        // Cache-buster using hash to ensure sanitization is applied
+        const hash = song.hashes?.[mRelative] || Date.now();
+        const m = `${resolvePath(mRelative)}?v=${hash}`;
+        
+        await osmd.load(m);
+        osmd.setOptions({ drawMeasureNumbers: !!drawMeasureNumbers });
+        
+        // The responsive render effect will handle the margins, zoom, and render call
+        setLoading(false);
+      } catch (err) {
+        console.error("OSMD Render Error:", err);
+        setError("Render Fail"); 
+        setLoading(false); 
+      }
+    })();
+  }, [song, activePartKey, drawMeasureNumbers, isPerformanceMode, zoomLevel]);
+
+  // Responsive Margins and Zooming Effect - Re-renders without reloading XML
+  useEffect(() => {
+    const osmd = osmdRef.current;
+    if (osmd && (osmd as any).sheet && !loading) {
+      osmd.EngravingRules.PageLeftMargin = 4.0;
+      osmd.EngravingRules.PageRightMargin = 4.0;
+      osmd.EngravingRules.PageTopMargin = 5.0;
+      osmd.EngravingRules.PageBottomMargin = 5.0;
+      
+      (osmd as any).Zoom = zoomLevel;
+      
+      try {
+        osmd.render();
+        
+        // Build Measure Map for Performance Mode paging if active
+        if (isPerformanceMode) {
+          const mList: Array<{ index: number; x: number }> = [];
+          const graphicMeasures = osmd.GraphicSheet.MeasureList;
+          for (let i = 0; i < graphicMeasures.length; i++) {
+            const m = graphicMeasures[i][0];
+            if (m) {
+              mList.push({
+                index: i,
+                x: m.PositionAndShape.AbsolutePosition.x * 10
+              });
+            }
+          }
+          setMeasureMap(mList);
+          setCurrentX(0);
+        }
+      } catch (e) {
+        console.error("OSMD Responsive Render Error:", e);
+      }
+    }
+  }, [windowWidth, zoomLevel, loading, isPerformanceMode]);
+
+  // UX Fix: Reset audio player when format changes to ensure new format is picked up
+  useEffect(() => {
+    if (activeTrack?.type === 'audio') {
+      setActiveTrack(null);
+    }
+  }, [audioFormat]);
+
+  const partOrder = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
+  const rehearsalParts: RehearsalPart[] = [
+    { key: 'full', name: 'Full Score', files: song.files },
+    ...partOrder
+      .filter(key => song.parts?.[key])
+      .map(key => ({ key, name: song.parts?.[key]?.name || key, files: song.parts?.[key]?.files || {} }))
+  ];
+
+  const handlePlayTrack = useCallback((type: 'audio' | 'video', part: RehearsalPart) => {
+    const fileUrl = type === 'video' ? part.files.mp4 : (part.files[audioFormat] || part.files.flac || part.files.mp3);
+    if (!fileUrl) return;
+    
+    // Apply cache-busting hash
+    const hash = song.hashes?.[fileUrl] || Date.now();
+    const finalUrl = `${resolvePath(fileUrl)}?v=${hash}`;
+    
+    setActiveTrack({ type, url: finalUrl, partName: part.name });
+  }, [song, audioFormat]);
+
+  // Performance Mode Unified Gesture Engine
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragStartX, setDragStartX] = useState<number>(0);
+  const [initialX, setInitialX] = useState<number>(0);
+  const dragStartTime = useRef<number>(0);
+  const dragDistance = useRef<number>(0);
+  const wasDragging = useRef<boolean>(false);
+
+  const goToNextPage = useCallback((fromX = currentX) => {
+    if (!isPerformanceMode || measureMap.length === 0) return;
+    const viewportWidth = window.innerWidth;
+    const targetX = fromX + (viewportWidth * 0.85);
+    const nextMeasure = measureMap.find(m => m.x >= targetX);
+    if (nextMeasure) setCurrentX(nextMeasure.x);
+  }, [isPerformanceMode, measureMap, currentX]);
+
+  const goToPrevPage = useCallback((fromX = currentX) => {
+    if (!isPerformanceMode || measureMap.length === 0) return;
+    const viewportWidth = window.innerWidth;
+    const targetX = fromX - (viewportWidth * 0.85);
+    const prevMeasure = [...measureMap].reverse().find(m => m.x <= targetX);
+    setCurrentX(prevMeasure ? Math.max(0, prevMeasure.x) : 0);
+  }, [isPerformanceMode, measureMap, currentX]);
+
   const handleGestureStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isPerformanceMode) return;
-    if (animationFrame.current !== undefined) cancelAnimationFrame(animationFrame.current);
+    
+    // Only allow dragging to start if the target is the score or a child of the score
+    const scoreElement = containerRef.current?.querySelector('.performance-score');
+    if (scoreElement && !scoreElement.contains(e.target as Node)) return;
+
+    // Prevent browser default behavior (like swipe-to-back)
+    if (e.cancelable) e.preventDefault();
+
+    setIsDragging(true);
+    wasDragging.current = false;
+    dragStartTime.current = Date.now();
+    dragDistance.current = 0;
     
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    isDraggingRef.current = true;
-    setIsDragging(true);
-    dragStartX.current = clientX;
-    dragStartScroll.current = currentX;
-    lastX.current = clientX;
-    lastTime.current = performance.now();
-    velocity.current = 0;
+    setDragStartX(clientX);
+    setInitialX(currentX);
   };
 
   const handleGestureMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDraggingRef.current) return;
+    if (!isDragging) return;
     
+    // Prevent browser default behavior (like swipe-to-back)
+    if (e.cancelable) e.preventDefault();
+
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const deltaX = dragStartX.current - clientX;
-    const now = performance.now();
-    const dt = now - lastTime.current;
+    const delta = clientX - dragStartX;
+    dragDistance.current = Math.abs(delta);
     
-    if (dt > 0) {
-      velocity.current = -(clientX - lastX.current) / dt;
+    if (dragDistance.current > 10) {
+      wasDragging.current = true;
     }
     
-    lastX.current = clientX;
-    lastTime.current = now;
-
-    const maxScroll = getMaxScroll();
-    const nextVal = Math.max(0, Math.min(maxScroll, dragStartScroll.current + deltaX));
-    setCurrentX(nextVal);
-    if (wrapperRef.current) {
-      wrapperRef.current.scrollLeft = nextVal;
-    }
+    setCurrentX(Math.max(0, initialX - delta));
   };
 
-  const handleGestureEnd = () => {
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
+  const handleGestureEnd = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging) return;
     setIsDragging(false);
+    
+    const clientX = 'changedTouches' in e ? (e.changedTouches?.[0]?.clientX || dragStartX) : (e as React.MouseEvent).clientX;
+    const delta = clientX - dragStartX;
+    const duration = Date.now() - dragStartTime.current;
 
-    // Apply inertia scroll if velocity was fast enough
-    if (Math.abs(velocity.current) > 0.15) {
-      const inertiaDelta = velocity.current * 150; // inertia stride
-      const maxScroll = getMaxScroll();
-      const target = Math.max(0, Math.min(maxScroll, currentX + inertiaDelta));
-      glideTo(target);
+    // FLICK: Fast movement -> Page Turn from INITIAL position
+    if (duration < 250 && dragDistance.current > 50) {
+      if (delta < 0) goToNextPage(initialX);
+      else goToPrevPage(initialX);
+      return;
+    }
+
+    // DRAG: Snap to nearest measure (Only if we actually moved significantly)
+    if (wasDragging.current) {
+      const nearest = measureMap.reduce((prev, curr) => 
+        Math.abs(curr.x - currentX) < Math.abs(prev.x - currentX) ? curr : prev, 
+        measureMap[0]
+      );
+      setCurrentX(nearest ? nearest.x : initialX);
     }
   };
 
-  // Video and Audio Track Playback coordinators
-  const handlePlayTrack = (type: 'video' | 'audio', part: RehearsalPart) => {
-    const fileUrl = part.files[audioFormat === 'flac' ? 'flac' : 'mp3'] || part.files.mp3 || part.files.flac;
-    if (type === 'video' && part.files.mp4) {
-      setActiveTrack({
-        type: 'video',
-        url: resolvePath(part.files.mp4),
-        partName: part.name
-      });
-    } else if (type === 'audio' && fileUrl) {
-      setActiveTrack({
-        type: 'audio',
-        url: resolvePath(fileUrl),
-        partName: part.name
-      });
-    }
-  };
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isPerformanceMode) return;
+      
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        goToNextPage(currentX);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        goToPrevPage(currentX);
+      } else if (e.key === 'Escape') {
+        setIsPerformanceMode(false);
+      }
+    };
+
+    const handleFullScreenChange = () => {
+      if (!document.fullscreenElement && isPerformanceMode) {
+        setIsPerformanceMode(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [isPerformanceMode, currentX, goToNextPage, goToPrevPage]);
 
   return (
-    <div className={`music-viewer ${isPerformanceMode ? "performance-mode" : ""}`}>
+    <div className={`viewer-container ${isPerformanceMode ? 'performance-mode' : ''}`}>
       <header className="viewer-header">
-        <button onClick={onBack} className="btn-back">← Library</button>
-        <div className="header-titles">
-          <h3>{song.title}</h3>
-          <p>{activePartKey === "All" ? "Full SATB Score" : `${song.parts?.[activePartKey]?.name || "Solo"} Rehearsal`}</p>
-        </div>
-        <button 
-          className={`performance-toggle ${isPerformanceMode ? "active" : ""}`}
-          onClick={() => {
-            setIsPerformanceMode(true);
-            // Hide tracks sidebar when transitioning to performance view
-            setActiveTrack(null);
-          }}
-          title="Enter Performance Mode"
-        >
-          🎭 Performance Mode
+        <button onClick={onBack} className="btn-back">
+          <span className="icon">←</span>
+          <span className="text">Back</span>
         </button>
+        <div className="song-title-group"><h3>{song.title}</h3></div>
+        <div className="viewer-actions">
+          <button 
+            className={`btn-performance ${isPerformanceMode ? 'active' : ''}`} 
+            data-tooltip="Performance Mode"
+            onClick={() => {
+              const nextState = !isPerformanceMode;
+              setIsPerformanceMode(nextState);
+              if (nextState) {
+                document.documentElement.requestFullscreen().catch(() => {});
+              } else if (document.fullscreenElement) {
+                document.exitFullscreen().catch(() => {});
+              }
+            }}
+            title="Toggle Performance Mode"
+          >
+            ⛶
+          </button>
+          <button 
+            className="btn-gear" 
+            data-tooltip="Settings"
+            onClick={() => setShowSettings(!showSettings)}
+          >⚙️</button>
+        </div>
       </header>
 
-      {!isPerformanceMode && (
-        <aside className="rehearsal-aside glass">
-          <div className="aside-scrollable">
+      {showSettings && (
+        <aside className={`settings-drawer glass ${showSettings ? 'open' : ''}`}>
+          <div className="drawer-header">
+            <h4>Settings</h4>
+            <button onClick={() => setShowSettings(false)}>×</button>
+          </div>
+          
+          <div className="drawer-content">
             <section className="drawer-section">
-              <h5>Focus Part Isolation</h5>
-              <div className="btn-group-vertical">
-                <button 
-                  className={`part-select-btn ${activePartKey === 'All' ? 'active' : ''}`}
-                  onClick={() => setActivePartKey('All')}
-                >
-                  Full Score (SATB)
-                </button>
-                {rehearsalParts.map((part) => (
-                  <button 
-                    key={part.key} 
-                    className={`part-select-btn ${activePartKey === part.key ? 'active' : ''}`}
-                    onClick={() => setActivePartKey(part.key)}
-                  >
-                    {part.name}
-                  </button>
-                ))}
+              <h5>Score Display</h5>
+              <div className="setting-group">
+                <label>Part Selection</label>
+                <select value={activePartKey} onChange={(e) => setActivePartKey(e.target.value)}>
+                  <option value="full">Full Score</option>
+                  {Object.entries(song.parts || {}).map(([key, part]) => (
+                    <option key={key} value={key}>{part?.name || key}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="setting-group">
+                <label className="checkbox-label">
+                  <input type="checkbox" checked={drawMeasureNumbers} onChange={(e) => updateSetting('drawMeasureNumbers', e.target.checked)} />
+                  Show Measure Numbers
+                </label>
+              </div>
+              <div className="setting-group" style={{ marginTop: '20px' }}>
+                <label>Score Zoom</label>
+                <div className="slider-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <input 
+                    type="range" 
+                    min="0.3" 
+                    max="1.5" 
+                    step="0.05" 
+                    value={zoomLevel} 
+                    onChange={(e) => setZoomLevel(parseFloat(e.target.value))} 
+                    style={{ flex: 1 }}
+                  />
+                  <span>{Math.round(zoomLevel * 100)}%</span>
+                </div>
               </div>
             </section>
+
+            <div className="drawer-divider"></div>
 
             <section className="drawer-section">
               <div className="section-header-row">
@@ -463,6 +479,7 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
       )}
 
       {loading && <div className="viewer-overlay"><div className="loader">Loading...</div></div>}
+      {error && <div className="viewer-overlay"><div className="error-message">{error}</div></div>}
       
       <div 
         ref={wrapperRef} 
