@@ -7,10 +7,10 @@
  * 
  * This resolver prepends the base path cleanly without double-slashing or breaking paths.
  * 
- * @param {string} path - Absolute asset path (starting with '/')
- * @returns {string} The resolved path relative to the base URL
+ * @param path - Absolute asset path (starting with '/')
+ * @returns The resolved path relative to the base URL
  */
-export function resolvePath(path) {
+export function resolvePath(path?: string): string {
   if (!path) return '';
   const base = import.meta.env.BASE_URL || '/';
   

@@ -2,7 +2,11 @@ import React from 'react';
 import './About.css';
 import { VERSION } from '../version';
 
-const About = ({ onBack }) => {
+interface AboutProps {
+  onBack: () => void;
+}
+
+const About: React.FC<AboutProps> = ({ onBack }) => {
   return (
     <div className="about-container">
       <header className="about-header">

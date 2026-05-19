@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { useSettings } from './SettingsContext';
+import { Song } from '../types/songbook';
 
-const SettingsView = () => {
+interface DownloadItem {
+  url: string;
+  hash: string;
+}
+
+const SettingsView: React.FC = () => {
   const { settings, updateSetting } = useSettings();
-  const [syncStatus, setSyncStatus] = useState('idle'); // idle, syncing, done
-  const [syncProgress, setSyncProgress] = useState(0);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'done'>('idle');
+  const [syncProgress, setSyncProgress] = useState<number>(0);
 
   const parts = ['All', 'Soprano', 'Alto', 'Tenor', 'Bass'];
 
@@ -14,33 +20,45 @@ const SettingsView = () => {
       setSyncProgress(0);
       
       const response = await fetch('/songs.json');
-      const songs = await response.json();
+      const songs: Song[] = await response.json();
       
       // Load local hash manifest to detect changes
-      const localHashes = JSON.parse(localStorage.getItem('mvet_synced_hashes') || '{}');
-      const newHashes = { ...localHashes };
+      const localHashes = JSON.parse(localStorage.getItem('mvet_synced_hashes') || '{}') as Record<string, string>;
+      const newHashes: Record<string, string> = { ...localHashes };
       
       const cache = await caches.open('song-files-cache');
       let completed = 0;
-      let totalFiles = 0;
       
       // Flatten all files to download
-      const downloadQueue = [];
+      const downloadQueue: DownloadItem[] = [];
       songs.forEach(song => {
         // Main files
-        Object.entries(song.files).forEach(([type, url]) => {
-          const serverHash = song.hashes[url];
-          if (localHashes[url] !== serverHash) {
-            downloadQueue.push({ url, hash: serverHash });
-          }
-        });
+        if (song.files) {
+          Object.entries(song.files).forEach(([_type, url]) => {
+            if (url && song.hashes) {
+              const serverHash = song.hashes[url];
+              if (serverHash && localHashes[url] !== serverHash) {
+                downloadQueue.push({ url, hash: serverHash });
+              }
+            }
+          });
+        }
+        
         // Part files
-        song.parts.forEach(part => {
-          const serverHash = song.hashes[part.file];
-          if (localHashes[part.file] !== serverHash) {
-            downloadQueue.push({ url: part.file, hash: serverHash });
-          }
-        });
+        if (song.parts) {
+          Object.values(song.parts).forEach(part => {
+            if (part && part.files) {
+              Object.entries(part.files).forEach(([_type, url]) => {
+                if (url && song.hashes) {
+                  const serverHash = song.hashes[url];
+                  if (serverHash && localHashes[url] !== serverHash) {
+                    downloadQueue.push({ url, hash: serverHash });
+                  }
+                }
+              });
+            }
+          });
+        }
       });
 
       if (downloadQueue.length === 0) {
@@ -87,7 +105,7 @@ const SettingsView = () => {
           </div>
           <button 
             className={`sync-btn ${syncStatus}`}
-            onClick={syncLibrary}
+            onClick={() => { void syncLibrary(); }}
             disabled={syncStatus === 'syncing'}
           >
             {syncStatus === 'syncing' ? `Syncing ${syncProgress}%` : 

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./Landing.css";
 import { resolvePath } from "../utils/resolvePath";
 
-function App() {
-  const [view, setView] = useState("home");
+const App: React.FC = () => {
+  const [view, setView] = useState<"home" | "learn-more">("home");
 
   if (view === "learn-more") {
     return (

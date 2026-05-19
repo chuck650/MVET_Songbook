@@ -4,14 +4,14 @@ import SettingsView from "./SettingsView";
 import MusicViewer from "./MusicViewer";
 import About from "./About";
 import { resolvePath } from "../utils/resolvePath";
-
+import { Song } from "../types/songbook";
 
 function AppContent() {
-  const [songs, setSongs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("browser");
-  const [selectedSong, setSelectedSong] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [activeTab, setActiveTab] = useState<"browser" | "settings" | "about" | "player">("browser");
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const { settings } = useSettings();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -20,7 +20,7 @@ function AppContent() {
     setLoading(true);
     fetch(resolvePath(`/songs.json?v=${Date.now()}`), { cache: 'no-store' })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: Song[]) => {
         setSongs(data);
         setLoading(false);
       })
@@ -42,7 +42,7 @@ function AppContent() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [selectedSong]);
 
-  const handleSongSelect = (song) => {
+  const handleSongSelect = (song: Song) => {
     setSelectedSong(song);
     setActiveTab("player");
     // Push state to allow browser back button to close viewer
@@ -58,7 +58,7 @@ function AppContent() {
     }
   };
 
-  const handleDownload = (e, fileUrl) => {
+  const handleDownload = (e: React.MouseEvent, _fileUrl: string) => {
     e.stopPropagation(); // Prevent card click
     // The browser will handle the download via the <a> tag's download attribute
   };
@@ -69,48 +69,48 @@ function AppContent() {
     >
       {!selectedSong && (
         <nav className={`sidebar ${!isSidebarOpen ? "collapsed" : ""}`}>
-            <div className="branding">
-              <div className="branding-text">
-                <img src={resolvePath("/favicon.png")} alt="MVET Choral Songbook" className="sidebar-logo" />
-              </div>
-              <button 
-                className="sidebar-close-btn"
-                onClick={toggleSidebar}
-                aria-label="Close sidebar"
-              >
-                ✕
-              </button>
+          <div className="branding">
+            <div className="branding-text">
+              <img src={resolvePath("/favicon.png")} alt="MVET Choral Songbook" className="sidebar-logo" />
             </div>
-            <ul className="nav-links">
-              <li
-                className={activeTab === "browser" ? "active" : ""}
-                onClick={() => {
-                  setActiveTab("browser");
-                  setIsSidebarOpen(false);
-                }}
-              >
-                <span>📚</span> Library
-              </li>
-              <li
-                className={activeTab === "settings" ? "active" : ""}
-                onClick={() => {
-                  setActiveTab("settings");
-                  setIsSidebarOpen(false);
-                }}
-              >
-                <span>⚙️</span> Settings
-              </li>
-              <li
-                className={activeTab === "about" ? "active" : ""}
-                onClick={() => {
-                  setActiveTab("about");
-                  setIsSidebarOpen(false);
-                }}
-              >
-                <span>🛡️</span> About & Legal
-              </li>
-            </ul>
-          </nav>
+            <button 
+              className="sidebar-close-btn"
+              onClick={toggleSidebar}
+              aria-label="Close sidebar"
+            >
+              ✕
+            </button>
+          </div>
+          <ul className="nav-links">
+            <li
+              className={activeTab === "browser" ? "active" : ""}
+              onClick={() => {
+                setActiveTab("browser");
+                setIsSidebarOpen(false);
+              }}
+            >
+              <span>📚</span> Library
+            </li>
+            <li
+              className={activeTab === "settings" ? "active" : ""}
+              onClick={() => {
+                setActiveTab("settings");
+                setIsSidebarOpen(false);
+              }}
+            >
+              <span>⚙️</span> Settings
+            </li>
+            <li
+              className={activeTab === "about" ? "active" : ""}
+              onClick={() => {
+                setActiveTab("about");
+                setIsSidebarOpen(false);
+              }}
+            >
+              <span>🛡️</span> About & Legal
+            </li>
+          </ul>
+        </nav>
       )}
 
       <main className="main-content">
@@ -178,7 +178,7 @@ function AppContent() {
                             href={resolvePath(song.files.mscz)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.mscz))}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.mscz || ''))}
                           >
                             <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
                             <span>MSCZ</span>
@@ -189,7 +189,7 @@ function AppContent() {
                             href={resolvePath(song.files.mxl)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.mxl))}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.mxl || ''))}
                           >
                             <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
                             <span>MXL</span>
@@ -200,7 +200,7 @@ function AppContent() {
                             href={resolvePath(song.files.pdf)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.pdf))}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.pdf || ''))}
                           >
                             <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
                             <span>PDF</span>
