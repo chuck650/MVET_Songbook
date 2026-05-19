@@ -47,11 +47,12 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Viewport-Proportional Margins & Manual Zoom Engine (v1.2.7)
 - [x] Universal Symmetric Margins & Decoupled Performance Scroller (v1.2.12)
 - [x] Production Deployment of v1.2.13 (Hardened Margins & Performance Mode Scroller)
+- [x] GitHub Pages Migration & Dynamic Path Resolution Hardening (v1.2.14)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
-- **Site ID**: `0c13f55a-3eb5-4763-8d8b-eb8b4476277d`
-- **Automation**: Use `.agents/skills/deploy_netlify/SKILL.md` and `.agents/skills/web_audio_precision_sync/SKILL.md` for core workflows.
+- **GitHub Pages URL**: `https://chuck650.github.io/MVET_Songbook/`
+- **Automation**: GitHub Actions workflow `.github/workflows/deploy.yml` manages automated Vite PWA compilation and deployment.
 - **Precision**: v1.1.68 implements the Atomic Vertical Fit (86vh) and Infinite Canvas (uncapped max-width) for flawless landscape mobile stability.
 - **Visuals**: Universal symmetric margins (4.0L / 4.0R) ensure the sheet music is flawlessly centered under the title across all device types and orientations, preventing any right-skew or overflow.
 - **Performance Mode**: Unconstrained `:not(.performance-mode)` SVG scaling ensures the single horizontal staffline renders at its full crisp width without vertical squishing.
