@@ -3,6 +3,7 @@ import { SettingsProvider, useSettings } from "./SettingsContext";
 import SettingsView from "./SettingsView";
 import MusicViewer from "./MusicViewer";
 import About from "./About";
+import { resolvePath } from "../utils/resolvePath";
 
 
 function AppContent() {
@@ -17,7 +18,7 @@ function AppContent() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/songs.json?v=${Date.now()}`, { cache: 'no-store' })
+    fetch(resolvePath(`/songs.json?v=${Date.now()}`), { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         setSongs(data);
@@ -70,7 +71,7 @@ function AppContent() {
         <nav className={`sidebar ${!isSidebarOpen ? "collapsed" : ""}`}>
             <div className="branding">
               <div className="branding-text">
-                <img src="/favicon.png" alt="MVET Choral Songbook" className="sidebar-logo" />
+                <img src={resolvePath("/favicon.png")} alt="MVET Choral Songbook" className="sidebar-logo" />
               </div>
               <button 
                 className="sidebar-close-btn"
@@ -133,7 +134,7 @@ function AppContent() {
           {activeTab === "browser" && !selectedSong && (
             <div className="library-welcome">
               <div className="hero-banner">
-                <img src="/mvet_hero.png" alt="MVET Patriotic Branding" />
+                <img src={resolvePath("/mvet_hero.png")} alt="MVET Patriotic Branding" />
                 <div className="hero-overlay">
                   <h3>Honor through Harmony</h3>
                 </div>
@@ -174,34 +175,34 @@ function AppContent() {
                       <div className="song-card-actions">
                         {song.files.mscz && (
                           <a
-                            href={song.files.mscz}
+                            href={resolvePath(song.files.mscz)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, song.files.mscz)}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.mscz))}
                           >
-                            <img src="/assets/icons/mscz.svg" className="btn-icon" alt="" />
+                            <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
                             <span>MSCZ</span>
                           </a>
                         )}
                         {song.files.mxl && (
                           <a
-                            href={song.files.mxl}
+                            href={resolvePath(song.files.mxl)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, song.files.mxl)}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.mxl))}
                           >
-                            <img src="/assets/icons/mxl.svg" className="btn-icon icon-mxl" alt="" />
+                            <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
                             <span>MXL</span>
                           </a>
                         )}
                         {song.files.pdf && (
                           <a
-                            href={song.files.pdf}
+                            href={resolvePath(song.files.pdf)}
                             download
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, song.files.pdf)}
+                            onClick={(e) => handleDownload(e, resolvePath(song.files.pdf))}
                           >
-                            <img src="/assets/icons/pdf.svg" className="btn-icon" alt="" />
+                            <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
                             <span>PDF</span>
                           </a>
                         )}

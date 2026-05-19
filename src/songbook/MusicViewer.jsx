@@ -3,6 +3,7 @@ import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { useSettings } from './SettingsContext';
 import { useWebAudio } from './useWebAudio';
 import { VERSION } from '../version';
+import { resolvePath } from '../utils/resolvePath';
 
 /**
  * MVET Songbook - Rehearsal Suite
@@ -116,7 +117,7 @@ const MusicViewer = ({ song, onBack }) => {
         
         // Cache-buster using hash to ensure sanitization is applied
         const hash = song.hashes?.[mRelative] || Date.now();
-        const m = `${mRelative}?v=${hash}`;
+        const m = `${resolvePath(mRelative)}?v=${hash}`;
         
         await osmd.load(m);
         osmd.setOptions({ drawMeasureNumbers: !!drawMeasureNumbers });
@@ -192,7 +193,7 @@ const MusicViewer = ({ song, onBack }) => {
     
     // Apply cache-busting hash
     const hash = song.hashes?.[url] || Date.now();
-    const finalUrl = `${url}?v=${hash}`;
+    const finalUrl = `${resolvePath(url)}?v=${hash}`;
     
     setActiveTrack({ type, url: finalUrl, partName: part.name });
   };
@@ -431,7 +432,7 @@ const MusicViewer = ({ song, onBack }) => {
                             {hasVideo && (
                               <div className="track-btns">
                                 <button className="track-btn play" onClick={() => handlePlayTrack('video', part)}>▶</button>
-                                <a href={part.files.mp4} download className="track-btn download">⬇</a>
+                                <a href={resolvePath(part.files.mp4)} download className="track-btn download">⬇</a>
                               </div>
                             )}
                           </td>
@@ -440,7 +441,7 @@ const MusicViewer = ({ song, onBack }) => {
                               <div className="track-btns">
                                 <button className="track-btn play" onClick={() => handlePlayTrack('audio', part)}>▶</button>
                                 <a 
-                                  href={`${part.files[audioFormat] || part.files.flac || part.files.mp3}?v=${song.hashes?.[part.files[audioFormat] || part.files.flac || part.files.mp3] || '1'}`} 
+                                  href={`${resolvePath(part.files[audioFormat] || part.files.flac || part.files.mp3)}?v=${song.hashes?.[part.files[audioFormat] || part.files.flac || part.files.mp3] || '1'}`} 
                                   download 
                                   className="track-btn download"
                                 >⬇</a>

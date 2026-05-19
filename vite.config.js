@@ -8,7 +8,11 @@ import fs from 'fs';
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 const appVersion = packageJson.version;
 
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const base = isGithubPages ? '/MVET_Songbook/' : '/';
+
 export default defineConfig({
+  base: base,
   plugins: [
     react(),
     {
@@ -88,8 +92,8 @@ export default defineConfig({
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',
-        scope: '/songbook/',
-        start_url: '/songbook/',
+        scope: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
+        start_url: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
         icons: [
           {
             src: 'pwa-192x192.png',

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Landing.css";
+import { resolvePath } from "../utils/resolvePath";
 
 function App() {
   const [view, setView] = useState("home");
@@ -80,7 +81,7 @@ function App() {
           </section>
 
           <div className="info-footer">
-            <a href="/songbook/" className="btn btn-primary">
+            <a href={resolvePath("/songbook/")} className="btn btn-primary">
               Enter the Songbook
             </a>
           </div>
@@ -103,7 +104,7 @@ function App() {
             Honor through Harmony.
           </p>
           <div className="cta-group">
-            <a href="/songbook/" className="btn btn-primary">
+            <a href={resolvePath("/songbook/")} className="btn btn-primary">
               Open Songbook
             </a>
             <button
@@ -114,7 +115,7 @@ function App() {
             </button>
           </div>
           <div className="hero-image-frame">
-            <img src="/mvet_hero.png" alt="MVET Patriotic Branding" />
+            <img src={resolvePath("/mvet_hero.png")} alt="MVET Patriotic Branding" />
           </div>
         </div>
       </header>
