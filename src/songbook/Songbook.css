@@ -2065,3 +2065,330 @@
 
 /* Specific adjustment for performance mode tooltips (against white background) */
 /* (Removed redundant override - universal style is high-contrast) */
+
+/* --- Copyright Badges & Details Modal --- */
+
+.badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.copyright-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.copyright-badge.public_domain {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.copyright-badge.copyrighted {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.copyright-badge.creative_commons {
+  background: rgba(6, 182, 212, 0.1);
+  color: #06b6d4;
+  border-color: rgba(6, 182, 212, 0.25);
+}
+
+.copyright-badge.permissive_license {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.copyright-badge.large {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.info-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: serif;
+  font-style: italic;
+  padding: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-btn:hover {
+  background: var(--color-primary-glow);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.info-btn:active {
+  transform: scale(0.9);
+}
+
+/* Modal Overlay & Panel */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  opacity: 0;
+  animation: modal-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 550px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95) translateY(10px);
+  animation: modal-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.modal-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metadata-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metadata-value {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.copyright-statement-section h4,
+.copyright-links-section h4 {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px 0;
+}
+
+.copyright-statement {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(245, 158, 11, 0.03);
+  border-left: 3px solid rgba(245, 158, 11, 0.3);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 0;
+}
+
+.modal-content:has(.copyright-badge.public_domain) .copyright-statement {
+  background: rgba(16, 185, 129, 0.03);
+  border-left-color: rgba(16, 185, 129, 0.3);
+}
+
+.modal-content:has(.copyright-badge.creative_commons) .copyright-statement {
+  background: rgba(6, 182, 212, 0.03);
+  border-left-color: rgba(6, 182, 212, 0.3);
+}
+
+.modal-content:has(.copyright-badge.permissive_license) .copyright-statement {
+  background: rgba(99, 102, 241, 0.03);
+  border-left-color: rgba(99, 102, 241, 0.3);
+}
+
+.copyright-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.copyright-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s;
+}
+
+.copyright-link:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.2);
+  transform: translateY(-1px);
+}
+
+.external-icon {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transition: transform 0.2s;
+}
+
+.copyright-link:hover .external-icon {
+  transform: translate(2px, -2px);
+  opacity: 1;
+}
+
+.modal-footer {
+  padding: 16px 24px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer .btn {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+@keyframes modal-fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes modal-scale-in {
+  to { transform: scale(1) translateY(0); }
+}
+
+/* Card layout enhancements for stacked badges & lower right info button */
+.song-card-badges {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 5;
+}
+
+.song-card-badges .key-badge,
+.song-card-badges .copyright-badge {
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-info-btn-lower {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 5;
+}
+
+/* Adjust card titles and actions padding to prevent layout collisions */
+.song-card-content .title-row {
+  padding-right: 130px; /* Space for stacked badges on top right */
+}
+
+.song-card-content .song-card-actions {
+  padding-right: 40px; /* Space for the info button on lower right */
+}

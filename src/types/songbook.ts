@@ -15,12 +15,25 @@ export interface VocalPart {
   files: RehearsalFiles;
 }
 
+export interface CopyrightInfo {
+  type: 'public_domain' | 'copyrighted' | 'creative_commons' | 'permissive_license';
+  license?: string;
+  holder?: string;
+  year?: string | number;
+  statement?: string;
+  links?: string[];
+}
+
 export interface Song {
   id: string;
   title: string;
+  subtitle?: string;
   key?: string;
   arranger?: string;
+  composer?: string;
   engraver?: string;
+  copyright?: string;
+  copyrightInfo?: CopyrightInfo;
   mtime?: string;
   thumbnail?: string;
   files: RehearsalFiles;

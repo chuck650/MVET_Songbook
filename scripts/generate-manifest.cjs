@@ -429,7 +429,7 @@ function generateManifest() {
     }
 
     // ── 5. Extract metadata (MXL → MSCZ → defaults) ──────────────────────
-    let meta = { title: folder.replace(/_/g, ' '), composer: 'Unknown Composer',
+    let meta = { title: folder.replace(/_/g, ' '), subtitle: '', composer: 'Unknown Composer',
                  arranger: 'Veteran Arrangement', engraver: '', copyright: '', key: '', mtime: '' };
 
     const mxlPath = mainFiles.mxl ? path.join(__dirname, '../public', mainFiles.mxl) : null;
@@ -493,15 +493,17 @@ function generateManifest() {
 
     // ── 6. Assemble song record ───────────────────────────────────────────
     const song = {
-      id:        songId,
-      title:     meta.title,
-      composer:  meta.composer,
-      arranger:  meta.arranger,
-      engraver:  meta.engraver,
-      copyright: meta.copyright,
-      key:       meta.key,
-      mtime:     meta.mtime,
-      files:     mainFiles,
+      id:            songId,
+      title:         meta.title,
+      subtitle:      meta.subtitle || "",
+      composer:      meta.composer,
+      arranger:      meta.arranger,
+      engraver:      meta.engraver,
+      copyright:     meta.copyright,
+      copyrightInfo: meta.copyrightInfo,
+      key:           meta.key,
+      mtime:         meta.mtime,
+      files:         mainFiles,
       parts,
       hashes,
       ...(thumbUrl ? { thumbnail: thumbUrl } : {}),

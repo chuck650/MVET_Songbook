@@ -12,6 +12,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState<"browser" | "settings" | "about" | "player">("browser");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [infoSong, setInfoSong] = useState<Song | null>(null);
   const { settings } = useSettings();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -22,10 +23,20 @@ function AppContent() {
       .then((res) => res.json())
       .then((data: Song[]) => {
         setSongs(data);
+        localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Error loading songs:", err);
+        console.error("Error loading songs, attempting offline fallback:", err);
+        const cached = localStorage.getItem('mvet_cached_songs');
+        if (cached) {
+          try {
+            setSongs(JSON.parse(cached));
+            console.log("Loaded offline library from local storage.");
+          } catch (e) {
+            console.error("Failed to parse cached songs:", e);
+          }
+        }
         setLoading(false);
       });
   }, []);
@@ -41,6 +52,11 @@ function AppContent() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, [selectedSong]);
+
+  const handleInfoClick = (e: React.MouseEvent, song: Song) => {
+    e.stopPropagation();
+    setInfoSong(song);
+  };
 
   const handleSongSelect = (song: Song) => {
     setSelectedSong(song);
@@ -154,6 +170,22 @@ function AppContent() {
                     onClick={() => handleSongSelect(song)}
                     title={song.title}
                   >
+                    {/* Top Right Badges */}
+                    <div className="song-card-badges">
+                      {song.key && (
+                        <span className="key-badge">{song.key}</span>
+                      )}
+                      {song.copyrightInfo && (
+                        <span className={`copyright-badge ${song.copyrightInfo.type}`}>
+                          {song.copyrightInfo.license || (
+                            song.copyrightInfo.type === 'public_domain' ? 'Public Domain' :
+                            song.copyrightInfo.type === 'copyrighted' ? 'Copyrighted' :
+                            song.copyrightInfo.type === 'creative_commons' ? 'Creative Commons' : 'Permissive'
+                          )}
+                        </span>
+                      )}
+                    </div>
+
                     <div className="song-card-preview">
                       {song.thumbnail ? (
                         <img src={resolvePath(song.thumbnail)} alt={song.title} />
@@ -164,14 +196,12 @@ function AppContent() {
                         </div>
                       )}
                     </div>
+                    
                     <div className="song-card-content">
                       <div className="title-row">
                         <h3>{song.title}</h3>
-                        {song.key && (
-                          <span className="key-badge">{song.key}</span>
-                        )}
                       </div>
-                      <p>{song.arranger || "Veteran Arrangement"}</p>
+                      <p>{song.subtitle || "Traditional SATB"}</p>
                       <div className="song-card-actions">
                         {song.files.mscz && (
                           <a
@@ -208,6 +238,14 @@ function AppContent() {
                         )}
                       </div>
                     </div>
+                    <button
+                      className="info-btn card-info-btn-lower"
+                      onClick={(e) => handleInfoClick(e, song)}
+                      aria-label="View song details and copyright"
+                      title="Song details & licensing"
+                    >
+                      <span className="info-icon-char">i</span>
+                    </button>
                   </div>
                 ))
               ) : (
@@ -229,6 +267,84 @@ function AppContent() {
           )}
         </div>
       </main>
+
+      {infoSong && (
+        <div className="modal-overlay" onClick={() => setInfoSong(null)}>
+          <div className="modal-content glass-panel" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setInfoSong(null)} aria-label="Close modal">
+              ✕
+            </button>
+            <div className="modal-header">
+              <h2>{infoSong.title}</h2>
+              {infoSong.copyrightInfo && (
+                <span className={`copyright-badge large ${infoSong.copyrightInfo.type}`}>
+                  {infoSong.copyrightInfo.license || (
+                    infoSong.copyrightInfo.type === 'public_domain' ? 'Public Domain' :
+                    infoSong.copyrightInfo.type === 'copyrighted' ? 'Copyrighted' :
+                    infoSong.copyrightInfo.type === 'creative_commons' ? 'Creative Commons' : 'Permissive'
+                  )}
+                </span>
+              )}
+            </div>
+            <div className="modal-body">
+              <div className="metadata-grid">
+                {infoSong.composer && (
+                  <div className="metadata-item">
+                    <span className="metadata-label">Composer</span>
+                    <span className="metadata-value">{infoSong.composer}</span>
+                  </div>
+                )}
+                {infoSong.arranger && (
+                  <div className="metadata-item">
+                    <span className="metadata-label">Arranger</span>
+                    <span className="metadata-value">{infoSong.arranger}</span>
+                  </div>
+                )}
+                {infoSong.engraver && (
+                  <div className="metadata-item">
+                    <span className="metadata-label">Engraver</span>
+                    <span className="metadata-value">{infoSong.engraver}</span>
+                  </div>
+                )}
+                {infoSong.key && (
+                  <div className="metadata-item">
+                    <span className="metadata-label">Key Signature</span>
+                    <span className="metadata-value">{infoSong.key}</span>
+                  </div>
+                )}
+              </div>
+
+              {infoSong.copyrightInfo?.statement && (
+                <div className="copyright-statement-section">
+                  <h4>Licensing & Legal Status</h4>
+                  <p className="copyright-statement">{infoSong.copyrightInfo.statement}</p>
+                </div>
+              )}
+
+              {infoSong.copyrightInfo?.links && infoSong.copyrightInfo.links.length > 0 && (
+                <div className="copyright-links-section">
+                  <h4>References & Licensing Records</h4>
+                  <ul className="copyright-links-list">
+                    {infoSong.copyrightInfo.links.map((link, idx) => (
+                      <li key={idx}>
+                        <a href={link} target="_blank" rel="noopener noreferrer" className="copyright-link">
+                          <span>📄</span> {link.length > 55 ? `${link.substring(0, 52)}...` : link}
+                          <span className="external-icon">↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" onClick={() => setInfoSong(null)}>
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
