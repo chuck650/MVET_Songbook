@@ -49,6 +49,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Production Deployment of v1.2.13 (Hardened Margins & Performance Mode Scroller)
 - [x] GitHub Pages Migration & Dynamic Path Resolution Hardening (v1.2.14)
 - [x] ESM, TypeScript & ESLint Modernization (Strict TSC/Linter Compilation passing)
+- [x] Modular Licensing Engine, Translucency Card Badges & DMCA Safe Harbor Policies (v1.2.31)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -65,4 +66,4 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 3. Finalize Web Audio gain/panning for Soprano/Alto and Tenor/Bass isolated track mix adjustments.
 
 ---
-*Last updated by Antigravity on 2026-05-19*
+*Last updated by Antigravity on 2026-05-20*
