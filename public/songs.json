@@ -8,8 +8,8 @@
     "engraver": "Chuck Nelson",
     "copyright": "",
     "copyrightInfo": {
-      "type": "public_domain",
-      "statement": "This arrangement was created by Thomas Knox in 1972 as part of his official duties as Chief Arranger for the United States Marine Band. As a work of the United States Government, it is in the Public Domain within the United States.",
+      "type": "copyrighted",
+      "statement": "This arrangement was created by Thomas Knox in 1972 as part of his official duties as Chief Arranger for the United States Marine Band, however it contains copyrighted works. Carl Fischer Music owns the copyright to Robert Crawford's “The U.S. Air Force Song” (“Wild Blue Yonder”). Alfred Music holds the copyright to “Semper Paratus” (the official march of the U.S. Coast Guard).",
       "links": [
         "https://en.wikipedia.org/wiki/Armed_Forces_Medley"
       ]
@@ -114,7 +114,7 @@
       "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mp4": "ca6ea9a7eabc3efaadeed335473b7b94c1a0bf63aca7be4309375f72f08e7aa2",
       "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mscz": "235c97f3d06bae5e5061a77d5096624f9c1fd4ac1fd74d5b2e503d498f0690da",
       "/songs/Armed_Forces_Medley_72/Armed_Forces_Medley_72.mxl": "794af49de22486b051c7ed7ecd98473bce8c1be4f049f59edd3239fd8f4977c9",
-      "/songs/Armed_Forces_Medley_72/metadata.json": "26c42597d886f9eb9d56f9721c58beabc6ee93125be88fc16c6477fccd06da3d",
+      "/songs/Armed_Forces_Medley_72/metadata.json": "fc3a2b623a53efa91249854ea28d0dca5d4113c31808738112162b40c34dc365",
       "/songs/Armed_Forces_Medley_72/thumbnail.png": "5a5e9f674e6058a097651ff2ebea31b075637af284e83338ce602f57512cb592"
     },
     "thumbnail": "/songs/Armed_Forces_Medley_72/thumbnail.png"
