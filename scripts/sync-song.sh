@@ -37,4 +37,19 @@ rsync -av --delete \
   "$SOURCE_DIR" \
   "$DEST_DIR"
 
+echo "Detecting merged AV..."
+
+if [ -f "${DEST_DIR}/${SONG}-Merged.mp4" ]; then
+    echo "✅ Found Merged AV: ${SONG}-Merged.mp4"
+fi
+
+# Replace main and SATB MP4 files with merged MP4 file
+if [ -f "${DEST_DIR}/${SONG}-Merged.mp4" ]; then
+    echo "✅ Found Merged AV: ${SONG}-Merged.mp4"
+    rm "${DEST_DIR}/${SONG}.mp4"
+    rm "${DEST_DIR}/${SONG}-SATB.mp4"
+    mv "${DEST_DIR}/${SONG}-Merged.mp4" "${DEST_DIR}/${SONG}.mp4"
+    echo "✅ Renamed Merged AV: ${SONG}.mp4"
+fi
+
 echo "✅ Sync complete. Run 'npm run build' to update the manifest and hashes."

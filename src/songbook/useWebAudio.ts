@@ -98,7 +98,21 @@ export const useWebAudio = (url?: string, autoPlay = false): UseWebAudioReturn =
       hasAutoPlayedRef.current = false;
       
       try {
-        const res = await fetch(url);
+        const headers: Record<string, string> = {};
+        const { getTokenOnly } = await import('../utils/authStorage');
+        const token = await getTokenOnly();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(url, { headers });
+        if (!res.ok) {
+          if (res.status === 401 || res.status === 403) {
+            throw new Error("Unauthorized: Please configure Choir Access.");
+          }
+          throw new Error(`Audio load failed (HTTP ${res.status})`);
+        }
+        
         const arrayBuf = await res.arrayBuffer();
         // Use a fresh context if needed
         const ctx = initAudio();

@@ -730,6 +730,120 @@
   }
 }
 
+/* Zoom Controls */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(30, 41, 59, 0.4);
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.zoom-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.zoom-btn:hover:not(:disabled) {
+  background: var(--color-primary-glow);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.zoom-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.zoom-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 140px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+
+.zoom-slider:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Chrome, Safari, Opera, Edge */
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.zoom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #56cbf9;
+}
+
+.zoom-slider::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+}
+
+/* Firefox */
+.zoom-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.zoom-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  background: #56cbf9;
+}
+
+.zoom-slider::-moz-range-thumb:active {
+  transform: scale(0.95);
+}
+
+.zoom-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 
 /* Loader & Overlays */
 .viewer-overlay {

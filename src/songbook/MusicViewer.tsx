@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { useSettings } from './SettingsContext';
 import { useWebAudio } from './useWebAudio';
+import { useAuth } from './AuthContext';
 import { resolvePath } from '../utils/resolvePath';
 import { Song, RehearsalFiles } from '../types/songbook';
 
@@ -23,6 +24,7 @@ interface MusicViewerProps {
 }
 
 const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
+  const { token } = useAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
@@ -130,16 +132,35 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
 
         // Cache-buster using hash to ensure sanitization is applied
         const hash = song.hashes?.[mRelative] || Date.now();
-        const m = `${resolvePath(mRelative)}?v=${hash}`;
+        const resolvedScoreUrl = resolvePath(mRelative);
+        const separator = resolvedScoreUrl.includes('?') ? '&' : '?';
+        const m = `${resolvedScoreUrl}${separator}v=${hash}`;
         
-        await osmd.load(m);
+        const headers: Record<string, string> = {};
+        const { getTokenOnly } = await import('../utils/authStorage');
+        const token = await getTokenOnly();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(m, { headers });
+        if (!res.ok) {
+          if (res.status === 401 || res.status === 403) {
+            throw new Error("Unauthorized: Please configure the Choir Access Key in Settings.");
+          }
+          throw new Error(`Failed to load score (HTTP ${res.status})`);
+        }
+        
+        const data = await res.arrayBuffer();
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        await osmd.load(blob);
         osmd.setOptions({ drawMeasureNumbers: !!drawMeasureNumbers });
         
         // The responsive render effect will handle the margins, zoom, and render call
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         console.error("OSMD Render Error:", err);
-        setError("Render Fail"); 
+        setError(err.message || "Render Fail"); 
         setLoading(false); 
       }
     })();
@@ -196,16 +217,29 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
       .map(key => ({ key, name: song.parts?.[key]?.name || key, files: song.parts?.[key]?.files || {} }))
   ];
 
+  const getDownloadUrl = useCallback((fileUrl: string, addHash = false) => {
+    const resolved = resolvePath(fileUrl);
+    if (!resolved) return '';
+    let url = resolved;
+    if (addHash) {
+      const hash = song.hashes?.[fileUrl] || '1';
+      const sep = url.includes('?') ? '&' : '?';
+      url = `${url}${sep}v=${hash}`;
+    }
+    if (token && import.meta.env.VITE_API_URL) {
+      const sep = url.includes('?') ? '&' : '?';
+      url = `${url}${sep}token=${encodeURIComponent(token)}`;
+    }
+    return url;
+  }, [song, token]);
+
   const handlePlayTrack = useCallback((type: 'audio' | 'video', part: RehearsalPart) => {
     const fileUrl = type === 'video' ? part.files.mp4 : (part.files[audioFormat] || part.files.flac || part.files.mp3);
     if (!fileUrl) return;
     
-    // Apply cache-busting hash
-    const hash = song.hashes?.[fileUrl] || Date.now();
-    const finalUrl = `${resolvePath(fileUrl)}?v=${hash}`;
-    
+    const finalUrl = getDownloadUrl(fileUrl, true);
     setActiveTrack({ type, url: finalUrl, partName: part.name });
-  }, [song, audioFormat]);
+  }, [audioFormat, getDownloadUrl]);
 
   // Performance Mode Unified Gesture Engine
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -436,7 +470,11 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
                             {hasVideo && (
                               <div className="track-btns">
                                 <button className="track-btn play" onClick={() => handlePlayTrack('video', part)}>▶</button>
-                                <a href={resolvePath(part.files.mp4)} download className="track-btn download">⬇</a>
+                                <a 
+                                  href={getDownloadUrl(part.files.mp4, true)} 
+                                  download 
+                                  className="track-btn download"
+                                >⬇</a>
                               </div>
                             )}
                           </td>
@@ -445,7 +483,7 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
                               <div className="track-btns">
                                 <button className="track-btn play" onClick={() => handlePlayTrack('audio', part)}>▶</button>
                                 <a 
-                                  href={`${resolvePath(part.files[audioFormat] || part.files.flac || part.files.mp3)}?v=${song.hashes?.[part.files[audioFormat] || part.files.flac || part.files.mp3 || ''] || '1'}`} 
+                                  href={getDownloadUrl(part.files[audioFormat] || part.files.flac || part.files.mp3, true)} 
                                   download 
                                   className="track-btn download"
                                 >⬇</a>
@@ -470,8 +508,14 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
               <h5>{activeTrack.partName} Rehearsal</h5>
               <button onClick={() => setActiveTrack(null)}>×</button>
             </div>
-            <video controls autoPlay className="main-video-player">
-              <source src={activeTrack.url} type="video/mp4" />
+            <video 
+              key={activeTrack.url}
+              src={activeTrack.url}
+              crossOrigin="anonymous"
+              controls 
+              autoPlay 
+              className="main-video-player"
+            >
               Your browser does not support the video tag.
             </video>
           </div>

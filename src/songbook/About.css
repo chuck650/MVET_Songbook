@@ -1,6 +1,6 @@
 .about-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--color-bg);
   color: #1e293b;
   padding: 2rem;
   display: flex;
@@ -20,7 +20,7 @@
 .about-title {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .about-content {

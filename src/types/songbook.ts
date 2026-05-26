@@ -7,7 +7,9 @@ export interface RehearsalFiles {
   mp4?: string;
   flac?: string;
   mp3?: string;
-  [key: string]: string | undefined;
+  protected?: boolean;
+  mtime?: string;
+  [key: string]: any;
 }
 
 export interface VocalPart {
@@ -46,5 +48,6 @@ export interface Song {
     men?: VocalPart;
     [key: string]: VocalPart | undefined;
   };
-  hashes?: Record<string, string>;
+  hashes?: Record<string, any>;
 }
+

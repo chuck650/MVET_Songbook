@@ -29,7 +29,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
         runtimeCaching: [
           {
-            urlPattern: /songs\.json/i,
+            urlPattern: /(?:songs\.json|\/api\/songs(?:\?.*)?$)/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'manifest-cache',
@@ -40,7 +40,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /\.(?:mp3|flac)(?:\?.*)?$/i,
+            urlPattern: /(?:\.(?:mp3|flac)|\/api\/songs\/[^\/]+\/files\/(?:mp3|flac))(?:\?.*)?$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'audio-cache',
@@ -70,7 +70,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /\.(?:mxl|pdf|mscz)(?:\?.*)?$/i,
+            urlPattern: /(?:\.(?:mxl|pdf|mscz)|\/api\/songs\/[^\/]+\/files\/(?:mxl|pdf|mscz))(?:\?.*)?$/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'song-files-cache',
@@ -81,6 +81,32 @@ export default defineConfig({
               cacheableResponse: {
                 statuses: [0, 200],
               },
+            },
+          },
+          {
+            urlPattern: /(?:\.(?:mp4)|\/api\/songs\/[^\/]+\/files\/mp4)(?:\?.*)?$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'video-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              plugins: [
+                {
+                  cacheKeyWillBeUsed: async ({ request }) => {
+                    const url = new URL(request.url);
+                    if (url.searchParams.has('token')) {
+                      url.searchParams.delete('token');
+                    }
+                    return url.toString();
+                  }
+                }
+              ],
+              rangeRequests: true,
             },
           },
         ],

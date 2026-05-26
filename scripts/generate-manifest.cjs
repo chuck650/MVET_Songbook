@@ -460,13 +460,27 @@ function generateManifest() {
       const msczMeta = extractMSCZMetadata(msczPath);
       if (msczMeta.key) meta.key = msczMeta.key;
 
-      // Extract thumbnail from MSCZ if none exists on disk
+      // Extract thumbnail from MSCZ if none exists on disk, or if the MSCZ file is newer
       const thumbDisk = path.join(folderPath, 'thumbnail.png');
-      if (!fs.existsSync(thumbDisk)) {
+      let shouldExtract = !fs.existsSync(thumbDisk);
+      if (!shouldExtract) {
+        try {
+          const msczMtime = fs.statSync(msczPath).mtimeMs;
+          const thumbMtime = fs.statSync(thumbDisk).mtimeMs;
+          if (msczMtime > thumbMtime) {
+            shouldExtract = true;
+          }
+        } catch {}
+      }
+
+      if (shouldExtract) {
         try {
           const zip = new AdmZip(msczPath);
           const th  = zip.getEntry('Thumbnails/thumbnail.png');
-          if (th) { fs.writeFileSync(thumbDisk, th.getData()); console.log('  [thumb] Extracted from MSCZ.'); }
+          if (th) {
+            fs.writeFileSync(thumbDisk, th.getData());
+            console.log(`  [thumb] Extracted/Updated from MSCZ for ${songId}.`);
+          }
         } catch {}
       }
     }

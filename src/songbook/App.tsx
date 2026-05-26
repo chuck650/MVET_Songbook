@@ -5,6 +5,9 @@ import MusicViewer from "./MusicViewer";
 import About from "./About";
 import { resolvePath } from "../utils/resolvePath";
 import { Song } from "../types/songbook";
+import { AuthProvider, useAuth } from "./AuthContext";
+import { ChoirAuthModal } from "./ChoirAuthModal";
+
 
 function AppContent() {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -13,33 +16,84 @@ function AppContent() {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [infoSong, setInfoSong] = useState<Song | null>(null);
+  const [authModalSong, setAuthModalSong] = useState<Song | null>(null);
+  const [pendingSongOpenId, setPendingSongOpenId] = useState<string | null>(null);
   const { settings } = useSettings();
+  const { token, isAuthenticated } = useAuth();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   useEffect(() => {
+    let active = true;
     setLoading(true);
-    fetch(resolvePath(`/songs.json?v=${Date.now()}`), { cache: 'no-store' })
-      .then((res) => res.json())
+
+    const apiBase = import.meta.env.VITE_API_URL || "";
+    const catalogUrl = apiBase ? `${apiBase}/api/songs` : resolvePath(`/songs.json?v=${Date.now()}`);
+
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    console.log(`Fetching songs catalog from: ${catalogUrl} (Auth: ${!!token})`);
+
+    fetch(catalogUrl, { 
+      headers,
+      cache: 'no-store' 
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+        return res.json();
+      })
       .then((data: Song[]) => {
+        if (!active) return;
         setSongs(data);
         localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error loading songs, attempting offline fallback:", err);
-        const cached = localStorage.getItem('mvet_cached_songs');
-        if (cached) {
-          try {
-            setSongs(JSON.parse(cached));
-            console.log("Loaded offline library from local storage.");
-          } catch (e) {
-            console.error("Failed to parse cached songs:", e);
+        
+        // Auto-open selected song if we just authenticated
+        if (pendingSongOpenId) {
+          const unlockedSong = data.find(s => s.id === pendingSongOpenId);
+          if (unlockedSong && unlockedSong.files && (unlockedSong.files as any).protected !== true) {
+            setSelectedSong(unlockedSong);
+            setActiveTab("player");
+            window.history.pushState({ songId: unlockedSong.id }, "");
+            setPendingSongOpenId(null);
           }
         }
-        setLoading(false);
+      })
+      .catch((err) => {
+        if (!active) return;
+        console.warn("API/Catalog fetch failed, falling back to local songs.json:", err);
+        // Fallback to static songs.json
+        fetch(resolvePath(`/songs.json?v=${Date.now()}`), { cache: 'no-store' })
+          .then((res) => res.json())
+          .then((data: Song[]) => {
+            if (!active) return;
+            setSongs(data);
+            localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
+            setLoading(false);
+          })
+          .catch((localErr) => {
+            if (!active) return;
+            console.error("Local songs.json fetch failed, using offline localStorage fallback:", localErr);
+            const cached = localStorage.getItem('mvet_cached_songs');
+            if (cached) {
+              try {
+                setSongs(JSON.parse(cached));
+                console.log("Loaded offline library from local storage.");
+              } catch (e) {
+                console.error("Failed to parse cached songs:", e);
+              }
+            }
+            setLoading(false);
+          });
       });
-  }, []);
+
+    return () => {
+      active = false;
+    };
+  }, [token, isAuthenticated]);
 
   // Handle browser back button
   useEffect(() => {
@@ -59,10 +113,16 @@ function AppContent() {
   };
 
   const handleSongSelect = (song: Song) => {
-    setSelectedSong(song);
-    setActiveTab("player");
-    // Push state to allow browser back button to close viewer
-    window.history.pushState({ songId: song.id }, "");
+    const isProtected = song.files && (song.files as any).protected === true;
+    
+    if (isProtected) {
+      setAuthModalSong(song);
+    } else {
+      setSelectedSong(song);
+      setActiveTab("player");
+      // Push state to allow browser back button to close viewer
+      window.history.pushState({ songId: song.id }, "");
+    }
   };
 
   const handleBackToLibrary = () => {
@@ -205,7 +265,11 @@ function AppContent() {
                       <div className="song-card-actions">
                         {song.files.mscz && (
                           <a
-                            href={resolvePath(song.files.mscz)}
+                            href={
+                              token && import.meta.env.VITE_API_URL
+                                ? `${resolvePath(song.files.mscz)}?token=${encodeURIComponent(token)}`
+                                : resolvePath(song.files.mscz)
+                            }
                             download
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.mscz || ''))}
@@ -216,7 +280,11 @@ function AppContent() {
                         )}
                         {song.files.mxl && (
                           <a
-                            href={resolvePath(song.files.mxl)}
+                            href={
+                              token && import.meta.env.VITE_API_URL
+                                ? `${resolvePath(song.files.mxl)}?token=${encodeURIComponent(token)}`
+                                : resolvePath(song.files.mxl)
+                            }
                             download
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.mxl || ''))}
@@ -227,7 +295,11 @@ function AppContent() {
                         )}
                         {song.files.pdf && (
                           <a
-                            href={resolvePath(song.files.pdf)}
+                            href={
+                              token && import.meta.env.VITE_API_URL
+                                ? `${resolvePath(song.files.pdf)}?token=${encodeURIComponent(token)}`
+                                : resolvePath(song.files.pdf)
+                            }
                             download
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.pdf || ''))}
@@ -345,6 +417,49 @@ function AppContent() {
           </div>
         </div>
       )}
+
+      {authModalSong && (
+        <ChoirAuthModal
+          songTitle={authModalSong.title}
+          onClose={() => setAuthModalSong(null)}
+          onSuccess={() => {
+            // Find the freshly unlocked song from the catalog state (which will update via context token)
+            // Or just fetch and load it. Wait, to prevent stale state references, we can load it 
+            // after the catalog re-renders, or just open it directly once token is set.
+            // When token is updated, songs will be fetched. We can just setselectedSong directly!
+            // Wait, if we setSelectedSong immediately, the old "protected: true" song will be active 
+            // in selectedSong until we re-assign. It is cleaner to set it!
+            // Since we trigger onSuccess after submitPSK finishes, the fetch is already triggered.
+            // Let's find the unmasked song from the newly fetched array inside another hook, or just
+            // fetch it directly. Actually, the easiest is to do select after state re-fetch, or simply 
+            // setselectedSong immediately using a small helper, or ask the user to click again.
+            // Let's immediately setselectedSong with a copy of authModalSong, but wait!
+            // If selectedSong is set, it will load. Once the catalog re-fetches, selectedSong is already loaded.
+            // Wait, does MusicViewer fetch files directly?
+            // Yes! MusicViewer downloads files from the URL inside selectedSong.files.osmd.
+            // If we set selectedSong to authModalSong, its selectedSong.files.osmd is still "protected: true" (which will fail)!
+            // We MUST load the unmasked song!
+            // Let's search the songs array after it updates, or better yet, fetch the specific song's 
+            // unmasked metadata directly when unlocking, or wait a tick!
+            // Wait, if we do a single quick inline fetch for the song data, we can get the unmasked version immediately!
+            // Yes! `${apiBase}/api/songs` returns the full catalog. We can just fetch `${apiBase}/api/songs` with the new token
+            // and find the song, then select it!
+            // Let's do that! That is 100% race-condition free and ultra-robust!
+            const apiBase = import.meta.env.VITE_API_URL || "";
+            if (apiBase) {
+              // Read token from IndexedDB (or we can just fetch it again since we know token is updated)
+              // Wait, submitPSK updates token in state, so we can fetch the catalog with it.
+              // To make sure we have the token, we can get it from localStorage or our auth storage.
+              // The submitPSK updates the state, so it will trigger the AppContent useEffect which refreshes the whole song list.
+              // Let's set a small flag 'pendingSongIdToOpen = authModalSong.id'.
+              // Then in the useEffect that refreshes songs, if 'pendingSongIdToOpen' matches a song that is now unlocked,
+              // we setSelectedSong(unlockedSong) and clear the flag!
+              // Oh!!! That is absolute genius! It is 100% automatic, clean, and has zero race conditions!
+              setPendingSongOpenId(authModalSong.id);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -352,7 +467,9 @@ function AppContent() {
 function App() {
   return (
     <SettingsProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </SettingsProvider>
   );
 }

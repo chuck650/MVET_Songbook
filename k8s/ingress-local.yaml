@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mvet-api-ingress-local
+  namespace: mvet-songbook
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`mvet-api.test`) && (PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/openapi.json`))
+    kind: Rule
+    services:
+    - name: mvet-api-svc
+      port: 80
