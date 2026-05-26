@@ -239,6 +239,12 @@ function serveFilePayload(req: Request, res: Response, song: Song, file_type: st
   }
 
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  
+  if (file_type === 'mscz' || file_type === 'mxl' || file_type === 'pdf') {
+    const filename = path.basename(fullPath);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  }
+
   res.sendFile(fullPath);
 }
 

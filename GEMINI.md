@@ -62,6 +62,8 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Local & Production Songbook Sync and Thumbnail Auto-Regeneration (v1.2.52)
 - [x] Decoupled API Gateway GHCR Automation Pipeline & Tag Release v1.0.0 (v1.2.52)
 - [x] Production K8s Pure Registry Deployment Config & Automated Testing Suite (v1.2.52)
+- [x] Production K8s cert-manager & Let's Encrypt automated TLS integration (v1.2.53)
+- [x] Custom-titled downloads with dynamic Content-Disposition headers for MSCZ/MXL/PDF buttons (v1.2.54)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -77,5 +79,5 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-05-26 (v1.2.52)*
+*Last updated by Antigravity on 2026-05-26 (v1.2.54)*
 

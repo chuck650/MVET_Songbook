@@ -33,6 +33,12 @@ The platform operates as a **Split-Architecture Tier** dividing user interface r
    - Exposes an OpenAPI 3.0 REST specification with interactive Swagger documentation under `/docs`.
    - Handles security token issuance, catalog obfuscation, and authenticated file streaming.
 
+3. **Ingress Routing & TLS Layer (Traefik + cert-manager)**
+   - Managed natively inside the `mvet-songbook` namespace via Traefik ingress configuration rules.
+   - Secure TLS termination is handled in-cluster (Option A) utilizing a Let's Encrypt production `ClusterIssuer` (HTTP-01 validation challenge).
+   - Generates globally trusted SSL certificates bound to the dynamic secret `mvet-api-tls-prod` for public endpoint `https://mvet-api.cminfosec.com`.
+
+
 ### 1.2 Security & Authentication Lifecycle
 
 - **Pre-Shared Key (PSK) Token Exchange**: Users enter a Choir PSK which is exchanged at `POST /api/auth/token` for a cryptographically signed JWT.

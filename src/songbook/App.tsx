@@ -270,7 +270,7 @@ function AppContent() {
                                 ? `${resolvePath(song.files.mscz)}?token=${encodeURIComponent(token)}`
                                 : resolvePath(song.files.mscz)
                             }
-                            download
+                            download={`${song.title}.mscz`}
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.mscz || ''))}
                           >
@@ -285,7 +285,7 @@ function AppContent() {
                                 ? `${resolvePath(song.files.mxl)}?token=${encodeURIComponent(token)}`
                                 : resolvePath(song.files.mxl)
                             }
-                            download
+                            download={`${song.title}.mxl`}
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.mxl || ''))}
                           >
@@ -300,7 +300,7 @@ function AppContent() {
                                 ? `${resolvePath(song.files.pdf)}?token=${encodeURIComponent(token)}`
                                 : resolvePath(song.files.pdf)
                             }
-                            download
+                            download={`${song.title}.pdf`}
                             className="btn-secondary"
                             onClick={(e) => handleDownload(e, resolvePath(song.files.pdf || ''))}
                           >

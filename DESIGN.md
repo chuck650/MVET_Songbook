@@ -50,18 +50,22 @@ To comply with intellectual property regulations without compromising PWA perfor
 - **Service Worker Authorization Injection**: Since standard HTML5 tags (like `<audio>` or `<video>`) do not support custom request headers, a browser-side Service Worker intercepts all file requests to the API and dynamically appends the JWT `Authorization: Bearer <token>` header, facilitating seamless native streaming and background offline caching.
 - **Public Image Path-Bypass**: Image extensions (`png`, `jpg`, etc.) bypass the authentication middleware completely, enabling anonymous visitors to view the catalog grid's song thumbnails without encountering broken assets.
 
-### 2.5 Workstation-Driven "Kubectl-Only" API Deployment
-Rather than utilizing CI/CD runners to log into internal servers or executing insecure remote shells, the production deployment is designed around **workstation-native kubectl**.
-- **Parity-Hardened Namespace**: Both local development (`k3s-local`) and production (`vps-production`) clusters use the identical namespace **`mvet-songbook`**. This eliminates environmental config drift and keeps DNS service naming (`mvet-api-svc.mvet-songbook`) identical.
-- **Secure Secrets Ingestion**: Database and authentication secrets are loaded locally from the control workstation's `.env.secrets` file using `--from-env-file` flags during deployment, completely avoiding checking keys into repositories or cloud environments.
 
-### 2.6 Out-of-Band SSH Delta Synchronization
+### 2.6 Cloud-Native TLS Termination (Option A)
+Rather than routing public API requests through the host machine's global Nginx reverse proxy, we decided to handle secure TLS termination natively inside the Kubernetes cluster via Traefik and Let's Encrypt (`cert-manager`).
+- **Rationale**:
+  1. **Strict Isolation**: It keeps 100% of the MVET API's network, ingress, and SSL certificate resources fully encapsulated inside Kubernetes under the `mvet-songbook` namespace. This prevents any modifications to the host Nginx configuration that could risk disrupting existing host-hosted websites (like `www.cminfosec.com` or `mail.cminfosec.com`).
+  2. **Automated Lifecycle**: Using K3s's native Traefik controller and `cert-manager` allows us to automate certificate issuance and 90-day renewals using Let's Encrypt HTTP-01 challenges completely transparently within the cluster boundaries.
+- **Wireguard Coexistence**: Because Klipper LoadBalancer binds the `mvet-api-ingress-prod` directly to the public interface `83.229.67.95:443`, public HTTPS traffic routes straight into Traefik. Wireguard tunnel connections (targeting the private host IP `10.51.51.7`) bypass this and resolve through Nginx over Wireguard, keeping the environments clean and isolated.
+
+### 2.7 Out-of-Band SSH Delta Synchronization
 To push over a gigabyte of vocal media files, standard file transfers via the Kubernetes API (`kubectl cp`) were abandoned in favor of native **SSH delta rsync**.
 - **Rationale**: `kubectl cp` bundles directories into a tarball on the fly, offering no incremental diffing, resuming, or transfer efficiency. By configuring our production script to connect via the local `~/.ssh/config` `vps` host, we ensure that:
   1. Directories and permissions are established natively via remote SSH commands.
   2. Large video/audio sync is delta-optimized, taking milliseconds for minor changes rather than hours of full uploads.
 
 ---
+
 
 ## 3. Visual Language & UX
 
