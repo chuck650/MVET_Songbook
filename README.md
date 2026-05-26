@@ -6,13 +6,15 @@ MVET Songbook is a high-fidelity rehearsal platform and sheet music library dedi
 
 ---
 
-## 🚀 Key Features
+## 🏛 Three-Tier Architecture
 
-- **High-Fidelity Rehearsal Suite**: Precision-engineered audio (48kHz FLAC) with Network-Aware Auto-Play and pre-rendered video tracking for flawless practice sessions.
-- **Interactive Sheet Music**: Dynamic MusicXML rendering via OpenSheetMusicDisplay (OSMD) with part isolation and a dedicated **Performance Mode** (Infinite Canvas & 86vh vertical fit) for live tablet use.
-- **Veteran-Optimized Arrangements**: Authentic SATB transcriptions (including isolated Men and Women parts) with sustainable vocal ranges.
-- **Offline Reliable (PWA)**: Full Progressive Web App support ensures your library is available in rehearsal spaces with no Wi-Fi.
-- **Surgical Sync**: SHA-256 hash-based cache management ensures you always have the latest scores and audio tracks.
+The system is designed with three isolated tiers to balance public PWA availability with strict copyright licensing compliance:
+
+1. **The Songbook & Metadata Database**: A high-fidelity structured audio, video, sheet music (MusicXML/PDF), and thumbnail library synced into local cluster volumes via out-of-band delta synchronization.
+2. **The Backend API Gateway**: A TypeScript-based containerized Express REST gateway that manages dynamic catalog masking, JWT access control lifecycles, and token-authorized media streaming.
+3. **The Frontend PWA**: A static, modern React application built using Vite, fully offline-reliable with Workbox Service Worker caching, and rendered natively on client tablets and mobile screens.
+
+---
 
 ## 🛠 Tech Stack
 
@@ -21,61 +23,123 @@ MVET Songbook is a high-fidelity rehearsal platform and sheet music library dedi
 - **API Spec**: OpenAPI 3.0 (with interactive Swagger UI documentation at `/docs`)
 - **Audio Engine**: Web Audio API (48kHz/24-bit optimized) with Network-Aware Auto-Play
 - **Rendering Engine**: OpenSheetMusicDisplay (OSMD) with asymmetric centering
-- **Deployment & Orchestration**: Docker, Kubernetes (k3s for local development), and Netlify (PWA hosting)
+- **Deployment & Orchestration**: Docker, Kubernetes (k3s on local development and remote VPS production contexts)
+- **Asset Transfer**: High-performance secure SSH rsync delta synchronization
 - **Dev Environment**: Built using [Google Antigravity](https://antigravity.google) Agentic IDE.
+
+---
 
 ## 📦 Getting Started
 
 ### Prerequisites
 - Node.js (Latest LTS)
 - npm
-- Docker & Kubernetes (k3s / kubectl) — for running the local API backend cluster
+- Docker & Kubernetes (`kubectl` config with your cluster contexts)
+- SSH keys configured for the host alias `vps` in your local SSH config (`~/.ssh/config`)
 
 ### Installation
 ```bash
-git clone https://github.com/chuck/MVET_Songbook.git
+git clone https://github.com/chuck650/MVET_Songbook.git
 cd MVET_Songbook
 npm install
 ```
 
-### Local Content Syncing
+---
+
+## 🛠 Development & Testing Setup
+
+### 1. Synchronize Song Assets (Local MuseScore Exports)
+To compile the local database manifest and parse all exported MuseScore tracks into your project:
 ```bash
 npm run sync
 ```
-*Securely synchronizes local exported assets (from MuseScore) into both the client static directory and the backend cluster storage folder.*
+*This command runs the `sync-all-songs.sh` worker script, generating `public/songs.json` with secure SHA-256 hashes and extracting new thumbnails.*
 
-### Local Development
-To run the dual-tier development workspace:
+### 2. Local Cluster Development (k3s-local)
+Boot the local API backend container and volume mounts within your local Kubernetes cluster:
 
-1. **Start the Frontend PWA Client**:
-   ```bash
-   npm run dev
-   ```
-   *Runs the Vite development server at http://localhost:5173/songbook/*
-
-2. **Boot the Backend API (K3s Cluster)**:
-   Ensure your local Kubernetes/K3s context is running, then deploy the API pods and volume mounts:
+1. **Deploy local K3s architecture**:
    ```bash
    bash scripts/deploy-local.sh
    ```
-   *Deploys the Express container and routes http://mvet-api.test*
+   *Deploys the Express gateway pod under the `mvet-songbook` namespace, loads local secrets from `.env.secrets`, and exposes http://mvet-api.test*
 
-   *If you make changes to the Express codebase under `/api/src`, rebuild and reload the container:*
+2. **Rebuild/Reload local code modifications**:
+   If you edit the Express code in the `/api` directory, rebuild and reload the local container instantly:
    ```bash
    bash scripts/build-and-import.sh
    ```
 
-3. **Run API Integration Tests**:
+3. **Deploy the songbook database to local volume**:
    ```bash
-   node scripts/test-api.js dev
+   npm run push-songbook local
    ```
-   *Runs the 12-point authentication, catalog obfuscation, and secure file streaming verification suite.*
+   *Syncs your database manifest and media directories directly into your local cluster volume path `/var/data/mvet-songbook`.*
 
-### Production Build
+4. **Start the Vite frontend dev server**:
+   ```bash
+   npm run dev
+   ```
+   *Runs the Vite development server locally at http://localhost:5173/songbook/*
+
+5. **Verify with local integration tests**:
+   ```bash
+   node scripts/test-api.js dev <your-local-psk>
+   ```
+
+---
+
+## 🚀 Production Deployment & Release Workflows
+
+Deployments are strictly decoupled to protect copyrighted assets while keeping the public interfaces globally available.
+
+### 1. Deploying the PWA (GitHub Pages)
+The static frontend client PWA is deployed to GitHub Pages automatically via GitHub Actions whenever you push a PWA release tag:
+1. **Commit and push PWA changes**:
+   ```bash
+   git add .
+   git commit -m "chore: release version v1.2.53"
+   git push origin main
+   ```
+2. **Tag and release**:
+   ```bash
+   git tag v1.2.53
+   git push origin v1.2.53
+   ```
+   *GitHub Actions will capture the tag and compile/deploy the static code directly to `https://chuck650.github.io/MVET_Songbook/`.*
+
+### 2. Deploying the API Gateway (GHCR & kubectl)
+The Express container does **not** contain any copyrighted music files, making it completely safe to build and compile in the public cloud.
+
+1. **Build and publish the API image**:
+   Push an `api-v*` tag to trigger the automated container compilation and publish it directly to the GitHub Container Registry (GHCR):
+   ```bash
+   git tag api-v1.0.0
+   git push origin api-v1.0.0
+   ```
+   *This compiles the TypeScript code and registers `ghcr.io/chuck650/mvet-api:latest`.*
+
+2. **Launch the remote infrastructure (kubectl-only)**:
+   Deploy the published container and workstation secrets directly to your remote VPS cluster context over your secure Wireguard tunnel:
+   ```bash
+   npm run deploy-prod-api
+   ```
+   *This commands targets your `vps-production` cluster context, securely generates K8s secrets from your local `.env.secrets` file without checking them into Git, applies the pure deployment manifests `k8s/api-deployment-prod.yaml` & `k8s/ingress-prod.yaml` under the identical namespace `mvet-songbook`, and awaits container readiness.*
+
+### 3. Deploying the Private Songbook Volume (SSH rsync)
+To sync your copyrighted SATB media files directly from your control workstation to the VPS persistent storage (bypassing the public cloud entirely):
 ```bash
-npm run build
+npm run push-songbook prod
 ```
-*The build script automatically increments the version, updates the manifest file with SHA-256 hashes, and compiles the Vite PWA into the `dist/` publishing folder.*
+*This connects securely over your SSH `vps` host config, configures file permissions on `/var/data/mvet-songbook`, and executes an ultra-fast, delta-optimized `rsync` sync.*
+
+### 4. Verifying Production Stability
+Test all five security layers and streaming endpoints natively on the remote host:
+```bash
+node scripts/test-api.js prod <your-production-psk>
+```
+
+---
 
 ## 📄 Documentation
 

@@ -4,17 +4,28 @@ This document outlines the design decisions and architectural rationale behind t
 
 ---
 
-## 1. Design Philosophy
+## 1. Three-Tier Architectural Vision
 
-### 1.1 High Fidelity & Technical Accuracy
-As a tool for veteran choirs, the application must provide an authoritative musical reference. This means:
-- **Audio Fidelity**: Maintaining the 48kHz sample rate of MuseScore exports to avoid resampling crackle and maintain tonal clarity.
-- **Visual Accuracy**: Using OpenSheetMusicDisplay (OSMD) to ensure MusicXML is rendered with professional engraving standards, rather than using static images.
+To comply with licensing and DMCA requirements while delivering a modern, responsive user experience on client mobile and tablet screens, the platform is divided into three cleanly isolated tiers:
 
-### 1.2 Performance & Efficiency
-The platform is designed to be lean and responsive:
-- **MPA Architecture**: Using a Multi-Page Application structure separates the marketing landing page from the high-utility Songbook App, reducing the initial bundle size for new visitors.
-- **Selective Caching**: Large media files (MP4, FLAC) are only cached when the user explicitly interacts with them, protecting device storage on older mobile devices common among veterans.
+```mermaid
+graph TD
+    A[1. Structured Songbook Assets] -->|Out-of-band SSH rsync| B(2. K3s Backend API Gateway)
+    C[Local .env.secrets] -->|Workstation kubectl config| B
+    B -->|Dynamic JSON Catalog & JWT JWT-signed Stream| D(3. Frontend Vite PWA)
+    D -->|Serves to Conductor / Vocalist Tablets| E[Web Browser UI]
+```
+
+1. **Structured Songbook Assets & Database (Private)**
+   - Resides securely in local directory structures on the server nodes, mounted as standard Kubernetes persistent volumes (`hostPath` pointing to `/var/data/mvet-songbook`).
+   - Syncs out-of-band directly from the editor's workstation to bypass Git history size limits and maintain 100% private copyright compliance.
+2. **Stateless API Gateway Container (Secure Logic)**
+   - Houses the express-routing logic, OpenAPI descriptors, cryptographic token checks, and media streaming middleware.
+   - Containerized and published securely on GitHub Container Registry (GHCR) as `ghcr.io/chuck650/mvet-api:latest`. 
+   - Excludes all musical files, enabling 100% open-source security compliance.
+3. **Frontend PWA Client (Public Presentation)**
+   - A static Single Page Application (SPA) built using Vite + React.
+   - Deployed directly to GitHub Pages, utilizing local caching via IndexedDB and Service Workers to achieve high responsiveness and offline reliability.
 
 ---
 
@@ -32,12 +43,23 @@ We chose the **Web Audio API** for rehearsal track playback.
 Each song directory contains a `song.json` sidecar that maps file roles (PDF, MP4, etc.) to actual filenames. We utilize a **Split-Role Architecture** for MusicXML.
 - **Rationale**: This allows for human-curated file management while supporting automated build-time manifest generation. By splitting the MusicXML roles into `"mxl"` (for raw file downloads) and `"osmd"` (for the visual rendering engine, usually set to a `*-SATB.mxl` conductor layout), we maintain strict control over both the visual layout and the downloadable payloads without forcing strict naming conventions on the user.
 
-### 2.4 Containerized API Gateway & Dynamic Obfuscation Layer (v1.2)
+### 2.4 Containerized API Gateway & Dynamic Obfuscation Layer
 To comply with intellectual property regulations without compromising PWA performance, we transitioned the application to a secured hybrid delivery pipeline using a containerized Express API gateway.
 - **Dynamic Masking**: For unauthenticated guests, the catalog endpoint (`GET /api/songs`) dynamically strips high-fidelity asset paths and hashes for copyrighted arrangements (like "Armed Forces Medley"), returning `{ protected: true }` placeholders. Public domain metadata remains completely transparent.
 - **Pre-Shared Key & JWT Session Lifecycle**: Choir members submit an access key which is exchanged at `POST /api/auth/token` for a cryptographically signed JWT, granting 90-day access to full vocal arrangements.
 - **Service Worker Authorization Injection**: Since standard HTML5 tags (like `<audio>` or `<video>`) do not support custom request headers, a browser-side Service Worker intercepts all file requests to the API and dynamically appends the JWT `Authorization: Bearer <token>` header, facilitating seamless native streaming and background offline caching.
 - **Public Image Path-Bypass**: Image extensions (`png`, `jpg`, etc.) bypass the authentication middleware completely, enabling anonymous visitors to view the catalog grid's song thumbnails without encountering broken assets.
+
+### 2.5 Workstation-Driven "Kubectl-Only" API Deployment
+Rather than utilizing CI/CD runners to log into internal servers or executing insecure remote shells, the production deployment is designed around **workstation-native kubectl**.
+- **Parity-Hardened Namespace**: Both local development (`k3s-local`) and production (`vps-production`) clusters use the identical namespace **`mvet-songbook`**. This eliminates environmental config drift and keeps DNS service naming (`mvet-api-svc.mvet-songbook`) identical.
+- **Secure Secrets Ingestion**: Database and authentication secrets are loaded locally from the control workstation's `.env.secrets` file using `--from-env-file` flags during deployment, completely avoiding checking keys into repositories or cloud environments.
+
+### 2.6 Out-of-Band SSH Delta Synchronization
+To push over a gigabyte of vocal media files, standard file transfers via the Kubernetes API (`kubectl cp`) were abandoned in favor of native **SSH delta rsync**.
+- **Rationale**: `kubectl cp` bundles directories into a tarball on the fly, offering no incremental diffing, resuming, or transfer efficiency. By configuring our production script to connect via the local `~/.ssh/config` `vps` host, we ensure that:
+  1. Directories and permissions are established natively via remote SSH commands.
+  2. Large video/audio sync is delta-optimized, taking milliseconds for minor changes rather than hours of full uploads.
 
 ---
 
@@ -49,7 +71,7 @@ The aesthetic uses deep navy backgrounds (`#0f172a`) with sky blue accents (`#38
 
 ### 3.2 The "Golden Ratio" Centering
 We discovered that OSMD SVGs are inherently asymmetric due to part label positioning.
-- **Rationale**: To center the score on the virtual "paper," we apply an asymmetric margin split (**2.0 Left / 10.0 Right**). This compensates for the implicit label space and ensures the staves are visually centered in the container.
+- **Rationale**: To center the score on the virtual "paper" container, we apply an asymmetric margin split (**2.0 Left / 10.0 Right**). This compensates for the implicit label space and ensures the staves are visually centered in the container.
 
 ### 3.3 Performance Mode (86vh Atomic Vertical Fit)
 A dedicated "Performance Mode" was built specifically for tablet and mobile landscape use during live performances.
@@ -61,7 +83,7 @@ A dedicated "Performance Mode" was built specifically for tablet and mobile land
 
 ### 4.1 Surgical SHA-256 Sync
 The build script generates a unique SHA-256 hash for every asset.
-- **Rationale**: Browser caching is often unreliable (especially on Edge or mobile WebView). By appending the hash to every URL (`?v=[hash]`), we bypass stale caches and guarantee that a corrected audio track or score is immediately available to the user after a build.
+- **Rationale**: Browser caching is often unreliable (especially on Edge or mobile WebView). By appending the hash to every URL (`path?v=[hash]`), we bypass stale caches and guarantee that a corrected audio track or score is immediately available to the user after a build.
 
 ### 4.2 Network-First Manifest
 The `songs.json` manifest is fetched with a timestamp to force a network check on every app load.
@@ -74,4 +96,4 @@ This project utilizes an **Agent-Driven Development** model.
 - **Rationale**: By maintaining structured documentation (OpenSpec, Design Docs), autonomous agents can verify the codebase against established standards, perform regression testing, and evolve features with high consistency.
 
 ---
-*Last Updated: 2026-05-25 (v1.2.38)*
+*Last Updated: 2026-05-26 (v1.2.53)*
