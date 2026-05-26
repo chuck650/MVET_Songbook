@@ -25,6 +25,9 @@ kubectl --context "$KUBECTL_CONTEXT" create secret generic mvet-auth-secrets \
 echo "🚀 Applying deployment and services to '${NAMESPACE}' namespace on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/api-deployment-prod.yaml"
 
+echo "🌐 Applying ingress routing rules to '${NAMESPACE}' namespace on context '${KUBECTL_CONTEXT}'..."
+kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/ingress-prod.yaml"
+
 echo "⏳ Waiting for Production API Pod to be ready on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" wait --namespace "$NAMESPACE" \
   --for=condition=ready pod \
