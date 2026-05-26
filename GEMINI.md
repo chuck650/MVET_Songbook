@@ -50,6 +50,18 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] GitHub Pages Migration & Dynamic Path Resolution Hardening (v1.2.14)
 - [x] ESM, TypeScript & ESLint Modernization (Strict TSC/Linter Compilation passing)
 - [x] Modular Licensing Engine, Translucency Card Badges & DMCA Safe Harbor Policies (v1.2.31)
+- [x] Split-Architecture Choir Access Controls & Dynamic PSK Authentication (v1.2.37)
+- [x] Public Song Thumbnail Gateway & Credential-Aware Offline Sync (v1.2.38)
+- [x] High-Fidelity Display Calibration Zoom Slider & Circular Glass Controls (v1.2.40)
+- [x] Clean Up Redundant Version Footer in Settings View (v1.2.41)
+- [x] High-Contrast Split-Architecture About & Legal View (v1.2.42)
+- [x] Secure Video Rehearsal Playback & Authenticated Downloads (v1.2.43)
+- [x] Standard UUIDv4 Choir PSK Obfuscation Migration (v1.2.44)
+- [x] Binding key/src Direct to HTML5 Video for React Hot-Reload (v1.2.46)
+- [x] API-Aware Service Worker Runtime Caching and Unified Offline Sync Caching (v1.2.47)
+- [x] Local & Production Songbook Sync and Thumbnail Auto-Regeneration (v1.2.52)
+- [x] Decoupled API Gateway GHCR Automation Pipeline & Tag Release v1.0.0 (v1.2.52)
+- [x] Production K8s Pure Registry Deployment Config & Automated Testing Suite (v1.2.52)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -58,12 +70,12 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - **Precision**: v1.1.68 implements the Atomic Vertical Fit (86vh) and Infinite Canvas (uncapped max-width) for flawless landscape mobile stability.
 - **Visuals**: Universal symmetric margins (4.0L / 4.0R) ensure the sheet music is flawlessly centered under the title across all device types and orientations, preventing any right-skew or overflow.
 - **Performance Mode**: Unconstrained `:not(.performance-mode)` SVG scaling ensures the single horizontal staffline renders at its full crisp width without vertical squishing.
-- **Type-Safety & Code Standards**: TypeScript strict mode compiles flawlessly with a robust ESLint v9 configuration to guard all Web Audio and score parsing interfaces.
+- **Type-Safety & Code Standards**: TypeScript strict mode compiles flawlessly with a robust ESLint v9 configuration to guard all Web Audio and score parsing interfaces. Root ESLint setup has been refined to ignore containerized server paths (`api/`), enabling 100% error-free linter runs across the entire client PWA interface.
 
 ## Next Steps
 1. Decompose the monolithic `MusicViewer.tsx` into clean, atomic subcomponents (`AudioMiniPlayer.tsx`, `RehearsalDrawer.tsx`, etc.).
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
-3. Finalize Web Audio gain/panning for Soprano/Alto and Tenor/Bass isolated track mix adjustments.
 
 ---
-*Last updated by Antigravity on 2026-05-20*
+*Last updated by Antigravity on 2026-05-26 (v1.2.52)*
+

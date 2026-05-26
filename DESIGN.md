@@ -32,6 +32,13 @@ We chose the **Web Audio API** for rehearsal track playback.
 Each song directory contains a `song.json` sidecar that maps file roles (PDF, MP4, etc.) to actual filenames. We utilize a **Split-Role Architecture** for MusicXML.
 - **Rationale**: This allows for human-curated file management while supporting automated build-time manifest generation. By splitting the MusicXML roles into `"mxl"` (for raw file downloads) and `"osmd"` (for the visual rendering engine, usually set to a `*-SATB.mxl` conductor layout), we maintain strict control over both the visual layout and the downloadable payloads without forcing strict naming conventions on the user.
 
+### 2.4 Containerized API Gateway & Dynamic Obfuscation Layer (v1.2)
+To comply with intellectual property regulations without compromising PWA performance, we transitioned the application to a secured hybrid delivery pipeline using a containerized Express API gateway.
+- **Dynamic Masking**: For unauthenticated guests, the catalog endpoint (`GET /api/songs`) dynamically strips high-fidelity asset paths and hashes for copyrighted arrangements (like "Armed Forces Medley"), returning `{ protected: true }` placeholders. Public domain metadata remains completely transparent.
+- **Pre-Shared Key & JWT Session Lifecycle**: Choir members submit an access key which is exchanged at `POST /api/auth/token` for a cryptographically signed JWT, granting 90-day access to full vocal arrangements.
+- **Service Worker Authorization Injection**: Since standard HTML5 tags (like `<audio>` or `<video>`) do not support custom request headers, a browser-side Service Worker intercepts all file requests to the API and dynamically appends the JWT `Authorization: Bearer <token>` header, facilitating seamless native streaming and background offline caching.
+- **Public Image Path-Bypass**: Image extensions (`png`, `jpg`, etc.) bypass the authentication middleware completely, enabling anonymous visitors to view the catalog grid's song thumbnails without encountering broken assets.
+
 ---
 
 ## 3. Visual Language & UX
@@ -67,4 +74,4 @@ This project utilizes an **Agent-Driven Development** model.
 - **Rationale**: By maintaining structured documentation (OpenSpec, Design Docs), autonomous agents can verify the codebase against established standards, perform regression testing, and evolve features with high consistency.
 
 ---
-*Last Updated: 2026-05-15*
+*Last Updated: 2026-05-25 (v1.2.38)*

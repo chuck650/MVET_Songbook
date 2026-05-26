@@ -16,10 +16,12 @@ MVET Songbook is a high-fidelity rehearsal platform and sheet music library dedi
 
 ## 🛠 Tech Stack
 
-- **Framework**: Vite + React
-- **Audio Engine**: Web Audio API (48kHz/24-bit optimized)
-- **Rendering**: OpenSheetMusicDisplay (OSMD)
-- **Deployment**: Netlify
+- **Frontend Client**: Vite + React (PWA with Workbox offline reliable synchronization)
+- **API Backend**: Express + TypeScript stateless REST gateway container
+- **API Spec**: OpenAPI 3.0 (with interactive Swagger UI documentation at `/docs`)
+- **Audio Engine**: Web Audio API (48kHz/24-bit optimized) with Network-Aware Auto-Play
+- **Rendering Engine**: OpenSheetMusicDisplay (OSMD) with asymmetric centering
+- **Deployment & Orchestration**: Docker, Kubernetes (k3s for local development), and Netlify (PWA hosting)
 - **Dev Environment**: Built using [Google Antigravity](https://antigravity.google) Agentic IDE.
 
 ## 📦 Getting Started
@@ -27,6 +29,7 @@ MVET Songbook is a high-fidelity rehearsal platform and sheet music library dedi
 ### Prerequisites
 - Node.js (Latest LTS)
 - npm
+- Docker & Kubernetes (k3s / kubectl) — for running the local API backend cluster
 
 ### Installation
 ```bash
@@ -39,18 +42,40 @@ npm install
 ```bash
 npm run sync
 ```
-*Securely synchronizes local exported assets (from MuseScore) into the web project.*
+*Securely synchronizes local exported assets (from MuseScore) into both the client static directory and the backend cluster storage folder.*
 
 ### Local Development
-```bash
-npm run dev
-```
+To run the dual-tier development workspace:
+
+1. **Start the Frontend PWA Client**:
+   ```bash
+   npm run dev
+   ```
+   *Runs the Vite development server at http://localhost:5173/songbook/*
+
+2. **Boot the Backend API (K3s Cluster)**:
+   Ensure your local Kubernetes/K3s context is running, then deploy the API pods and volume mounts:
+   ```bash
+   bash scripts/deploy-local.sh
+   ```
+   *Deploys the Express container and routes http://mvet-api.test*
+
+   *If you make changes to the Express codebase under `/api/src`, rebuild and reload the container:*
+   ```bash
+   bash scripts/build-and-import.sh
+   ```
+
+3. **Run API Integration Tests**:
+   ```bash
+   node scripts/test-api.js dev
+   ```
+   *Runs the 12-point authentication, catalog obfuscation, and secure file streaming verification suite.*
 
 ### Production Build
 ```bash
 npm run build
 ```
-*The build script automatically increments the version, generates the file manifest with SHA-256 hashes, and compiles the Vite project.*
+*The build script automatically increments the version, updates the manifest file with SHA-256 hashes, and compiles the Vite PWA into the `dist/` publishing folder.*
 
 ## 📄 Documentation
 

@@ -19,25 +19,36 @@ To create the premier digital resource for veteran-focused vocal arrangements, o
 
 ## 1. System Architecture
 
-### 1.1 Multi-Page Application (MPA)
-- **Framework**: Vite + React.
-- **Root (`/`)**: High-performance, SEO-optimized landing page.
-- **Songbook (`/songbook/`)**: Progressive Web App (PWA) for interactive rehearsal.
-- **Routing**: Netlify redirects handle SPA-style navigation within the `/songbook/` scope.
+The platform operates as a **Split-Architecture Tier** dividing user interface rendering and offline reliable playback from a secure stateless API backend gateway.
 
-### 1.2 Technology Stack
-- **Frontend**: React (Functional Components + Hooks).
-- **Styling**: Vanilla CSS with a deep navy glassmorphism aesthetic.
-- **Rendering**: OpenSheetMusicDisplay (OSMD) for MusicXML (.mxl).
-- **Audio**: Native Web Audio API for high-resolution 48kHz playback.
-- **PWA**: Workbox-powered service worker for offline functionality.
+### 1.1 Subsystems
+
+1. **Frontend PWA Client (Vite + React)**
+   - Deployed as a high-performance static Progressive Web App (`dist` publish folder).
+   - Manages client-side state, OSMD canvas rendering, Web Audio synthesis, and Service Worker offline caching.
+   - Routable under `/songbook/`, falling back dynamically to client-side routing.
+
+2. **Backend API Gateway (Express + TypeScript)**
+   - Deployed as a lightweight containerized Node.js service (`api/` subdirectory) running inside K3s/Kubernetes.
+   - Exposes an OpenAPI 3.0 REST specification with interactive Swagger documentation under `/docs`.
+   - Handles security token issuance, catalog obfuscation, and authenticated file streaming.
+
+### 1.2 Security & Authentication Lifecycle
+
+- **Pre-Shared Key (PSK) Token Exchange**: Users enter a Choir PSK which is exchanged at `POST /api/auth/token` for a cryptographically signed JWT.
+  - *Format*: Active PSK keys conform to the standard **UUIDv4** format (e.g., `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`), balancing high cryptographic entropy ($2^{122}$ values) with user-friendly readability and ease of copy/pasting.
+- **Service Worker Interceptor**: The frontend stores the token in IndexedDB. The Service Worker intercepts outgoing requests to `/api/songs/:id/files/:type`, extracting the token and injecting it in the `Authorization: Bearer <token>` header to enable native browser player streaming.
+- **Catalog Obfuscation**: The catalog `GET /api/songs` evaluates active tokens:
+  - *Unauthenticated*: Automatically censors copyright-restricted files and hashes, returning `{ protected: true }` placeholders, while keeping public domain metadata clear.
+  - *Authenticated*: Reveals direct file access parameters and hashes.
+- **Bypassed Image Gateway**: To allow homepage catalog loading, image formats (`png`, `jpg`, `jpeg`, etc.) are served anonymously by the gateway, even for copyrighted scores.
 
 ---
 
 ## 2. Data Manifest Specification
 
-### 2.1 The Global Manifest (`songs.json`)
-The `public/songs.json` file is a compiled index generated at build time by `scripts/generate-manifest.cjs`.
+### 2.1 The Global Manifest & API Gateway
+The catalog is dynamically requested from `/api/songs` (which acts as the authenticated dynamic source of truth). If the `VITE_API_URL` environment variable is blank, it falls back to the static `public/songs.json` file. The `public/songs.json` file is a compiled index generated at build time by `scripts/generate-manifest.cjs` and is also synced directly to the backend's `DATA_DIR` host mount.
 
 #### Schema (v1.1)
 ```typescript
@@ -146,6 +157,7 @@ interface PartEntry {
 
 | Version | Key Milestone |
 |---------|---------------|
+| 1.2.38  | **OpenAPI Backend Integration**. Switched to a secure, split-architecture containerized Express API gateway running in Kubernetes (k3s), providing JWT access controls, credential-aware offline sync, and public thumbnail bypass routes. |
 | 1.1.80  | **Split-Role Architecture**. Separated raw MXL downloads from OSMD render files (-SATB.mxl). |
 | 1.1.77  | **Asset Syncing & Parts**. Added support for 'women' and 'men' vocal groups, added `npm run sync`. |
 | 1.1.72  | **Network-Aware Auto-Play**. Engineered exact-time auto-playback for WebAudio following network load. |
