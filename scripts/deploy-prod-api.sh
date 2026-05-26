@@ -5,7 +5,7 @@ set -euo pipefail
 # Deploys the Express API gateway from GHCR to the production cluster (vps-production)
 
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-NAMESPACE="vps-production"
+NAMESPACE="mvet-songbook"
 KUBECTL_CONTEXT="vps-production"
 
 echo "📁 Creating production namespace '${NAMESPACE}' on context '${KUBECTL_CONTEXT}'..."
