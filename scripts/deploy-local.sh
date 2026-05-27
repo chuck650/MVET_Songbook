@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "📂 Setting up local volume directory at /var/data/mvet-songbook/..."
-sudo mkdir -p /var/data/mvet-songbook
-sudo chown -R chuck:chuck /var/data/mvet-songbook
-
-echo "📁 Syncing local songs and songs.json into k3s volume..."
-rsync -av --delete public/songs.json /var/data/mvet-songbook/songs.json
-rsync -av --delete public/songs/ /var/data/mvet-songbook/songs/
-
 echo "🔑 Creating local testing secrets in Kubernetes (mvet-songbook namespace)..."
 kubectl create namespace mvet-songbook --dry-run=client -o yaml | kubectl apply -f -
 

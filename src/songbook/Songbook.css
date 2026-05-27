@@ -2506,3 +2506,38 @@
 .song-card-content .song-card-actions {
   padding-right: 40px; /* Space for the info button on lower right */
 }
+
+/* PDF Viewer Fullscreen Overlay */
+.pdf-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-primary, #0f172a);
+  z-index: 2000; /* Extremely high to sit completely over everything */
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.pdf-viewer-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pdf-viewer-container {
+  flex: 1;
+  width: 100%;
+  background: #202428;
+}
+
+.pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

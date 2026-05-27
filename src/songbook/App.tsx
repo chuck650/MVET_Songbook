@@ -18,6 +18,9 @@ function AppContent() {
   const [infoSong, setInfoSong] = useState<Song | null>(null);
   const [authModalSong, setAuthModalSong] = useState<Song | null>(null);
   const [pendingSongOpenId, setPendingSongOpenId] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<Record<string, boolean>>({});
+  const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
+  const [activePdfTitle, setActivePdfTitle] = useState<string>("");
   const { settings } = useSettings();
   const { token, isAuthenticated } = useAuth();
 
@@ -134,9 +137,71 @@ function AppContent() {
     }
   };
 
-  const handleDownload = (e: React.MouseEvent, _fileUrl: string) => {
+  const getSongFileUrl = (song: Song, fileUrl: string | undefined, addHash = true) => {
+    if (!fileUrl) return "";
+    const resolved = resolvePath(fileUrl);
+    if (!resolved) return "";
+    let url = resolved;
+    
+    if (addHash && song.hashes?.[fileUrl]) {
+      const hash = song.hashes[fileUrl];
+      const sep = url.includes("?") ? "&" : "?";
+      url = `${url}${sep}v=${hash}`;
+    }
+    
+    if (token && import.meta.env.VITE_API_URL) {
+      const sep = url.includes("?") ? "&" : "?";
+      url = `${url}${sep}token=${encodeURIComponent(token)}`;
+    }
+    return url;
+  };
+
+  const handleDownload = async (e: React.MouseEvent, fileUrl: string, filename: string) => {
+    e.preventDefault();
     e.stopPropagation(); // Prevent card click
-    // The browser will handle the download via the <a> tag's download attribute
+    
+    if (downloading[fileUrl]) return;
+
+    setDownloading((prev) => ({ ...prev, [fileUrl]: true }));
+    try {
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      console.log(`Downloading secure resource: ${fileUrl}`);
+      const response = await fetch(fileUrl, { headers });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch file: ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Revoke the object URL after a short delay
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 100);
+    } catch (error) {
+      console.error("Secure JS Download failed, falling back to direct navigation:", error);
+      // Direct download fallback
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.download = filename;
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } finally {
+      setDownloading((prev) => ({ ...prev, [fileUrl]: false }));
+    }
   };
 
   return (
@@ -263,50 +328,49 @@ function AppContent() {
                       </div>
                       <p>{song.subtitle || "Traditional SATB"}</p>
                       <div className="song-card-actions">
-                        {song.files.mscz && (
-                          <a
-                            href={
-                              token && import.meta.env.VITE_API_URL
-                                ? `${resolvePath(song.files.mscz)}?token=${encodeURIComponent(token)}`
-                                : resolvePath(song.files.mscz)
-                            }
-                            download={`${song.title}.mscz`}
-                            className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.mscz || ''))}
-                          >
-                            <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
-                            <span>MSCZ</span>
-                          </a>
-                        )}
-                        {song.files.mxl && (
-                          <a
-                            href={
-                              token && import.meta.env.VITE_API_URL
-                                ? `${resolvePath(song.files.mxl)}?token=${encodeURIComponent(token)}`
-                                : resolvePath(song.files.mxl)
-                            }
-                            download={`${song.title}.mxl`}
-                            className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.mxl || ''))}
-                          >
-                            <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
-                            <span>MXL</span>
-                          </a>
-                        )}
+                        {song.files.mscz && (() => {
+                          const url = getSongFileUrl(song, song.files.mscz, true);
+                          const isLoading = downloading[url];
+                          return (
+                            <a
+                              href={url}
+                              download={`${song.title}.mscz`}
+                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
+                            >
+                              <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
+                              <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
+                            </a>
+                          );
+                        })()}
+                        {song.files.mxl && (() => {
+                          const url = getSongFileUrl(song, song.files.mxl, true);
+                          const isLoading = downloading[url];
+                          return (
+                            <a
+                              href={url}
+                              download={`${song.title}.mxl`}
+                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
+                            >
+                              <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
+                              <span>{isLoading ? "Downloading..." : "MXL"}</span>
+                            </a>
+                          );
+                        })()}
                         {song.files.pdf && (
-                          <a
-                            href={
-                              token && import.meta.env.VITE_API_URL
-                                ? `${resolvePath(song.files.pdf)}?token=${encodeURIComponent(token)}`
-                                : resolvePath(song.files.pdf)
-                            }
-                            download={`${song.title}.pdf`}
+                          <button
                             className="btn-secondary"
-                            onClick={(e) => handleDownload(e, resolvePath(song.files.pdf || ''))}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent card select click
+                              const url = getSongFileUrl(song, song.files.pdf, true);
+                              setActivePdfUrl(url);
+                              setActivePdfTitle(song.title);
+                            }}
                           >
                             <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
                             <span>PDF</span>
-                          </a>
+                          </button>
                         )}
                       </div>
                     </div>
@@ -459,6 +523,31 @@ function AppContent() {
             }
           }}
         />
+      )}
+
+      {activePdfUrl && (
+        <div className="pdf-viewer-overlay">
+          <header className="view-header pdf-viewer-header">
+            <button 
+              className="sync-btn back-btn"
+              style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}
+              onClick={() => setActivePdfUrl(null)}
+            >
+              ← Back to Library
+            </button>
+            <div className="header-titles" style={{ marginLeft: "1.5rem" }}>
+              <h2>{activePdfTitle}</h2>
+              <p>Sheet Music PDF</p>
+            </div>
+          </header>
+          <div className="pdf-viewer-container">
+            <iframe 
+              src={activePdfUrl} 
+              title={`${activePdfTitle} PDF`}
+              className="pdf-iframe"
+            />
+          </div>
+        </div>
       )}
     </div>
   );

@@ -217,7 +217,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
       .map(key => ({ key, name: song.parts?.[key]?.name || key, files: song.parts?.[key]?.files || {} }))
   ];
 
-  const getDownloadUrl = useCallback((fileUrl: string, addHash = false) => {
+  const getDownloadUrl = useCallback((fileUrl: string | undefined, addHash = false) => {
+    if (!fileUrl) return '';
     const resolved = resolvePath(fileUrl);
     if (!resolved) return '';
     let url = resolved;

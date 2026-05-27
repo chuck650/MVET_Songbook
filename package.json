@@ -1,12 +1,14 @@
 {
   "name": "mvet-songbook",
   "private": true,
-  "version": "1.2.54",
+  "version": "1.2.61",
   "type": "module",
   "scripts": {
     "sync": "bash scripts/sync-all-songs.sh",
     "push-songbook": "bash scripts/push-songbook.sh",
     "deploy-prod-api": "bash scripts/deploy-prod-api.sh",
+    "deploy-api": "bash scripts/deploy-local.sh",
+    "build-api": "bash scripts/build-and-import.sh",
     "bump-version": "node scripts/bump-version.cjs",
     "generate-manifest": "node scripts/generate-manifest.cjs",
     "dev": "npm run generate-manifest && vite",

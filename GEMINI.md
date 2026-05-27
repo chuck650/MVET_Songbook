@@ -64,6 +64,12 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Production K8s Pure Registry Deployment Config & Automated Testing Suite (v1.2.52)
 - [x] Production K8s cert-manager & Let's Encrypt automated TLS integration (v1.2.53)
 - [x] Custom-titled downloads with dynamic Content-Disposition headers for MSCZ/MXL/PDF buttons (v1.2.54)
+- [x] Cross-origin CORS exposed headers and Service Worker download bypass hardening (v1.2.55)
+- [x] Inline PDF rendering support with cross-origin target="_blank" view and direct MSCZ/MXL attachment downloads (v1.2.56)
+- [x] Idempotent production API deployment via rolling restart mechanism in deploy-prod-api.sh (v1.2.57)
+- [x] Unified RESTful API Router with /api/v1 versioning and legacy backward-compatible alias routing (v1.2.59)
+- [x] Query-controlled Content-Disposition supporting browser-inline rendering for PDF downloads (v1.2.59)
+- [x] Restored service worker runtime caching for PDF/MSCZ files and resolved mobile PWA new-tab/external PDF breaks using premium full-screen inline React overlays with v=hash cache integrity (v1.2.60)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -79,5 +85,5 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-05-26 (v1.2.54)*
+*Last updated by Antigravity on 2026-05-26 (v1.2.60)*
 

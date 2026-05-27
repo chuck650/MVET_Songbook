@@ -27,7 +27,8 @@ app.use(cors({
       callback(new Error('Blocked by CORS policy'));
     }
   },
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['Content-Disposition']
 }));
 
 // Config
@@ -130,8 +131,11 @@ app.get('/openapi.json', (req: Request, res: Response) => {
 });
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
+// Unified Express API Router (serving legacy /api and versioned /api/v1)
+const apiRouter = express.Router();
+
 // Auth Post
-app.post('/api/auth/token', (req: Request, res: Response) => {
+apiRouter.post('/auth/token', (req: Request, res: Response) => {
   const { psk } = req.body as PSKRequest;
   if (!psk) {
     return res.status(400).json({ error: 'Preshared Key (psk) is required in the body.' });
@@ -155,7 +159,7 @@ app.post('/api/auth/token', (req: Request, res: Response) => {
 });
 
 // Fetch full or obfuscated catalog
-app.get('/api/songs', (req: Request, res: Response) => {
+apiRouter.get('/songs', (req: Request, res: Response) => {
   try {
     const catalog = loadCatalog();
     const isAuthorized = checkTokenSilent(req);
@@ -191,7 +195,7 @@ app.get('/api/songs', (req: Request, res: Response) => {
   }
 });
 
-// Serve actual file payload safely
+// Serve actual file payload safely with query-driven content disposition (ADR-057)
 function serveFilePayload(req: Request, res: Response, song: Song, file_type: string) {
   let fileRelPath: string | undefined = undefined;
 
@@ -240,16 +244,28 @@ function serveFilePayload(req: Request, res: Response, song: Song, file_type: st
 
   res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
   
-  if (file_type === 'mscz' || file_type === 'mxl' || file_type === 'pdf') {
-    const filename = path.basename(fullPath);
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  const filename = path.basename(fullPath);
+  let dispositionType = 'attachment'; // default fallback for other types
+
+  // Determine disposition based on query parameter, otherwise use sensible RESTful defaults
+  const reqDisposition = req.query.disposition as string;
+  if (reqDisposition === 'inline' || reqDisposition === 'attachment') {
+    dispositionType = reqDisposition;
+  } else {
+    // Default behaviors: inline for PDF/images, attachment for other binaries (MSCZ, MXL)
+    if (file_type === 'pdf' || file_type === 'png' || file_type === 'jpg' || file_type === 'jpeg' || file_type === 'gif' || file_type === 'svg') {
+      dispositionType = 'inline';
+    } else {
+      dispositionType = 'attachment';
+    }
   }
 
+  res.setHeader('Content-Disposition', `${dispositionType}; filename="${filename}"`);
   res.sendFile(fullPath);
 }
 
 // Serve secure or public song file route
-app.get('/api/songs/:song_id/files/:file_type', (req: AuthenticatedRequest, res: Response) => {
+apiRouter.get('/songs/:song_id/files/:file_type', (req: AuthenticatedRequest, res: Response) => {
   try {
     const { song_id, file_type } = req.params;
     const catalog = loadCatalog();
@@ -271,6 +287,10 @@ app.get('/api/songs/:song_id/files/:file_type', (req: AuthenticatedRequest, res:
     res.status(500).json({ error: err.message });
   }
 });
+
+// Mount the unified router under /api and /api/v1 (ADR-057 routing versioning compliant)
+app.use('/api', apiRouter);
+app.use('/api/v1', apiRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);

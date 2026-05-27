@@ -28,10 +28,10 @@ kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/api-deployme
 echo "🌐 Applying ingress routing rules to '${NAMESPACE}' namespace on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/ingress-prod.yaml"
 
-echo "⏳ Waiting for Production API Pod to be ready on context '${KUBECTL_CONTEXT}'..."
-kubectl --context "$KUBECTL_CONTEXT" wait --namespace "$NAMESPACE" \
-  --for=condition=ready pod \
-  --selector=app=mvet-api \
-  --timeout=60s
+echo "🔄 Triggering rollout restart of deployment/mvet-api to pull latest image..."
+kubectl --context "$KUBECTL_CONTEXT" rollout restart deployment/mvet-api --namespace "$NAMESPACE"
+
+echo "⏳ Waiting for Production API Deployment rollout to complete on context '${KUBECTL_CONTEXT}'..."
+kubectl --context "$KUBECTL_CONTEXT" rollout status deployment/mvet-api --namespace "$NAMESPACE" --timeout=120s
 
 echo "✅ Production API Deployment Complete on context '${KUBECTL_CONTEXT}'!"
