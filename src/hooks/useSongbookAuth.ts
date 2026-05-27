@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { saveAuthData, getAuthData, clearAuthData } from '../utils/authStorage';
+import { syncTokenToServiceWorker } from '../utils/authSync';
+
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -50,7 +52,7 @@ export function useSongbookAuth() {
   // Background refresh method
   const refreshJWT = useCallback(async (currentPsk: string): Promise<string> => {
     try {
-      const response = await fetch(`${API_BASE}/api/auth/token`, {
+      const response = await fetch(`${API_BASE}/api/v1/auth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ psk: currentPsk })
@@ -192,7 +194,7 @@ export function useSongbookAuth() {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE}/api/auth/token`, {
+      const response = await fetch(`${API_BASE}/api/v1/auth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ psk: inputPsk })
@@ -224,6 +226,11 @@ export function useSongbookAuth() {
     setIsAuthenticated(false);
     setError(null);
   }, []);
+
+  // Automatically sync credentials to Service Worker fetch thread upon state updates
+  useEffect(() => {
+    syncTokenToServiceWorker(token || null);
+  }, [token]);
 
   return {
     psk,

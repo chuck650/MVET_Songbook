@@ -31,7 +31,7 @@ function AppContent() {
     setLoading(true);
 
     const apiBase = import.meta.env.VITE_API_URL || "";
-    const catalogUrl = apiBase ? `${apiBase}/api/songs` : resolvePath(`/songs.json?v=${Date.now()}`);
+    const catalogUrl = apiBase ? `${apiBase}/api/v1/songs` : resolvePath(`/songs.json?v=${Date.now()}`);
 
     const headers: Record<string, string> = {};
     if (token) {
@@ -149,10 +149,6 @@ function AppContent() {
       url = `${url}${sep}v=${hash}`;
     }
     
-    if (token && import.meta.env.VITE_API_URL) {
-      const sep = url.includes("?") ? "&" : "?";
-      url = `${url}${sep}token=${encodeURIComponent(token)}`;
-    }
     return url;
   };
 

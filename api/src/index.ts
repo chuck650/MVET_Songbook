@@ -288,8 +288,7 @@ apiRouter.get('/songs/:song_id/files/:file_type', (req: AuthenticatedRequest, re
   }
 });
 
-// Mount the unified router under /api and /api/v1 (ADR-057 routing versioning compliant)
-app.use('/api', apiRouter);
+// Mount the unified router strictly under /api/v1 (ADR-057 routing versioning compliant)
 app.use('/api/v1', apiRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

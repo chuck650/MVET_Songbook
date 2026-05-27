@@ -8,6 +8,7 @@ coverage
 
 # Production
 dist/
+dev-dist/
 build/
 
 # Misc

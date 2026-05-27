@@ -25,6 +25,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
+        importScripts: ['sw-auth-sync.js'],
         maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // Increase to 20MiB for high-res scores and audio
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
         runtimeCaching: [
@@ -132,6 +133,9 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      devOptions: {
+        enabled: true
       }
     })
   ],

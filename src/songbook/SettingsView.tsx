@@ -34,7 +34,7 @@ const SettingsView: React.FC = () => {
 
       const apiBase = import.meta.env.VITE_API_URL || "";
       const catalogUrl = apiBase
-        ? `${apiBase}/api/songs`
+        ? `${apiBase}/api/v1/songs`
         : resolvePath(`/songs.json?v=${Date.now()}`);
 
       const headers: Record<string, string> = {};
@@ -111,8 +111,9 @@ const SettingsView: React.FC = () => {
           const separator = resolvedUrl.includes("?") ? "&" : "?";
           let finalUrl = `${resolvedUrl}${separator}v=${hash}`;
 
-          if (token && apiBase && resolvedUrl.includes("/api/songs/")) {
-            finalUrl += `&token=${encodeURIComponent(token)}`;
+          if (token && apiBase && (resolvedUrl.includes("/api/songs/") || resolvedUrl.includes("/api/v1/songs/"))) {
+            // Service Worker intercepts and appends header dynamically.
+            // No URL parameter query addition needed here.
           }
 
           await cache.add(finalUrl);

@@ -227,12 +227,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
       const sep = url.includes('?') ? '&' : '?';
       url = `${url}${sep}v=${hash}`;
     }
-    if (token && import.meta.env.VITE_API_URL) {
-      const sep = url.includes('?') ? '&' : '?';
-      url = `${url}${sep}token=${encodeURIComponent(token)}`;
-    }
     return url;
-  }, [song, token]);
+  }, [song]);
 
   const handlePlayTrack = useCallback((type: 'audio' | 'video', part: RehearsalPart) => {
     const fileUrl = type === 'video' ? part.files.mp4 : (part.files[audioFormat] || part.files.flac || part.files.mp3);

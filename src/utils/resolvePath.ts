@@ -53,7 +53,7 @@ export function resolvePath(path?: string): string {
       const fileType = getFileTypeFromPath(path);
       const partKey = getPartKeyFromPath(path);
       const queryParam = partKey ? `?part=${partKey}` : '';
-      return `${cleanApiBase}/api/songs/${songId}/files/${fileType}${queryParam}`;
+      return `${cleanApiBase}/api/v1/songs/${songId}/files/${fileType}${queryParam}`;
     }
   }
   

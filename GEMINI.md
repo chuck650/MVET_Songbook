@@ -71,6 +71,8 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Query-controlled Content-Disposition supporting browser-inline rendering for PDF downloads (v1.2.59)
 - [x] Restored service worker runtime caching for PDF/MSCZ files and resolved mobile PWA new-tab/external PDF breaks using premium full-screen inline React overlays with v=hash cache integrity (v1.2.60)
 - [x] High-contrast fullscreen inline React PDF overlay viewer, resolved floating promise ESLint blocks, modularized deploy-api vs. push-songbook scripting, and deployed production release v1.2.61 / api-v1.0.2 (v1.2.61)
+- [x] Strict API /api/v1 URI versioning enforcement, 16-checkpoint test suite implementation, local sandbox K3s rolling restart deployment, and automated Markdown Audit Report generator with nested list layout spacing fixes (v1.2.62 / api-v1.0.3)
+
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -86,5 +88,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-05-26 (v1.2.61)*
+*Last updated by Antigravity on 2026-05-27 (v1.2.62 / docs-refreshed)*
+
+
 
