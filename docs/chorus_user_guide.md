@@ -1,103 +1,207 @@
-# 🎶 Welcome to the MVET Songbook Rehearsal Suite!
+# 🎶 Military Voices of East Tennessee (MVET) Chorus User Guide
 
-This guide will walk you through installing, unlocking, and mastering the new digital sheet music and rehearsal engine designed exclusively for the **Military Voices of East Tennessee (MVET) Choir**.
+## _Guide to the Interactive Songbook & Rehearsal Suite_
+
+Welcome to the **MVET Songbook**! This interactive rehearsing and performance application has been designed specifically for members of the Military Voices of East Tennessee (MVET) Chorus.
+
+Whether you are rehearsing at home, practicing on the road, or performing live on stage, this application delivers high-fidelity sheet music, synchronized rehearsal tracks, and offline capability.
+
+This guide will walk you through accessing, installing, unlocking, and mastering every single feature of the MVET Songbook.
 
 ---
 
-## 🏛️ Getting Started: The Landing Page
+## 🏛️ Step 1: Accessing the Application
 
-To begin, open your web browser on your smartphone, tablet, or laptop and navigate to:
+To begin, open your web browser on your smartphone, tablet, or computer and navigate to the application link:
 👉 **[https://chuck650.github.io/MVET_Songbook/](https://chuck650.github.io/MVET_Songbook/)**
 
-From the landing page, you can read about the choir’s vision, and click the **"Open Songbook"** button to load the active rehearsal environment!
+Upon navigating, you will see the **Dashboard Home Catalog** showing all active songs in the choral library.
+
+![MVET Songbook Dashboard Home](images/01_library_view.png)
+_Figure 1: The MVET Songbook Dashboard Home Catalog view, showing song library cards._
 
 ---
 
-## 📲 How to Install the App (Step-by-Step PWA Guide)
+## 🔑 Step 2: Unlocking Copyrighted Music (Choir Access Key)
 
-The MVET Songbook is a **Progressive Web App (PWA)**. This means it behaves exactly like a native app installed from the App Store or Google Play, but bypasses stores completely. 
-
-Installing it places a **Choral Songbook icon** on your home screen/desktop, launches in clean full-screen mode (without browser address bars), and enables offline singing.
-
-### 📱 iPhone & iPad (iOS Safari)
-> [!IMPORTANT]
-> You must use the default **Safari** browser on iOS to install PWAs.
-1. Open the Songbook link in Safari.
-2. Tap the **Share** button at the bottom of the screen (the square icon with an arrow pointing up).
-3. Scroll down the sharing menu and tap **"Add to Home Screen"**.
-4. Confirm by tapping **Add** in the top right corner. 
-5. The **Choral Songbook** icon will now appear on your home screen!
-
-### 🤖 Android Devices (Google Chrome)
-1. Open the Songbook link in Chrome.
-2. Tap the **Three Dots** in the top-right corner to open the menu.
-3. Tap **"Install App"** (or **"Add to Home Screen"**).
-4. Tap **Install** to confirm.
-5. The app icon will now appear on your app drawer and home screen.
-
-### 💻 Windows Laptops & Desktops (Chrome or Edge)
-1. Open the link in Google Chrome or Microsoft Edge.
-2. Look at the right side of the URL Address Bar. You will see an **"App Install" icon** (it looks like a small monitor with a down arrow, or three overlapping squares with a plus sign).
-3. Click this icon, then click **Install**.
-4. The app will launch in its own standalone window and place a shortcut on your desktop!
-
-### 🍏 MacBooks & iMacs (Safari, macOS Sonoma or newer)
-1. Open the link in **Safari**.
-2. Click **File** in the top menu bar.
-3. Click **"Add to Dock..."**.
-4. Confirm the name and click **Add**.
-5. The app will appear in your Mac's Dock and launch as a clean, standalone desktop application!
-
----
-
-## 🔑 Unlocking the Library (Choir Access Key)
-
-Due to sheet music copyright regulations, our SATB arrangements and secure recording downloads are protected. When you first open the app, several songs will show a dark **`COPYRIGHTED`** badge. 
+To respect musical copyright rules, secure audio rehearsals and certain licensed vocal arrangements are encrypted. Copyrighted song cards display a dark **`COPYRIGHTED`** badge and are locked initially.
 
 ### How to enter your Choir Access Key:
-1. Locate any song card with a `COPYRIGHTED` badge.
-2. Tap the card. A secure **Access Key Required** prompt will appear.
-3. Alternatively, tap the **Gear Icon (Settings)** in the top-left corner of the library to open the settings panel.
-4. Paste or type your private **Choir Access Key**. (If you do not have the Access Key, please contact Choral Director Chuck or retrieve it from the pinned announcements in our private Facebook Group: [Military Voices of East Tennessee (MVET)](https://www.facebook.com/groups/674760652211751)).
-5. Tap **Submit Key**.
-6. The library will decrypt instantly! All locks will turn to green checkmarks, and your downloads (PDF, MSCZ, MXL) will unlock.
+
+1. Tap any song card displaying a **`COPYRIGHTED`** badge. A secure passcode window will slide up.
+2. Alternatively, tap the **Gear Icon (Settings)** in the top-left corner of the dashboard screen to open the global settings panel.
+3. Locate the **Choir Access Key** field.
+4. Type or paste your private access key.
+   _(If you do not have the access key, please contact **Jason Hardy or Chuck Nelson**, or retrieve it from the pinned announcements in our private Facebook Group: [Military Voices of East Tennessee (MVET)](https://www.facebook.com/groups/674760652211751))._
+5. Tap **Submit Key** or **Save Settings**.
+6. The entire song catalog will decrypt instantly! All copyrighted locks will turn into green checkmarks (**`UNLOCKED`**), and your download buttons (PDF, MSCZ, and MXL) will become active.
 
 > [!TIP]
-> **You only have to do this once!** Your browser securely saves this key in its internal storage. The app will keep you authenticated automatically, even if you close the app or restart your device.
+> **You only have to do this once!** The application securely stores this key in your browser's local cache. It will remember you automatically, even if you close the app, shut down your browser, or restart your device.
 
 ---
 
-## 🎼 Navigating the Rehearsal Suite
+## 📲 Step 3: Installing the App (PWA Guide)
 
-Tap any unlocked song card (e.g., *Armed Forces Medley*) to load the interactive rehearsal suite.
+The MVET Songbook is built as a **Progressive Web App (PWA)**. Installing it bypasses the app stores entirely, adding a premium launch icon on your home screen or dock. It removes the browser address bars for a clean full-screen sheet music layout and enables offline singing. You can ue the browser of your choice. Instuctions for common OS and browser combinations are provided below.
 
-### 1. The Sheet Music Viewer
-*   **Automatic Score Centering:** The system is optimized to render clean, large music notation.
-*   **Zoom Controls:** Use the circular **`+` and `-` zoom buttons** at the bottom of the screen to scale the sheet music to your perfect reading size.
-*   **Screen Wake Lock:** As long as a song is open on your screen, **your device will not dim or turn off!** You can sing with both hands on your binder without having to tap your screen to keep it awake.
+### 📱 iOS Devices (iPhones and iPads)
 
-### 2. The Part Isolator Drawer (SATB Controls)
-At the bottom of the player, tap the drawer handle or play controls to access the **Rehearsal Tracks**:
-*   **Vocal Isolation:** You will see active selectors for **Soprano, Alto, Tenor, and Bass**.
-*   **The Mute/Solo System:**
-    *   Tap your vocal part (e.g., **Tenor**) to highlight it.
-    *   Use the volume slider to dim the other voices so you can hear only your part, or turn them up slightly to practice blending in!
-*   **Tempo & Playback:** You can pause, play, or jump directly to specific measures by clicking on the note inside the sheet music itself! The player and notation will glide smoothly together in real-time.
+> [!IMPORTANT]
+> You must use the default **Safari** browser on iOS to install the app.
 
-### 3. Performance Mode (For Live Concerts)
-When you are ready to perform or just want an uncluttered reading layout:
-*   Tap the **Performance Mode** toggle (the music stand icon).
-*   The rehearsal tracks, buttons, and settings will slide away, leaving a **clean, full-screen horizontal scroll**.
-*   This mode is specifically optimized for tablets in landscape orientation, displaying a single, un-squished horizontal staff line that spans the full width of your device.
+1. Open the Songbook link inside **Safari**.
+2. Tap the **Share** button at the bottom of the screen (a square icon with an arrow pointing up).
+3. Scroll down the sharing panel and tap **"Add to Home Screen"**.
+4. Confirm by tapping **Add** in the top-right corner.
+5. The **Choral Songbook** launcher icon will now be pinned to your home screen!
+
+### 🤖 Android Devices (Phones and Tablets)
+
+1. Open the Songbook link in **Google Chrome**.
+2. Tap the **Three Dots** menu icon in the top-right corner.
+3. Tap **"Install App"** (or **"Add to Home Screen"**).
+4. Tap **Install** to confirm.
+5. The app launcher icon is now ready on your device.
+
+### 💻 Windows Laptops & Desktops
+
+1. Open the link in **Google Chrome** or **Microsoft Edge**.
+2. Look at the right side of the address bar at the top of the browser. You will see an **Install Icon** (it looks like a small monitor with a down arrow, or a cluster of squares with a plus sign).
+3. Click this icon, then click **Install**.
+4. A standalone desktop application window will launch, and a shortcut will be placed on your desktop.
+
+### 🍏 MacBooks & Desktop Macs
+
+1. Open the link inside **Safari** (macOS Sonoma or newer).
+2. Click **File** in the top Mac menu bar.
+3. Choose **"Add to Dock..."**.
+4. Click **Add** to confirm.
+5. The standalone application is now pinned to your Mac Dock!
 
 ---
 
-## ✈️ Offline Rehearsals (Syncing the Database)
+## 🎼 Step 4: Loading & Viewing Sheet Music
 
-If you rehearse in an area with poor cellular service or no Wi-Fi, you can download the entire library for offline use:
+Tap any unlocked song card on your dashboard (such as _The Star-Spangled Banner_) to load it into the sheet music viewer.
 
-1. Tap the **Gear Icon (Settings)** in the top-left corner of the home screen.
-2. Under the Offline Sync section, tap the **"Sync Library"** button.
-3. A progress bar will track the download of all sheet music XML, printable PDFs, and high-fidelity audio tracks.
-4. Once completed, the status will show **"Synced"**.
-5. **You can now put your phone or tablet on Airplane Mode!** The entire app will load and play rehearsal tracks flawlessly without a single byte of internet access!
+The sheet music viewer loads a premium high-contrast sheet music canvas. By default, the viewer displays the **Full Score** with symmetric left/right margins and professional automatic centering.
+
+![Music Sheet Viewer Default](images/02_score_viewer.png)
+_Figure 2: The Interactive Sheet Music Viewer showing a full score._
+
+---
+
+## ⚙️ Step 5: Mastering Vocal Part Isolation & Settings
+
+Inside the sheet music viewer, all layout preferences and rehearsal tracks are centralized inside the **Settings Drawer**.
+
+### Opening the Settings Drawer:
+
+- Click the **Gear (⚙️) button** in the top-right corner of the viewer header tools.
+- The Settings Drawer will slide open from the right side of your screen.
+
+![Settings Drawer Open](images/03_settings_drawer.png)
+_Figure 3: Sheet Music Viewer with the slide-out Settings Drawer open._
+
+### 1. Score Display & Vocal Part Isolation
+
+- **Vocal Part Selection:** Inside the Settings Drawer under **Score Display**, tap the **Part Selection** dropdown menu.
+- By default, it is set to "Full Score". You can select your specific vocal line (_Soprano, Alto, Tenor, Bass, Men, or Women_).
+
+![Vocal Part Selection](images/05_part_selection.png)
+_Figure 4: Selecting isolated vocal parts (e.g., Tenor) from the dropdown list._
+
+- **Dynamic Re-rendering:** Once you select your part, the interactive engine instantly sweeps away all other staves, displaying **only your selected vocal line**! This keeps your score clean and eliminates tracking confusion.
+
+![Isolated Tenor Score View](images/06_clean_tenor_score.png)
+_Figure 5: The sheet music viewer isolated to display only the Tenor vocal part staff._
+
+- **Score Zoom Slider:** Want larger notes? Drag the **Score Zoom** slider inside the settings drawer to scale the notation staff dynamically from **30% up to 150%** of its original size. The notes will scale cleanly without stretching off the edges.
+- **Show Measure Numbers:** Toggle the **Show Measure Numbers** checkbox to show or hide exact measure labels above the systems.
+
+---
+
+## 🔊 Step 6: Using Rehearsal Tracks & Players
+
+Under the **Rehearsal Tracks** section of the Settings Drawer, you will find high-fidelity rehearsal guides matching the active song arrangement.
+
+### 1. High-Fidelity Audio Tracks (FLAC & MP3)
+
+1. Choose your preferred audio format (**FLAC** or **MP3**) via the toggle buttons.
+2. The table lists all parts (_Full Score, Soprano, Alto, Tenor, Bass, etc._) that have guide tracks.
+3. Tap the play (**▶**) button to listen to any track, or click the download (**⬇**) button to save the audio file directly to your hard drive.
+4. Playing a track triggers our premium **Mini-Player Bar** at the bottom of the screen!
+
+![Mini-Audio Player Active](images/04_audio_player.png)
+_Figure 6: Sheet Music Viewer with the Rehearsal Audio Player active at the bottom._
+
+### 2. Audio Player Bar Controls:
+
+- **Equalizer Visualizer:** A glowing three-bar visualizer reacts in real time to the audio's dynamic volume, proving that your track is active and playing.
+- **Play / Pause:** Tap the center button (which changes from play to pause) to control playback. If a track is loading, a circular spinner will show.
+- **Timeline Seeker:** Drag the timeline slider to jump forward or backward to specific parts of the song. Timeline clocks show current time and total song length.
+- **Volume Slider:** Adjust the volume slider on the far right (with a speaker icon) to calibrate rehearsal volume.
+
+---
+
+## 🎥 Step 7: Synchronized Video Rehearsal
+
+For singers who learn visually:
+
+1. Open the Settings Drawer (⚙️) inside the score viewer.
+2. In the Rehearsal Tracks table, locate the **Video** column.
+3. Tap the play (**▶**) button for your part.
+4. A high-definition **Video Modal Overlay** will open directly over the score viewer.
+5. The video synchronizes to the guide track, and you can play, pause, or fullscreen the video easily.
+6. Click the Close (**×**) button in the top-right of the video window to return immediately to your sheet music notation.
+
+---
+
+## ⛶ Step 8: Hands-Free Performance Mode (Music Stand View)
+
+When you are performing live in concert or want a completely clean, distraction-free rehearsal layout:
+
+### 1. Activating Performance Mode:
+
+- Tap the **Fullscreen (⛶) button** in the top-right header tools.
+- The application will enter pure fullscreen, hiding the header bars, sliders, sidebars, and settings drawer.
+
+### 2. The Performance Layout:
+
+- Your sheet music formats into a **single continuous horizontal staffline** that stretches across the entire screen.
+- Viewport-proportional margins prevent any squishing, rendering the text and notes in maximum size and high resolution.
+
+### 3. Hands-Free & Gesture Navigation:
+
+- **Gestures:** Swipe or drag your finger left or right on the sheet music to slide smoothly between measures.
+- **Navigation Pill:** A small, transparent **Navigation Pill** floats in the lower-middle of the screen containing visual left/right arrow buttons for simple measure stepping.
+- **Keyboard Control:** If your device is connected to a keyboard or bluetooth page turner, press **Right Arrow, PageDown, or Space** to go forward, and **Left Arrow or PageUp** to go backward.
+- **Exiting:** Tap the exit (**×**) button in the top-right corner or press the **Escape (Esc)** key to return to the standard viewer.
+
+> [!NOTE]
+> **Keep your hands on your binder!** In both standard and Performance Mode, the app requests a background **Screen Wake Lock**. Your device screen will remain fully awake and lit indefinitely while a song is open, meaning your device will never dim or shut off while you are performing or practicing!
+
+---
+
+## ✈️ Step 9: Syncing Library for Offline Performance
+
+Poor cellular reception at the church or rehearsal hall is no longer a problem. The MVET Songbook allows you to sync the entire database, saving files directly to your PWA.
+
+### How to Synchronize:
+
+1. On the Dashboard Home screen, tap the **Gear Icon (Settings)** in the top-left corner.
+2. Scroll to the **Offline Sync Engine** section.
+3. Tap the **Sync Library** button.
+4. The system will download all MusicXML sheet music, printable PDFs, FLAC/MP3 rehearsal audio guides, and metadata files. A progress bar will track the download.
+5. Once completed, the engine status will show **"Synced"**.
+6. **You can now toggle Airplane Mode on your phone or tablet!** You can disconnect from cellular service and Wi-Fi completely. The application, sheet music rendering, and high-fidelity audio tracks will load and play flawlessly without any internet connection.
+
+---
+
+## 📞 Need Help?
+
+If you experience any issues or have questions regarding the application:
+
+- **Choir Access Key / Arrangements:** Contact Choral Director **Jason Hardy** or app maintainer, **Chuck Nelson**.
+- **Online Announcements & Discussion:** Visit our private Facebook Group at [Military Voices of East Tennessee (MVET)](https://www.facebook.com/groups/674760652211751).

@@ -271,6 +271,98 @@
     .back-link:hover {
       color: #93c5fd;
     }
+
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.8in;
+      }
+      body {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        background-image: none !important;
+        font-size: 11pt;
+      }
+      .container {
+        padding: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+      header {
+        margin-bottom: 2rem !important;
+      }
+      h1 {
+        font-size: 2.2rem !important;
+        background: none !important;
+        -webkit-text-fill-color: #0f172a !important;
+        color: #0f172a !important;
+      }
+      .brand-badge {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #1e3a8a !important;
+      }
+      .alert-banner {
+        background: #fffbeb !important;
+        border: 1px solid #fef3c7 !important;
+        color: #92400e !important;
+        margin-bottom: 2rem !important;
+        page-break-inside: avoid;
+      }
+      .alert-content p {
+        color: #78350f !important;
+      }
+      .alert-content a {
+        color: #1d4ed8 !important;
+      }
+      .card {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+        padding: 1.5rem !important;
+        margin-bottom: 2rem !important;
+        page-break-inside: avoid;
+      }
+      h2 {
+        font-size: 1.5rem !important;
+        color: #0f172a !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+        padding-bottom: 0.5rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .installation-grid {
+        display: block !important;
+      }
+      .install-item {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        margin-bottom: 1rem !important;
+        page-break-inside: avoid !important;
+      }
+      .install-item h4 {
+        color: #1e293b !important;
+      }
+      .highlight {
+        color: #0f172a !important;
+        font-weight: 600 !important;
+      }
+      .feature-step {
+        page-break-inside: avoid !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .step-number {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #1e3a8a !important;
+      }
+      .step-desc h3 {
+        color: #1e293b !important;
+      }
+      .back-link, footer {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -289,7 +381,7 @@
       <div class="alert-icon">🔒</div>
       <div class="alert-content">
         <h3>Copyrighted Arrangements Locked?</h3>
-        <p>To comply with musical licensing requirements, all proprietary SATB sheet music downloads and isolated audio rehearsal tracks are protected. To unlock the full library, please contact Choral Director Chuck or retrieve our active Access Key pinned inside the private Facebook Group: <a href="https://www.facebook.com/groups/674760652211751" target="_blank" rel="noopener noreferrer">Military Voices of East Tennessee (MVET)</a>.</p>
+        <p>To comply with musical licensing requirements, all proprietary SATB sheet music downloads and isolated audio rehearsal tracks are protected. To unlock the full library, please contact Jason Hardy or Chuck Nelson or retrieve our active Access Key pinned inside the private Facebook Group: <a href="https://www.facebook.com/groups/674760652211751" target="_blank" rel="noopener noreferrer">Military Voices of East Tennessee (MVET)</a>.</p>
       </div>
     </div>
 
@@ -351,40 +443,48 @@
       <div class="feature-step">
         <div class="step-number">1</div>
         <div class="step-desc">
-          <h3>Vocal Part Isolation (SATB Drawer)</h3>
-          <p>Tap the controls bar at the bottom of any song score. You will see buttons for <strong>Soprano, Alto, Tenor, and Bass</strong>. Tap your part to highlight it, and drag the individual volume slider to solo your voice, or lower the other parts to Blending Mode to test your harmonies!</p>
+          <h3>The Settings Drawer (⚙️) & Vocal Part Isolation</h3>
+          <p>Access vocal controls by tapping the <strong>Gear (⚙️) icon</strong> in the top-right header tools. Under the <strong>Score Display</strong> section of the slide-out panel, use the <strong>Part Selection</strong> dropdown menu to switch from "Full Score" to your specific part (<em>Soprano, Alto, Tenor, Bass, Men,</em> or <em>Women</em>). The sheet music instantly re-renders to display <strong>only your selected vocal line</strong>, sweeping away the other staves so you can focus entirely on your part!</p>
         </div>
       </div>
 
       <div class="feature-step">
         <div class="step-number">2</div>
         <div class="step-desc">
-          <h3>Display Zoom Calibration</h3>
-          <p>Readability is key. Tap the floating <strong>plus (+) and minus (-) circles</strong> positioned at the bottom margin of the score viewer. This dynamically adjusts the size and layout of notation staffs on any tablet or mobile screen without distorting notation elements.</p>
+          <h3>Score Zoom & Scale Calibration</h3>
+          <p>Readability is key. Inside the Settings Drawer, use the <strong>Score Zoom</strong> range slider to scale the music notation from <strong>30% up to 150%</strong> of its default size. Alternatively, you can calibrate default zoom levels globally from the main library view by clicking the gear icon and using the circular plus (+) and minus (-) default zoom buttons next to the zoom slider. The notation will dynamically re-wrap and scale perfectly on any tablet or mobile screen.</p>
         </div>
       </div>
 
       <div class="feature-step">
         <div class="step-number">3</div>
         <div class="step-desc">
-          <h3>Hands-Free Screen Wake Lock</h3>
-          <p>Our app automatically requests a background <strong>Screen Wake Lock</strong> when sheet music is open on your screen. Your mobile phone or tablet screen will remain awake and fully lit indefinitely without dimming, letting you rehearse hands-free with both hands on your binder!</p>
+          <h3>Rehearsal Track Player (FLAC & MP3)</h3>
+          <p>Under the <strong>Rehearsal Tracks</strong> section of the settings drawer, choose your preferred high-fidelity audio format (<strong>FLAC</strong> or <strong>MP3</strong>). Tap play (<strong>▶</strong>) to listen to any vocal track, or download the audio files directly using the download (<strong>⬇</strong>) button. Playing a track slides up a premium <strong>Mini-Player Bar</strong> at the bottom of the screen, featuring an animated equalizer visualizer, Play/Pause control, timeline seeking slider, and an independent volume slider.</p>
         </div>
       </div>
 
       <div class="feature-step">
         <div class="step-number">4</div>
         <div class="step-desc">
-          <h3>Performance Mode (Full-Screen Live Layout)</h3>
-          <p>Tap the <strong>Music Stand icon</strong> in the player controls. This enables our pure full-screen mode, sweeping away settings controls, buttons, and drawers. In this mode, the sheet music expands to full-width horizontal scroll with view-proportional symmetric margins, optimized for live chorus stands.</p>
+          <h3>Synchronized Video Rehearsal</h3>
+          <p>For visual learners, select a part's video rehearsal track inside the settings drawer and tap play (<strong>▶</strong>). This launches a synchronized high-definition <strong>Video Modal Overlay</strong> directly over the score viewer. You can practice in real-time with full standard media controls, and close (<strong>×</strong>) the modal at any time to return to the notation.</p>
         </div>
       </div>
 
       <div class="feature-step">
         <div class="step-number">5</div>
         <div class="step-desc">
-          <h3>Sync Library for Offline Performance</h3>
-          <p>No Wi-Fi at the rehearsal venue? No problem! Navigate to the <strong>Settings Gear</strong> icon from the library home view, and tap <strong>"Sync Library"</strong>. The app will download and save all MusicXML files, high-fidelity isolated rehearsal MP3s, and printable PDFs directly to your device. You can then put your device on Airplane Mode and practice anywhere!</p>
+          <h3>Performance Mode (Full-Screen Horizontal Flow)</h3>
+          <p>Ready to perform? Tap the <strong>Fullscreen (⛶) button</strong> in the top-right header tools. This enters a gorgeous full-screen mode, sweeping away headers, controls, and drawers, and formatting your sheet music in a <strong>single continuous horizontal staffline</strong>. You can navigate measures by swiping/dragging, pressing keyboard arrow keys, or using the floating lower <strong>Navigation Pill's</strong> left/right arrow buttons.</p>
+        </div>
+      </div>
+
+      <div class="feature-step">
+        <div class="step-number">6</div>
+        <div class="step-desc">
+          <h3>Hands-Free Screen Wake Lock</h3>
+          <p>To keep your hands free for holding your singing binder, the app automatically requests a background <strong>Screen Wake Lock</strong> whenever sheet music is open. Your device screen will remain awake and fully lit indefinitely without dimming, so you can focus entirely on singing without ever needing to tap your screen to keep it on.</p>
         </div>
       </div>
     </section>

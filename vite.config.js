@@ -28,6 +28,7 @@ export default defineConfig({
         importScripts: ['sw-auth-sync.js'],
         maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // Increase to 20MiB for high-res scores and audio
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        navigateFallbackDenylist: [/help\.html/],
         runtimeCaching: [
           {
             urlPattern: /(?:songs\.json|\/api\/songs(?:\?.*)?$)/i,
