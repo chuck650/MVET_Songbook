@@ -246,6 +246,14 @@ function AppContent() {
             >
               <span>🛡️</span> About & Legal
             </li>
+            <li
+              onClick={() => {
+                setIsSidebarOpen(false);
+                window.open(resolvePath("/help.html"), "_blank");
+              }}
+            >
+              <span>❓</span> Help & User Guide
+            </li>
           </ul>
         </nav>
       )}

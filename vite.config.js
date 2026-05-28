@@ -145,6 +145,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         songbook: resolve(__dirname, 'songbook/index.html'),
+        help: resolve(__dirname, 'help.html'),
       },
       output: {
         manualChunks(id) {

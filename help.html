@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVET Songbook | Chorus Help & User Guide</title>
+  
+  <!-- Modern Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Clean, premium custom dark system styling matching the Songbook PWA styling */
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --alert-bg: rgba(245, 158, 11, 0.1);
+      --alert-border: rgba(245, 158, 11, 0.3);
+      --alert-text: #f59e0b;
+      --success-glow: rgba(16, 185, 129, 0.1);
+      --success-border: rgba(16, 185, 129, 0.3);
+      --success-text: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    /* Premium Header */
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 9999px;
+      color: #60a5fa;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* Alert Banner (No Secrets) */
+    .alert-banner {
+      background: var(--alert-bg);
+      border: 1px solid var(--alert-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 3.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .alert-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .alert-content h3 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--alert-text);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .alert-content p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .alert-content a {
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .alert-content a:hover {
+      color: #93c5fd;
+      text-decoration: underline;
+    }
+
+    /* Help Cards Grid */
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .installation-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .installation-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .install-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .install-item:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .install-item h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #cbd5e1;
+    }
+
+    .install-item ol {
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .install-item li {
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Rehearsal Drawer Steps */
+    .feature-step {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+
+    .feature-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      flex-shrink: 0;
+    }
+
+    .step-desc h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    .step-desc p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Footer link styling */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #93c5fd;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header>
+      <span class="brand-badge">MVET Chorus</span>
+      <h1>Songbook User Guide</h1>
+      <p class="subtitle">Quick reference manual for installing and mastering your rehearsal suite.</p>
+    </header>
+
+    <!-- Secure Alert (Direction to Facebook Group / Director) -->
+    <div class="alert-banner">
+      <div class="alert-icon">🔒</div>
+      <div class="alert-content">
+        <h3>Copyrighted Arrangements Locked?</h3>
+        <p>To comply with musical licensing requirements, all proprietary SATB sheet music downloads and isolated audio rehearsal tracks are protected. To unlock the full library, please contact Choral Director Chuck or retrieve our active Access Key pinned inside the private Facebook Group: <a href="https://www.facebook.com/groups/674760652211751" target="_blank" rel="noopener noreferrer">Military Voices of East Tennessee (MVET)</a>.</p>
+      </div>
+    </div>
+
+    <!-- Section 1: PWA Installation -->
+    <section class="card">
+      <h2><span>📲</span> Progressive Web App (PWA) Installation</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">Installing the MVET Songbook on your home screen turns it into a standalone full-screen application. It hides web search bars, improves performance, and enables complete offline use!</p>
+      
+      <div class="installation-grid">
+        <!-- iOS Safari -->
+        <div class="install-item">
+          <h4><span>🍏</span> iPhone & iPad</h4>
+          <ol>
+            <li>Open the Songbook in <span class="highlight">Safari</span>.</li>
+            <li>Tap the <span class="highlight">Share</span> icon (square with an up-pointing arrow at the bottom).</li>
+            <li>Scroll down and select <span class="highlight">"Add to Home Screen"</span>.</li>
+            <li>Confirm by tapping <span class="highlight">Add</span> in Safari's header.</li>
+          </ol>
+        </div>
+        
+        <!-- Android Chrome -->
+        <div class="install-item">
+          <h4><span>🤖</span> Android Devices</h4>
+          <ol>
+            <li>Open the Songbook in <span class="highlight">Google Chrome</span>.</li>
+            <li>Tap the <span class="highlight">Three Dots</span> menu in the top-right corner.</li>
+            <li>Tap <span class="highlight">"Install App"</span> (or "Add to Home Screen").</li>
+            <li>Confirm by tapping <span class="highlight">Install</span>.</li>
+          </ol>
+        </div>
+        
+        <!-- Windows Laptops -->
+        <div class="install-item">
+          <h4><span>💻</span> Windows (Chrome/Edge)</h4>
+          <ol>
+            <li>Open the link in <span class="highlight">Chrome</span> or <span class="highlight">Edge</span>.</li>
+            <li>Click the <span class="highlight">Install Icon</span> (a monitor with a down arrow) at the right edge of the top address bar.</li>
+            <li>Click <span class="highlight">Install</span> to place a stand-alone launcher shortcut on your desktop.</li>
+          </ol>
+        </div>
+        
+        <!-- macOS Safari -->
+        <div class="install-item">
+          <h4><span>🍎</span> MacBooks (macOS Sonoma+)</h4>
+          <ol>
+            <li>Open the link inside <span class="highlight">Safari</span>.</li>
+            <li>Click <span class="highlight">File</span> in the top Mac menu bar.</li>
+            <li>Select <span class="highlight">"Add to Dock..."</span>.</li>
+            <li>Confirm the name and click <span class="highlight">Add</span> to pin it to your desktop task dock.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Rehearsal Navigation -->
+    <section class="card">
+      <h2><span>🎼</span> Mastering the Interactive Rehearsal Suite</h2>
+      
+      <div class="feature-step">
+        <div class="step-number">1</div>
+        <div class="step-desc">
+          <h3>Vocal Part Isolation (SATB Drawer)</h3>
+          <p>Tap the controls bar at the bottom of any song score. You will see buttons for <strong>Soprano, Alto, Tenor, and Bass</strong>. Tap your part to highlight it, and drag the individual volume slider to solo your voice, or lower the other parts to Blending Mode to test your harmonies!</p>
+        </div>
+      </div>
+
+      <div class="feature-step">
+        <div class="step-number">2</div>
+        <div class="step-desc">
+          <h3>Display Zoom Calibration</h3>
+          <p>Readability is key. Tap the floating <strong>plus (+) and minus (-) circles</strong> positioned at the bottom margin of the score viewer. This dynamically adjusts the size and layout of notation staffs on any tablet or mobile screen without distorting notation elements.</p>
+        </div>
+      </div>
+
+      <div class="feature-step">
+        <div class="step-number">3</div>
+        <div class="step-desc">
+          <h3>Hands-Free Screen Wake Lock</h3>
+          <p>Our app automatically requests a background <strong>Screen Wake Lock</strong> when sheet music is open on your screen. Your mobile phone or tablet screen will remain awake and fully lit indefinitely without dimming, letting you rehearse hands-free with both hands on your binder!</p>
+        </div>
+      </div>
+
+      <div class="feature-step">
+        <div class="step-number">4</div>
+        <div class="step-desc">
+          <h3>Performance Mode (Full-Screen Live Layout)</h3>
+          <p>Tap the <strong>Music Stand icon</strong> in the player controls. This enables our pure full-screen mode, sweeping away settings controls, buttons, and drawers. In this mode, the sheet music expands to full-width horizontal scroll with view-proportional symmetric margins, optimized for live chorus stands.</p>
+        </div>
+      </div>
+
+      <div class="feature-step">
+        <div class="step-number">5</div>
+        <div class="step-desc">
+          <h3>Sync Library for Offline Performance</h3>
+          <p>No Wi-Fi at the rehearsal venue? No problem! Navigate to the <strong>Settings Gear</strong> icon from the library home view, and tap <strong>"Sync Library"</strong>. The app will download and save all MusicXML files, high-fidelity isolated rehearsal MP3s, and printable PDFs directly to your device. You can then put your device on Airplane Mode and practice anywhere!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <a href="javascript:window.close();" class="back-link">✕ Close Help & Return to Songbook</a>
+      <p>Military Voices of East Tennessee &copy; 2026. All rights reserved.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
