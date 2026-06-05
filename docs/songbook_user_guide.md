@@ -24,7 +24,7 @@ _Figure 1: The MVET Songbook Dashboard Home Catalog view, showing song library c
 
 ## 🔑 Step 2: Unlocking Copyrighted Music (Choir Access Key)
 
-To respect musical copyright rules, secure audio rehearsals and certain licensed vocal arrangements are encrypted. Copyrighted song cards display a dark **`COPYRIGHTED`** badge and are locked initially.
+To respect musical copyright rules, secure audio rehearsals and certain licensed vocal arrangements are blocked. Copyrighted song cards display a dark **`COPYRIGHTED`** badge and are locked initially.
 
 ### How to enter your Choir Access Key:
 
@@ -34,7 +34,7 @@ To respect musical copyright rules, secure audio rehearsals and certain licensed
 4. Type or paste your private access key.
    _(If you do not have the access key, please contact **Jason Hardy or Chuck Nelson**, or retrieve it from the pinned announcements in our private Facebook Group: [Military Voices of East Tennessee (MVET)](https://www.facebook.com/groups/674760652211751))._
 5. Tap **Submit Key** or **Save Settings**.
-6. The entire song catalog will decrypt instantly! All copyrighted locks will turn into green checkmarks (**`UNLOCKED`**), and your download buttons (PDF, MSCZ, and MXL) will become active.
+6. The entire song catalog will available instantly! All copyrighted works will be unblocked, and your download buttons (PDF, MSCZ, and MXL) will become active.
 
 > [!TIP]
 > **You only have to do this once!** The application securely stores this key in your browser's local cache. It will remember you automatically, even if you close the app, shut down your browser, or restart your device.

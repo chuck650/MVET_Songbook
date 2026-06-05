@@ -47,4 +47,4 @@ scratch/
 docs/*Audit Report*.md
 
 # Generated pdf's
-docs/chorus_user_guide.pdf
+docs/*_user_guide.pdf

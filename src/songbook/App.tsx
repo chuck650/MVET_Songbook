@@ -110,6 +110,26 @@ function AppContent() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [selectedSong]);
 
+  // Listen for re-authentication requests from the secure PDF iframe viewer
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "REAUTH_REQUIRED") {
+        console.log("🔒 [PWA] Re-authentication request received from secure iframe.");
+        // Close the PDF overlay
+        setActivePdfUrl(null);
+        // If a song was open, go back to catalog
+        setSelectedSong(null);
+        // Switch tab to settings drawer
+        setActiveTab("settings");
+        // Open sidebar if it was closed
+        setIsSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
   const handleInfoClick = (e: React.MouseEvent, song: Song) => {
     e.stopPropagation();
     setInfoSong(song);
@@ -362,20 +382,50 @@ function AppContent() {
                             </a>
                           );
                         })()}
-                        {song.files.pdf && (
-                          <button
-                            className="btn-secondary"
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevent card select click
-                              const url = getSongFileUrl(song, song.files.pdf, true);
-                              setActivePdfUrl(url);
-                              setActivePdfTitle(song.title);
-                            }}
-                          >
-                            <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
-                            <span>PDF</span>
-                          </button>
-                        )}
+                        {song.files.pdf && (() => {
+                          const url = getSongFileUrl(song, song.files.pdf, true);
+                          const isLoading = downloading[url];
+                          return (
+                            <button
+                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                              disabled={isLoading}
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevent card select click
+                                if (isLoading) return;
+                                
+                                const loadPdf = async () => {
+                                  setDownloading((prev) => ({ ...prev, [url]: true }));
+                                  try {
+                                    const headers: Record<string, string> = {};
+                                    if (token) {
+                                      headers["Authorization"] = `Bearer ${token}`;
+                                    }
+                                    
+                                    console.log(`Fetching secure PDF: ${url}`);
+                                    const response = await fetch(url, { headers });
+                                    if (!response.ok) {
+                                      throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+                                    }
+                                    
+                                    const blob = await response.blob();
+                                    const blobUrl = URL.createObjectURL(blob);
+                                    setActivePdfUrl(blobUrl);
+                                    setActivePdfTitle(song.title);
+                                  } catch (error) {
+                                    console.error("Secure PDF load failed:", error);
+                                    alert("Failed to load secure PDF. Please check your Access Key or connection.");
+                                  } finally {
+                                    setDownloading((prev) => ({ ...prev, [url]: false }));
+                                  }
+                                };
+                                void loadPdf();
+                              }}
+                            >
+                              <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
+                              <span>{isLoading ? "Loading..." : "PDF"}</span>
+                            </button>
+                          );
+                        })()}
                       </div>
                     </div>
                     <button
@@ -535,7 +585,12 @@ function AppContent() {
             <button 
               className="sync-btn back-btn"
               style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}
-              onClick={() => setActivePdfUrl(null)}
+              onClick={() => {
+                if (activePdfUrl && activePdfUrl.startsWith("blob:")) {
+                  URL.revokeObjectURL(activePdfUrl);
+                }
+                setActivePdfUrl(null);
+              }}
             >
               ← Back to Library
             </button>

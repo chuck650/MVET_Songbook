@@ -171,7 +171,8 @@ export function useSongbookAuth() {
       }
 
       // Safety standard: minimum attempt window must not fall below 1 minute (60,000 ms) to prevent API spamming
-      const finalDelay = Math.max(60000, nextAttemptDelay);
+      // Also cap at 24 hours (86,400,000 ms) to prevent 32-bit signed integer overflow in setTimeout (max ~24.8 days)
+      const finalDelay = Math.min(86400000, Math.max(60000, nextAttemptDelay));
       
       console.log(`⏰ Scheduled next renewal check in ${(finalDelay / 1000).toFixed(1)} seconds. (Expires in: ${(remaining / 3600000).toFixed(2)} hours)`);
       
@@ -229,7 +230,7 @@ export function useSongbookAuth() {
 
   // Automatically sync credentials to Service Worker fetch thread upon state updates
   useEffect(() => {
-    syncTokenToServiceWorker(token || null);
+    void syncTokenToServiceWorker(token || null);
   }, [token]);
 
   return {

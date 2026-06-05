@@ -109,7 +109,7 @@ const SettingsView: React.FC = () => {
           const resolvedUrl = resolvePath(item.url);
           const hash = item.hash;
           const separator = resolvedUrl.includes("?") ? "&" : "?";
-          let finalUrl = `${resolvedUrl}${separator}v=${hash}`;
+          const finalUrl = `${resolvedUrl}${separator}v=${hash}`;
 
           if (token && apiBase && (resolvedUrl.includes("/api/songs/") || resolvedUrl.includes("/api/v1/songs/"))) {
             // Service Worker intercepts and appends header dynamically.
