@@ -21,6 +21,7 @@ function AppContent() {
   const [downloading, setDownloading] = useState<Record<string, boolean>>({});
   const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
   const [activePdfTitle, setActivePdfTitle] = useState<string>("");
+  const [isOffline, setIsOffline] = useState<boolean>(!navigator.onLine);
   const { settings } = useSettings();
   const { token, isAuthenticated } = useAuth();
 
@@ -128,6 +129,20 @@ function AppContent() {
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
+  // Monitor network connection status
+  useEffect(() => {
+    const goOnline = () => setIsOffline(false);
+    const goOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
   }, []);
 
   const handleInfoClick = (e: React.MouseEvent, song: Song) => {
@@ -292,6 +307,11 @@ function AppContent() {
               <h2>Choral Songbook</h2>
               <p>Military Voices of East Tennessee</p>
             </div>
+            {activeTab === "browser" && isOffline && (
+              <div className="offline-badge" title="No network connection. Operating in offline cached mode.">
+                OFFLINE
+              </div>
+            )}
           </header>
         )}
 
@@ -453,7 +473,7 @@ function AppContent() {
           )}
 
           {selectedSong && (
-            <MusicViewer song={selectedSong} onBack={handleBackToLibrary} />
+            <MusicViewer song={selectedSong} onBack={handleBackToLibrary} isOffline={isOffline} />
           )}
         </div>
       </main>

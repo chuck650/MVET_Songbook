@@ -87,6 +87,21 @@ Boot the local API backend container and volume mounts within your local Kuberne
    node scripts/test-api.js dev <your-local-psk>
    ```
 
+### 3. PWA Testing Strategy (Dev vs. Preview)
+To ensure the offline synchronization and Service Worker caching layers work flawlessly, our official testing strategy enforces verifying builds locally before tagging releases:
+
+* **For general UI and logic changes:** Run `npm run dev`. This launches the Vite development server with Hot Module Replacement (HMR). The service worker is bypassed in dev mode to avoid loading stale cached code while you write files.
+* **For testing PWA features, caching, and offline status:**
+  1. Compile the production bundle locally:
+     ```bash
+     npm run build
+     ```
+  2. Start the production simulator:
+     ```bash
+     npm run preview
+     ```
+  3. Open `http://localhost:4173/songbook/` in your browser. This serves the optimized production build and activates the Workbox Service Worker, allowing you to test offline status indicators, range caching, and network timeouts.
+
 ---
 
 ## 🚀 Production Deployment & Release Workflows
@@ -94,17 +109,29 @@ Boot the local API backend container and volume mounts within your local Kuberne
 Deployments are strictly decoupled to protect copyrighted assets while keeping the public interfaces globally available.
 
 ### 1. Deploying the PWA (GitHub Pages)
-The static frontend client PWA is deployed to GitHub Pages automatically via GitHub Actions whenever you push a PWA release tag:
-1. **Commit and push PWA changes**:
+The static frontend client PWA is deployed to GitHub Pages automatically via GitHub Actions whenever you push a PWA release tag.
+
+#### Build Versioning Process (Idempotent Versioning)
+Our build process is fully idempotent; version numbers are **never** auto-incremented during build compilation. Instead, the version must be bumped manually prior to release commits:
+- **Major Release:** `npm run bump:major` (e.g., `1.2.71` -> `2.0.0` - resets minor and build numbers to 0)
+- **Minor Release:** `npm run bump:minor` (e.g., `1.2.71` -> `1.3.0` - resets build number to 0)
+- **Build/Patch Release:** `npm run bump:build` (e.g., `1.2.72` -> `1.2.73` - increments the patch version)
+
+#### Release Steps:
+1. **Manually bump the version** (updates `package.json` and `src/version.ts`):
+   ```bash
+   npm run bump:build
+   ```
+2. **Commit and push PWA changes**:
    ```bash
    git add .
-   git commit -m "chore: release version v1.2.53"
+   git commit -m "chore: release version v1.2.73"
    git push origin main
    ```
-2. **Tag and release**:
+3. **Tag and release**:
    ```bash
-   git tag v1.2.53
-   git push origin v1.2.53
+   git tag v1.2.73
+   git push origin v1.2.73
    ```
    *GitHub Actions will capture the tag and compile/deploy the static code directly to `https://chuck650.github.io/MVET_Songbook/`.*
 

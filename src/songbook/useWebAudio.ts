@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { getTokenOnly } from '../utils/authStorage';
 
 export interface UseWebAudioReturn {
   play: (off?: number) => void;
@@ -99,7 +100,6 @@ export const useWebAudio = (url?: string, autoPlay = false): UseWebAudioReturn =
       
       try {
         const headers: Record<string, string> = {};
-        const { getTokenOnly } = await import('../utils/authStorage');
         const token = await getTokenOnly();
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;

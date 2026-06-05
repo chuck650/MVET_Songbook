@@ -34,7 +34,7 @@ spec:
               name: mvet-auth-secrets
               key: JWT_SECRET
         - name: CORS_ORIGINS
-          value: "https://chuck650.github.io,http://localhost:5173,http://localhost:5174,http://localhost:5175,http://mvet-api.test"
+          value: "https://chuck650.github.io,http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:4173,http://mvet-api.test"
         - name: DATA_DIR
           value: "/app/data"
         ports:

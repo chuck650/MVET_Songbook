@@ -5,6 +5,7 @@ import { useWebAudio } from './useWebAudio';
 import { useAuth } from './AuthContext';
 import { resolvePath } from '../utils/resolvePath';
 import { Song, RehearsalFiles } from '../types/songbook';
+import { getTokenOnly } from '../utils/authStorage';
 
 interface ActiveTrack {
   type: 'audio' | 'video';
@@ -21,9 +22,10 @@ interface RehearsalPart {
 interface MusicViewerProps {
   song: Song;
   onBack: () => void;
+  isOffline?: boolean;
 }
 
-const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
+const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = false }) => {
   const { token } = useAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -137,7 +139,6 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
         const m = `${resolvedScoreUrl}${separator}v=${hash}`;
         
         const headers: Record<string, string> = {};
-        const { getTokenOnly } = await import('../utils/authStorage');
         const token = await getTokenOnly();
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
@@ -631,6 +632,11 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack }) => {
             </div>
           )}
         </div>
+        {isOffline && (
+          <div className="footer-offline-badge" title="No network connection. Operating in offline cached mode.">
+            OFFLINE
+          </div>
+        )}
       </footer>
     </div>
   );

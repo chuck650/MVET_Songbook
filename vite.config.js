@@ -31,10 +31,11 @@ export default defineConfig({
         navigateFallbackDenylist: [/help\.html/],
         runtimeCaching: [
           {
-            urlPattern: /(?:songs\.json|\/api\/songs(?:\?.*)?$)/i,
+            urlPattern: /(?:songs\.json|\/api\/(?:v1\/)?songs(?:\?.*)?$)/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'manifest-cache',
+              networkTimeoutSeconds: 5,
               expiration: {
                 maxEntries: 1,
                 maxAgeSeconds: 60 * 60 * 24, // 24 hours
@@ -42,7 +43,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /(?:\.(?:mp3|flac)|\/api\/songs\/[^\/]+\/files\/(?:mp3|flac))(?:\?.*)?$/i,
+            urlPattern: /(?:\.(?:mp3|flac)|\/api\/(?:v1\/)?songs\/[^\/]+\/files\/(?:mp3|flac))(?:\?.*)?$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'audio-cache',
@@ -72,8 +73,8 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /(?:\.(?:mxl|pdf|mscz)|\/api\/songs\/[^\/]+\/files\/(?:mxl|pdf|mscz))(?:\?.*)?$/i,
-            handler: 'NetworkFirst',
+            urlPattern: /(?:\.(?:mxl|pdf|mscz)|\/api\/(?:v1\/)?songs\/[^\/]+\/files\/(?:mxl|pdf|mscz))(?:\?.*)?$/i,
+            handler: 'CacheFirst',
             options: {
               cacheName: 'song-files-cache',
               expiration: {
@@ -86,7 +87,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /(?:\.(?:mp4)|\/api\/songs\/[^\/]+\/files\/mp4)(?:\?.*)?$/i,
+            urlPattern: /(?:\.(?:mp4)|\/api\/(?:v1\/)?songs\/[^\/]+\/files\/mp4)(?:\?.*)?$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'video-cache',
@@ -122,6 +123,7 @@ export default defineConfig({
         display: 'standalone',
         scope: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
         start_url: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
+        id: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -132,6 +134,22 @@ export default defineConfig({
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png'
+          }
+        ],
+        screenshots: [
+          {
+            src: 'screenshot-desktop.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Choral Library Desktop'
+          },
+          {
+            src: 'screenshot-mobile.png',
+            sizes: '390x844',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Choral Library Mobile'
           }
         ]
       },

@@ -74,6 +74,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Strict API /api/v1 URI versioning enforcement, 16-checkpoint test suite implementation, local sandbox K3s rolling restart deployment, and automated Markdown Audit Report generator with nested list layout spacing fixes (v1.2.62 / api-v1.0.3)
 - [x] Comprehensive visual Markdown Chorus User Guide with local screenshots and accurate UX rehearsal suite steps (v1.2.65)
 - [x] Stateless Service Worker token recovery from IndexedDB, cross-origin iframe navigation Blob URL conversion, and cap setTimeout to 24 hours to prevent integer overflow (v1.2.71)
+- [x] Workbox caching strategy optimization to CacheFirst for score files and 5s timeout on dynamic catalog fetches, with static offline mode indicators (v1.2.73)
 
 
 ## Key Context Points
@@ -90,7 +91,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-06-05 (v1.2.71 / fix-sw-token-overflow)*
+*Last updated by Antigravity on 2026-06-05 (v1.2.73 / caching-offline-indicators)*
 
 
 
