@@ -4,7 +4,7 @@
     "mxl": "Stars_and_Stripes_Forever.mxl",
     "osmd": "Stars_and_Stripes_Forever-SATB.mxl",
     "pdf": "Stars_and_Stripes_Forever-SATB.pdf",
-    "mp3": "Stars_and_Stripes_forever.mp3",
+    "mp3": "Stars_and_Stripes_Forever.mp3",
     "flac": "Stars_and_Stripes_Forever.flac",
     "mp4": "Stars_and_Stripes_Forever.mp4"
   },
@@ -61,6 +61,14 @@
         "mp3": "Stars_and_Stripes_Forever-Women.mp3",
         "flac": "Stars_and_Stripes_Forever-Women.flac",
         "mp4": "Stars_and_Stripes_Forever-Women.mp4"
+      }
+    },
+    "instrumental": {
+      "name": "Instrumental",
+      "files": {
+        "mp3": "Stars_and_Stripes_Forever-Instrumental.mp3",
+        "flac": "Stars_and_Stripes_Forever-Instrumental.flac",
+        "mp4": "Stars_and_Stripes_Forever-Instrumental.mp4"
       }
     }
   }

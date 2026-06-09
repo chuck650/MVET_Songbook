@@ -62,6 +62,14 @@
         "flac": "Armed_Forces_Medley_72-Women.flac",
         "mp4": "Armed_Forces_Medley_72-Women.mp4"
       }
+    },
+    "instrumental": {
+      "name": "Instrumental",
+      "files": {
+        "mp3": "Armed_Forces_Medley_72-Instrumental.mp3",
+        "flac": "Armed_Forces_Medley_72-Instrumental.flac",
+        "mp4": "Armed_Forces_Medley_72-Instrumental.mp4"
+      }
     }
   }
 }

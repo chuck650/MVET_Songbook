@@ -46,6 +46,7 @@ export interface Song {
     bass?: VocalPart;
     women?: VocalPart;
     men?: VocalPart;
+    instrumental?: VocalPart;
     [key: string]: VocalPart | undefined;
   };
   hashes?: Record<string, any>;

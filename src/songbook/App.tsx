@@ -3,10 +3,11 @@ import { SettingsProvider, useSettings } from "./SettingsContext";
 import SettingsView from "./SettingsView";
 import MusicViewer from "./MusicViewer";
 import About from "./About";
-import { resolvePath } from "../utils/resolvePath";
+import { resolvePath, getApiUrl } from "../utils/resolvePath";
 import { Song } from "../types/songbook";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { ChoirAuthModal } from "./ChoirAuthModal";
+import ReloadPrompt from "./ReloadPrompt";
 
 
 function AppContent() {
@@ -31,7 +32,7 @@ function AppContent() {
     let active = true;
     setLoading(true);
 
-    const apiBase = import.meta.env.VITE_API_URL || "";
+    const apiBase = getApiUrl();
     const catalogUrl = apiBase ? `${apiBase}/api/v1/songs` : resolvePath(`/songs.json?v=${Date.now()}`);
 
     const headers: Record<string, string> = {};
@@ -583,7 +584,7 @@ function AppContent() {
             // Yes! `${apiBase}/api/songs` returns the full catalog. We can just fetch `${apiBase}/api/songs` with the new token
             // and find the song, then select it!
             // Let's do that! That is 100% race-condition free and ultra-robust!
-            const apiBase = import.meta.env.VITE_API_URL || "";
+            const apiBase = getApiUrl();
             if (apiBase) {
               // Read token from IndexedDB (or we can just fetch it again since we know token is updated)
               // Wait, submitPSK updates token in state, so we can fetch the catalog with it.
@@ -637,6 +638,7 @@ function App() {
     <SettingsProvider>
       <AuthProvider>
         <AppContent />
+        <ReloadPrompt />
       </AuthProvider>
     </SettingsProvider>
   );

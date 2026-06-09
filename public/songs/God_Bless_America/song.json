@@ -62,6 +62,14 @@
         "flac": "God_Bless_America-Women.flac",
         "mp4": "God_Bless_America-Women.mp4"
       }
+    },
+    "instrumental": {
+      "name": "Instrumental",
+      "files": {
+        "mp3": "God_Bless_America-Instrumental.mp3",
+        "flac": "God_Bless_America-Instrumental.flac",
+        "mp4": "God_Bless_America-Instrumental.mp4"
+      }
     }
   }
 }

@@ -31,10 +31,10 @@ const SONGS_DIR   = path.join(__dirname, '../public/songs');
 const OUTPUT_FILE = path.join(__dirname, '../public/songs.json');
 
 // Canonical part keys in display order (OPENSPEC §1.2.3)
-const PART_KEYS = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
+const PART_KEYS = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men', 'instrumental'];
 
 // Display names keyed by lowercase part key
-const PART_NAMES = { soprano: 'Soprano', alto: 'Alto', tenor: 'Tenor', bass: 'Bass', women: 'Women', men: 'Men' };
+const PART_NAMES = { soprano: 'Soprano', alto: 'Alto', tenor: 'Tenor', bass: 'Bass', women: 'Women', men: 'Men', instrumental: 'Instrumental' };
 
 // Known media/score extensions handled per role
 const ROLE_EXTENSIONS = {
@@ -50,8 +50,8 @@ const ROLE_EXTENSIONS = {
 // Matched BEFORE the bare [id].[ext] default.
 const MAIN_OVERRIDE_SUFFIXES = ['-Main', '-Full', '-SATB'];
 
-// Part keyword patterns (case-insensitive) mapped to canonical part key
 const PART_PATTERNS = [
+  { key: 'instrumental', patterns: ['-instrumental'] },
   { key: 'soprano', patterns: ['soprano', '-S-', '-S.'] },
   { key: 'alto',    patterns: ['alto',    '-A-', '-A.'] },
   { key: 'tenor',   patterns: ['tenor',   '-T-', '-T.'] },

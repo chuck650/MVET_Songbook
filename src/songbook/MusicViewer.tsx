@@ -161,7 +161,17 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
         setLoading(false);
       } catch (err: any) {
         console.error("OSMD Render Error:", err);
-        setError(err.message || "Render Fail"); 
+        const errMsg = err.message || "";
+        if (
+          err instanceof TypeError || 
+          errMsg.includes("Failed to fetch") || 
+          errMsg.includes("fetch") || 
+          errMsg.includes("network")
+        ) {
+          setError("Failed to load score. Please check your connection or contact the system administrator if the problem continues.");
+        } else {
+          setError(err.message || "Render Fail");
+        }
         setLoading(false); 
       }
     })();
@@ -210,7 +220,7 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
     }
   }, [audioFormat]);
 
-  const partOrder = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
+  const partOrder = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men', 'instrumental'];
   const rehearsalParts: RehearsalPart[] = [
     { key: 'full', name: 'Full Score', files: song.files },
     ...partOrder
@@ -521,7 +531,18 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
       )}
 
       {loading && <div className="viewer-overlay"><div className="loader">Loading...</div></div>}
-      {error && <div className="viewer-overlay"><div className="error-message">{error}</div></div>}
+      {error && (
+        <div className="viewer-overlay">
+          <div className="error-card">
+            <div className="error-icon">⚠️</div>
+            <h2 className="error-title">Failed to Load Score</h2>
+            <p className="error-desc">{error}</p>
+            <button className="error-btn" onClick={onBack}>
+              Back to Library
+            </button>
+          </div>
+        </div>
+      )}
       
       <div 
         ref={wrapperRef} 

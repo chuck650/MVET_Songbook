@@ -22,7 +22,7 @@ export default defineConfig({
       }
     },
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       injectRegister: 'auto',
       workbox: {
         importScripts: ['sw-auth-sync.js'],

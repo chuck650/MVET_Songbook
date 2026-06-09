@@ -867,6 +867,66 @@
   color: var(--color-primary);
 }
 
+/* Error Card Overlay styling */
+.error-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  margin: 0 0 0.75rem 0;
+  color: #f43f5e;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.error-desc {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.error-btn {
+  background: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.error-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
+}
+
+.error-btn:active {
+  transform: translateY(0);
+}
+
 /* Viewer Settings Drawer - Restored & Optimized */
 .viewer-settings {
   position: fixed;
@@ -2581,5 +2641,105 @@
   text-transform: uppercase;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+}
+
+/* PWA Reload/Upgrade Prompt */
+.reload-prompt-container {
+  position: fixed;
+  right: var(--spacing-lg);
+  bottom: var(--spacing-lg);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: 20px;
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  max-width: 380px;
+  animation: prompt-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes prompt-slide-up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.reload-prompt-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.reload-prompt-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.reload-prompt-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reload-prompt-message .message-title {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.reload-prompt-message .message-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.reload-prompt-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.prompt-update-btn {
+  padding: 8px 16px !important;
+  font-size: 0.8rem !important;
+  min-width: unset !important;
+}
+
+.prompt-close-btn {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-muted);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.prompt-close-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .reload-prompt-container {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    bottom: var(--spacing-md);
+    max-width: none;
+  }
 }
 

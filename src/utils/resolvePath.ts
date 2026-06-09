@@ -15,7 +15,7 @@ function getFileTypeFromPath(path: string): string {
 
 function getPartKeyFromPath(path: string): string | null {
   const lower = path.toLowerCase();
-  const parts = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men'];
+  const parts = ['soprano', 'alto', 'tenor', 'bass', 'women', 'men', 'instrumental'];
   for (const part of parts) {
     // Look for parts as standalone segments or extensions to prevent partial word matching
     const matchesPattern = new RegExp(`[-_]${part}\\.`, 'i').test(lower) || 
@@ -40,11 +40,53 @@ function getPartKeyFromPath(path: string): string | null {
  * @param path - Absolute asset path (starting with '/')
  * @returns The resolved path relative to the base URL
  */
+interface MvetConfig {
+  VITE_API_URL?: string;
+}
+
+declare global {
+  interface Window {
+    __MVET_CONFIG__?: MvetConfig;
+  }
+}
+
+let cachedApiUrl: string | null = null;
+
+export async function loadRuntimeConfig(): Promise<void> {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    const configUrl = resolvePath('/api-config.json');
+    const res = await fetch(`${configUrl}?v=${Date.now()}`);
+    if (res.ok) {
+      const config: MvetConfig = await res.json();
+      window.__MVET_CONFIG__ = config;
+      if (config.VITE_API_URL) {
+        cachedApiUrl = config.VITE_API_URL;
+        console.log(`⚙️ [Config] Loaded runtime API configuration: ${cachedApiUrl}`);
+      }
+    }
+  } catch (e) {
+    console.error('⚙️ [Config] Failed to load runtime configuration, falling back to compile-time env:', e);
+  }
+}
+
+export function getApiUrl(): string {
+  if (cachedApiUrl) return cachedApiUrl;
+  
+  if (typeof window !== 'undefined' && window.__MVET_CONFIG__?.VITE_API_URL) {
+    return window.__MVET_CONFIG__.VITE_API_URL;
+  }
+  
+  return import.meta.env.VITE_API_URL || '';
+}
+
 export function resolvePath(path?: string): string {
   if (!path) return '';
   
   // If VITE_API_URL is configured and the path is a song asset (/songs/...)
-  const apiBase = import.meta.env.VITE_API_URL;
+  const apiBase = getApiUrl();
+  
   if (apiBase && path.startsWith('/songs/')) {
     const cleanApiBase = apiBase.endsWith('/') ? apiBase.slice(0, -1) : apiBase;
     const parts = path.split('/');

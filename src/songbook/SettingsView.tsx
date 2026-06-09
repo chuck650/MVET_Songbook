@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSettings } from "./SettingsContext";
 import { Song } from "../types/songbook";
-import { resolvePath } from "../utils/resolvePath";
+import { resolvePath, getApiUrl } from "../utils/resolvePath";
 import { useAuth } from "./AuthContext";
 
 interface DownloadItem {
@@ -32,7 +32,7 @@ const SettingsView: React.FC = () => {
       setSyncStatus("syncing");
       setSyncProgress(0);
 
-      const apiBase = import.meta.env.VITE_API_URL || "";
+      const apiBase = getApiUrl();
       const catalogUrl = apiBase
         ? `${apiBase}/api/v1/songs`
         : resolvePath(`/songs.json?v=${Date.now()}`);
