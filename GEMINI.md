@@ -76,7 +76,8 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Stateless Service Worker token recovery from IndexedDB, cross-origin iframe navigation Blob URL conversion, and cap setTimeout to 24 hours to prevent integer overflow (v1.2.71)
 - [x] Workbox caching strategy optimization to CacheFirst for score files and 5s timeout on dynamic catalog fetches, with static offline mode indicators (v1.2.73)
 - [x] Optional Instrumental Rehearsal Track Part Support with automatic pattern discovery and local k3s deployment verification (v1.3.0)
-- [x] Local API routing protection and friendly score loading error page handler (v1.3.1)
+- [x] Local API routing protection and friendly score loading error page handler (v1.3.3)
+- [x] Explicit PWA Service Worker scope alignment for DevTools Application visibility (v1.3.4)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -92,7 +93,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-06-08 (v1.3.1 / local-api-protection)*
+*Last updated by Antigravity on 2026-06-09 (v1.3.4 / pwa-sw-scope-fix)*
 
 
 

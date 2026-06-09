@@ -22,6 +22,7 @@ export default defineConfig({
       }
     },
     VitePWA({
+      scope: isGithubPages ? '/MVET_Songbook/songbook/' : '/songbook/',
       registerType: 'prompt',
       injectRegister: 'auto',
       workbox: {
