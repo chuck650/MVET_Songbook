@@ -98,8 +98,10 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Production Deployment & 25/25 Endpoint Verification on VPS (v1.3.5)
 - [x] Card lower controls layout refinement (Info & Admin action button separation) (v1.3.5)
 - [x] Music Notation Unicode Standards enforcement rule (`♭`, `♯`, `♮`) & metadata normalization (v1.3.5)
-- [x] Borderless compact SVG badges for Public Domain & Copyrighted with top-stacked Key badge (v1.3.5)
 - [x] Persistent Repertoire State Engine (`repertoire_state.json`), API v1.1.1 overlay, 26/26 test checkpoints, & CLI pull utility (v1.3.5 / api-v1.1.1)
+- [x] Automated Orphan Repertoire State Pruning & OpenSpec Spec-First Rule enforcement (v1.3.6 / api-v1.1.1)
+- [x] Full Migration of Raw Scripts into Self-Documenting Agent Skills (`song-catalog-management`, `release-management`, `local-testing-and-deployment`) (v1.3.6)
+- [x] Production Deployment of v1.3.6 (GitHub Pages PWA) & api-v1.1.1 (GHCR Docker Container) with 27/27 verification checkpoints passed on live VPS (v1.3.6 / api-v1.1.1)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -115,7 +117,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-09-22 (v1.3.5 / api-v1.1.0 / prod-redirect-guard)*
+*Last updated by Antigravity on 2026-09-22 (v1.3.6 / api-v1.1.1 / skills-migration-prod-release)*
 
 
 
