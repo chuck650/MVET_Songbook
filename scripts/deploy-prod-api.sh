@@ -23,6 +23,12 @@ if [ -f "$REFRESH_CERTS_SCRIPT" ]; then
   fi
 fi
 
+# Preflight: Check that VPS traffic redirect / SSH tunnel is inactive
+CHECK_REDIRECT_SCRIPT="${WORKSPACE_DIR}/.agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh"
+if [ -f "$CHECK_REDIRECT_SCRIPT" ]; then
+  bash "$CHECK_REDIRECT_SCRIPT"
+fi
+
 echo "📁 Creating production namespace '${NAMESPACE}' on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl --context "$KUBECTL_CONTEXT" apply -f -
 

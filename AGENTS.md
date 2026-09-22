@@ -58,6 +58,14 @@ bash .agents/skills/local-testing-and-deployment/scripts/refresh-vps-certs.sh
 ```
 *This retrieves the renewed credentials from `/etc/rancher/k3s/k3s.yaml` on the VPS over SSH and updates the `vps-admin` user block in `~/.kube/config` automatically.*
 
+### VPS Traffic Redirect & SSH Tunnel Preflight (`vps-production`)
+When local developer forwarding tunnels or firewalld redirect rules are active (`vps connect` in `~/.local/bin/vps`), outbound traffic to `83.229.67.95:443` is redirected over the tunnel, blocking direct public requests to `https://mvet-api.cminfosec.com`.
+Run the preflight check before production pushes:
+```bash
+bash .agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh
+```
+If active, disable with `vps disconnect` or pass `--auto-disconnect`. This check is automated inside `deploy-prod-api.sh`, `push-songbook.sh prod`, and `test-api.js prod`.
+
 ---
 
 ## 📦 Song Deployment Pipeline

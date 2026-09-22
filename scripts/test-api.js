@@ -2,6 +2,7 @@ import http from 'http';
 import https from 'https';
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 const args = process.argv.slice(2);
 const targetEnv = args[0] || 'dev';
@@ -34,6 +35,17 @@ function loadEnvSecrets() {
 const secrets = loadEnvSecrets();
 
 if (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'production') {
+  // Preflight check: Ensure VPS traffic redirect is inactive
+  const checkRedirectScript = path.resolve('.agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh');
+  if (fs.existsSync(checkRedirectScript)) {
+    try {
+      execSync(`bash "${checkRedirectScript}"`, { stdio: 'inherit' });
+    } catch {
+      console.error('\n❌ Preflight Error: Production VPS redirect check failed.');
+      process.exit(1);
+    }
+  }
+
   API_BASE = 'https://mvet-api.cminfosec.com';
   DEFAULT_PSK = providedPsk || (secrets && secrets.ACTIVE_PSKS ? secrets.ACTIVE_PSKS.split(',')[0].trim() : '');
   DEFAULT_ADMIN_PSK = secrets?.ADMIN_PSK || '';

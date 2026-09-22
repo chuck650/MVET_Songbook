@@ -75,6 +75,21 @@ When deploying or communicating with `vps-production`, client certificates can a
    ```
    *This automatically backs up `~/.kube/config`, retrieves the active credentials from `/etc/rancher/k3s/k3s.yaml` on the VPS via SSH, updates the `vps-admin` user, and verifies cluster connectivity. It is also executed automatically as a preflight step in `scripts/deploy-prod-api.sh`.*
 
+### VPS Traffic Redirect & SSH Tunnel Preflight (`vps-production`)
+When developing or testing other local services, a local forwarding tunnel or firewalld redirect may be active (managed via `~/.local/bin/vps connect` / `disconnect`):
+- If the redirect is active, it redirects external WAN traffic destined for `83.229.67.95:443` across an SSH port forward on port 4443, which breaks direct public HTTPS connectivity to `https://mvet-api.cminfosec.com`.
+- **Preflight Check**:
+  ```bash
+  bash .agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh
+  ```
+- **Resolution**:
+  ```bash
+  vps disconnect
+  # Or run with auto-disconnect:
+  bash .agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh --auto-disconnect
+  ```
+  *This check is built directly into `scripts/deploy-prod-api.sh`, `scripts/push-songbook.sh prod`, and `scripts/test-api.js prod`.*
+
 ---
 
 ## 3. End-to-End Song Ingestion & Testing Pipeline

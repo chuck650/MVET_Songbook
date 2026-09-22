@@ -25,6 +25,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - **VPS Isolation & Testing:** When modifying VPS routing, ingress, or container network configurations, always test legacy/side-by-side websites and services (e.g. mail interfaces) over public IP networks using loopback or external check tools to verify that host ports (80/443) remain untouched and un-hijacked.
 - **Pre-Production Local Testing Gate:** ALWAYS test songbook assets and API updates against the local test server (`k3s-local`) at `http://mvet-api.test` and in the local browser at `http://localhost:5173/songbook/` prior to pushing to `vps-production`. Never bypass local verification.
 - **K3s Certificate Maintenance:** K3s client certificates expire yearly. If `k3s-local` requests credentials or fails auth, run `bash .agents/skills/local-testing-and-deployment/scripts/refresh-k3s-certs.sh` to sync renewed certificates from `/etc/rancher/k3s/k3s.yaml` into `~/.kube/config`.
+- **VPS Traffic Redirect Preflight:** Always verify that local VPS SSH tunnels or firewalld redirects (`vps connect` in `~/.local/bin/vps`) are inactive before deploying or running tests against `vps-production`, using `bash .agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh`.
 
 ## Current Project Status
 - [x] Project Initialization
@@ -88,6 +89,10 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Smart Part Names & Abbreviations Rendering for Multi-Staff SATB Scores (v1.3.5-prep)
 - [x] OpenSpec Toolchain Initialization & Modular Living Specs Migration (openspec v1.2.0)
 - [x] OpenSpec Agent Governance Rules, Spec Management Skill, and Change Workflow (.agents/rules/openspec.md)
+- [x] VPS Client Certificate Auto-Refresh Script & Integration (scripts/refresh-vps-certs.sh)
+- [x] VPS Traffic Redirect & SSH Tunnel Preflight Guard (scripts/check-vps-redirect.sh)
+- [x] Role-Based Admin JWT Authentication & In-App Song Archival Suite (v1.3.5 / api-v1.1.0)
+- [x] Production Deployment & 25/25 Endpoint Verification on VPS (v1.3.5)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -103,7 +108,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-09-22 (v1.3.5-prep / local-testing-sop)*
+*Last updated by Antigravity on 2026-09-22 (v1.3.5 / api-v1.1.0 / prod-redirect-guard)*
 
 
 

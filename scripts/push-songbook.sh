@@ -42,6 +42,11 @@ if [ "$TARGET" = "local" ]; then
 elif [ "$TARGET" = "prod" ] || [ "$TARGET" = "production" ]; then
   echo "🚀 Target: Production VPS Volume (vps-production)"
   
+  CHECK_REDIRECT_SCRIPT="${WORKSPACE_DIR}/.agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh"
+  if [ -f "$CHECK_REDIRECT_SCRIPT" ]; then
+    bash "$CHECK_REDIRECT_SCRIPT"
+  fi
+
   SSH_HOST="vps"
   REMOTE_DIR="/var/data/mvet-songbook"
   
