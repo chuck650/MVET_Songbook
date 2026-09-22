@@ -35,7 +35,7 @@ const secrets = loadEnvSecrets();
 
 if (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'production') {
   API_BASE = 'https://mvet-api.cminfosec.com';
-  DEFAULT_PSK = providedPsk || '';
+  DEFAULT_PSK = providedPsk || (secrets && secrets.ACTIVE_PSKS ? secrets.ACTIVE_PSKS.split(',')[0].trim() : '');
   DEFAULT_ADMIN_PSK = secrets?.ADMIN_PSK || '';
 } else {
   if (providedPsk) {
@@ -1054,7 +1054,10 @@ The local \`k3s-local\` instance successfully passes every security check, prese
 Next step of active development is to boot the **Frontend PWA Integration** to utilize the dynamically populated \`/api/v1/songs\` manifest instead of reading the static local \`/public/songs.json\` file.
 `;
 
-  const reportPath = path.resolve('docs/API Endpoint Audit Report: k3s-local.md');
+  const reportFileName = (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'production') 
+    ? 'API Endpoint Audit Report: prod.md' 
+    : 'API Endpoint Audit Report: k3s-local.md';
+  const reportPath = path.resolve('docs', reportFileName);
   fs.writeFileSync(reportPath, mdReport, 'utf-8');
   console.log(`📁 Compliant test execution audit report successfully generated and saved to:`);
   console.log(`   ${reportPath}\n`);
