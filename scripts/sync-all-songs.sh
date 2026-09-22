@@ -6,6 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Define the array across multiple lines
 song_ids=(
     "Armed_Forces_Medley_72"
+    "Battle_Hymn_of_the_Republic"
     "God_Bless_America"
     "God_Bless_America-G_Major"
     "Stars_and_Stripes_Forever"

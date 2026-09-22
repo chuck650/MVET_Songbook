@@ -15,7 +15,7 @@ const SettingsView: React.FC = () => {
     "idle",
   );
   const [syncProgress, setSyncProgress] = useState<number>(0);
-  const { token, psk, isAuthenticated, isVerifying, error, submitPSK, logout } =
+  const { token, psk, isAuthenticated, isAdmin, isVerifying, error, submitPSK, logout } =
     useAuth();
   const [accessKeyInput, setAccessKeyInput] = useState(psk || "");
 
@@ -33,8 +33,9 @@ const SettingsView: React.FC = () => {
       setSyncProgress(0);
 
       const apiBase = getApiUrl();
+      const includeArchivedQuery = settings.includeArchived ? "?include_archived=true" : "";
       const catalogUrl = apiBase
-        ? `${apiBase}/api/v1/songs`
+        ? `${apiBase}/api/v1/songs${includeArchivedQuery}`
         : resolvePath(`/songs.json?v=${Date.now()}`);
 
       const headers: Record<string, string> = {};
@@ -166,6 +167,24 @@ const SettingsView: React.FC = () => {
       </section>
 
       <section className="settings-section">
+        <h3>Library Preferences</h3>
+        <div className="setting-control">
+          <div className="setting-info">
+            <label>Include Archived Performances</label>
+            <span>Show past performance songs that have been retired from the active repertoire.</span>
+          </div>
+          <button
+            className={`toggle-btn ${settings.includeArchived ? "active" : ""}`}
+            onClick={() =>
+              updateSetting("includeArchived", !settings.includeArchived)
+            }
+          >
+            {settings.includeArchived ? "Shown" : "Hidden"}
+          </button>
+        </div>
+      </section>
+
+      <section className="settings-section">
         <h3>Choir Access Credentials</h3>
 
         {isAuthenticated ? (
@@ -194,11 +213,12 @@ const SettingsView: React.FC = () => {
                     fontWeight: 600,
                   }}
                 >
-                  <span>🛡️</span> Access Granted (Choir Member)
+                  <span>🛡️</span> {isAdmin ? "Access Granted (Administrator)" : "Access Granted (Choir Member)"}
                 </label>
                 <span>
-                  Your device is successfully authorized for secure
-                  arrangements.
+                  {isAdmin
+                    ? "Your device has full administrative permissions for repertoire curation and secure arrangements."
+                    : "Your device is successfully authorized for secure arrangements."}
                 </span>
               </div>
               <button

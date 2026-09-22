@@ -38,6 +38,7 @@ export interface Song {
   files: FileManifest;
   parts?: Record<string, Part>;
   thumbnail?: string;
+  archived?: boolean;
   hashes?: Record<string, string> | { protected: boolean };
 }
 
@@ -48,10 +49,12 @@ export interface PSKRequest {
 export interface TokenResponse {
   token: string;
   expires_at: string;
+  role?: 'member' | 'admin';
 }
 
 export interface JWTPayload {
   authorized: boolean;
+  role?: 'member' | 'admin';
   iat?: number;
   exp?: number;
 }

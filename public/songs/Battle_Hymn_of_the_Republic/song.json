@@ -1,0 +1,67 @@
+{
+  "files": {
+    "mscz": "Battle_Hymn_of_the_Republic.mscz",
+    "mxl": "Battle_Hymn_of_the_Republic.mxl",
+    "osmd": "Battle_Hymn_of_the_Republic-SATB.mxl",
+    "pdf": "Battle_Hymn_of_the_Republic-SATB.pdf",
+    "mp3": "Battle_Hymn_of_the_Republic-SATB.mp3",
+    "flac": "Battle_Hymn_of_the_Republic-SATB.flac",
+    "mp4": "Battle_Hymn_of_the_Republic-SATB.mp4"
+  },
+  "parts": {
+    "alto": {
+      "name": "Alto",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Alto.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Alto.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Alto.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Alto.mp4"
+      }
+    },
+    "bass": {
+      "name": "Bass",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Bass.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Bass.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Bass.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Bass.mp4"
+      }
+    },
+    "soprano": {
+      "name": "Soprano",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Soprano.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Soprano.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Soprano.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Soprano.mp4"
+      }
+    },
+    "tenor": {
+      "name": "Tenor",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Tenor.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Tenor.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Tenor.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Tenor.mp4"
+      }
+    },
+    "men": {
+      "name": "Men",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Men.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Men.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Men.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Men.mp4"
+      }
+    },
+    "women": {
+      "name": "Women",
+      "files": {
+        "mxl": "Battle_Hymn_of_the_Republic-Women.mxl",
+        "mp3": "Battle_Hymn_of_the_Republic-Women.mp3",
+        "flac": "Battle_Hymn_of_the_Republic-Women.flac",
+        "mp4": "Battle_Hymn_of_the_Republic-Women.mp4"
+      }
+    }
+  }
+}

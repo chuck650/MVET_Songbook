@@ -14,6 +14,15 @@ if ! kubectl config get-contexts | grep -q "${KUBECTL_CONTEXT}"; then
   exit 1
 fi
 
+# Preflight: Check certificate health
+REFRESH_CERTS_SCRIPT="${WORKSPACE_DIR}/.agents/skills/local-testing-and-deployment/scripts/refresh-k3s-certs.sh"
+if [ -f "$REFRESH_CERTS_SCRIPT" ]; then
+  if ! bash "$REFRESH_CERTS_SCRIPT" --check-only; then
+    echo "🔄 Attempting automatic certificate refresh..."
+    bash "$REFRESH_CERTS_SCRIPT"
+  fi
+fi
+
 echo "🔑 Creating local testing secrets in namespace '${NAMESPACE}' on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl --context "$KUBECTL_CONTEXT" apply -f -
 
@@ -31,11 +40,11 @@ echo "🚀 Applying api-deployment and ingress-local to cluster on context '${KU
 kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/api-deployment.yaml"
 kubectl --context "$KUBECTL_CONTEXT" apply -f "${WORKSPACE_DIR}/k8s/ingress-local.yaml"
 
+echo "🔄 Triggering rollout restart to pick up any new container images..."
+kubectl --context "$KUBECTL_CONTEXT" rollout restart deployment/mvet-api -n "$NAMESPACE"
+
 echo "⏳ Waiting for API Pod to be ready..."
-kubectl --context "$KUBECTL_CONTEXT" wait --namespace "$NAMESPACE" \
-  --for=condition=ready pod \
-  --selector=app=mvet-api \
-  --timeout=60s
+kubectl --context "$KUBECTL_CONTEXT" rollout status deployment/mvet-api -n "$NAMESPACE" --timeout=60s
 
 echo "✅ Local API Deployment Complete!"
 echo "🌐 API is now reachable at http://mvet-api.test/api"

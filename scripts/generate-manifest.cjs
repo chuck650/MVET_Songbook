@@ -505,6 +505,8 @@ function generateManifest() {
     const thumbUrl = fs.existsSync(path.join(folderPath, 'thumbnail.png'))
       ? `${urlPrefix}/thumbnail.png` : undefined;
 
+    const isArchived = Boolean(sidecar.archived || meta.archived);
+
     // ── 6. Assemble song record ───────────────────────────────────────────
     const song = {
       id:            songId,
@@ -517,6 +519,7 @@ function generateManifest() {
       copyrightInfo: meta.copyrightInfo,
       key:           meta.key,
       mtime:         meta.mtime,
+      ...(isArchived ? { archived: true } : {}),
       files:         mainFiles,
       parts,
       hashes,

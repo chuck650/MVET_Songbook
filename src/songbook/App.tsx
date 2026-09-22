@@ -24,7 +24,7 @@ function AppContent() {
   const [activePdfTitle, setActivePdfTitle] = useState<string>("");
   const [isOffline, setIsOffline] = useState<boolean>(!navigator.onLine);
   const { settings } = useSettings();
-  const { token, isAuthenticated } = useAuth();
+  const { token, isAuthenticated, isAdmin } = useAuth();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
@@ -33,14 +33,15 @@ function AppContent() {
     setLoading(true);
 
     const apiBase = getApiUrl();
-    const catalogUrl = apiBase ? `${apiBase}/api/v1/songs` : resolvePath(`/songs.json?v=${Date.now()}`);
+    const includeArchivedQuery = settings.includeArchived ? "?include_archived=true" : "";
+    const catalogUrl = apiBase ? `${apiBase}/api/v1/songs${includeArchivedQuery}` : resolvePath(`/songs.json?v=${Date.now()}`);
 
     const headers: Record<string, string> = {};
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
-    console.log(`Fetching songs catalog from: ${catalogUrl} (Auth: ${!!token})`);
+    console.log(`Fetching songs catalog from: ${catalogUrl} (Auth: ${!!token}, Archived: ${settings.includeArchived})`);
 
     fetch(catalogUrl, { 
       headers,
@@ -52,13 +53,15 @@ function AppContent() {
       })
       .then((data: Song[]) => {
         if (!active) return;
-        setSongs(data);
+        // In case the response came from static songs.json (which contains all songs), filter if not requested
+        const displayedSongs = settings.includeArchived ? data : data.filter(s => !s.archived);
+        setSongs(displayedSongs);
         localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
         setLoading(false);
         
         // Auto-open selected song if we just authenticated
         if (pendingSongOpenId) {
-          const unlockedSong = data.find(s => s.id === pendingSongOpenId);
+          const unlockedSong = displayedSongs.find(s => s.id === pendingSongOpenId);
           if (unlockedSong && unlockedSong.files && (unlockedSong.files as any).protected !== true) {
             setSelectedSong(unlockedSong);
             setActiveTab("player");
@@ -75,7 +78,8 @@ function AppContent() {
           .then((res) => res.json())
           .then((data: Song[]) => {
             if (!active) return;
-            setSongs(data);
+            const displayedSongs = settings.includeArchived ? data : data.filter(s => !s.archived);
+            setSongs(displayedSongs);
             localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
             setLoading(false);
           })
@@ -85,7 +89,9 @@ function AppContent() {
             const cached = localStorage.getItem('mvet_cached_songs');
             if (cached) {
               try {
-                setSongs(JSON.parse(cached));
+                const parsed: Song[] = JSON.parse(cached);
+                const displayedSongs = settings.includeArchived ? parsed : parsed.filter(s => !s.archived);
+                setSongs(displayedSongs);
                 console.log("Loaded offline library from local storage.");
               } catch (e) {
                 console.error("Failed to parse cached songs:", e);
@@ -98,7 +104,7 @@ function AppContent() {
     return () => {
       active = false;
     };
-  }, [token, isAuthenticated]);
+  }, [token, isAuthenticated, settings.includeArchived]);
 
   // Handle browser back button
   useEffect(() => {
@@ -149,6 +155,48 @@ function AppContent() {
   const handleInfoClick = (e: React.MouseEvent, song: Song) => {
     e.stopPropagation();
     setInfoSong(song);
+  };
+
+  const handleToggleArchive = async (e: React.MouseEvent, song: Song) => {
+    e.stopPropagation();
+    const action = song.archived ? "restore" : "archive";
+    const confirmPrompt = song.archived
+      ? `Restore "${song.title}" to the active repertoire?`
+      : `Archive "${song.title}"? It will be hidden from members unless "Show Archived Songs" is enabled.`;
+
+    if (!window.confirm(confirmPrompt)) {
+      return;
+    }
+
+    const apiBase = getApiUrl();
+    if (!apiBase) {
+      alert("API server is not configured.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${apiBase}/api/v1/songs/${song.id}/${action}`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Failed to ${action} song`);
+      }
+
+      setSongs((prevSongs) => {
+        if (action === "archive" && !settings.includeArchived) {
+          return prevSongs.filter((s) => s.id !== song.id);
+        }
+        return prevSongs.map((s) => (s.id === song.id ? { ...s, archived: action === "archive" } : s));
+      });
+    } catch (err: any) {
+      console.error(`Error toggling archive for ${song.id}:`, err);
+      alert(`Failed to ${action} song: ${err.message}`);
+    }
   };
 
   const handleSongSelect = (song: Song) => {
@@ -342,6 +390,9 @@ function AppContent() {
                   >
                     {/* Top Right Badges */}
                     <div className="song-card-badges">
+                      {song.archived && (
+                        <span className="badge-archived">Archived</span>
+                      )}
                       {song.key && (
                         <span className="key-badge">{song.key}</span>
                       )}
@@ -373,36 +424,6 @@ function AppContent() {
                       </div>
                       <p>{song.subtitle || "Traditional SATB"}</p>
                       <div className="song-card-actions">
-                        {song.files.mscz && (() => {
-                          const url = getSongFileUrl(song, song.files.mscz, true);
-                          const isLoading = downloading[url];
-                          return (
-                            <a
-                              href={url}
-                              download={`${song.title}.mscz`}
-                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
-                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
-                            >
-                              <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
-                              <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
-                            </a>
-                          );
-                        })()}
-                        {song.files.mxl && (() => {
-                          const url = getSongFileUrl(song, song.files.mxl, true);
-                          const isLoading = downloading[url];
-                          return (
-                            <a
-                              href={url}
-                              download={`${song.title}.mxl`}
-                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
-                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
-                            >
-                              <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
-                              <span>{isLoading ? "Downloading..." : "MXL"}</span>
-                            </a>
-                          );
-                        })()}
                         {song.files.pdf && (() => {
                           const url = getSongFileUrl(song, song.files.pdf, true);
                           const isLoading = downloading[url];
@@ -447,16 +468,58 @@ function AppContent() {
                             </button>
                           );
                         })()}
+                        {song.files.mscz && (() => {
+                          const url = getSongFileUrl(song, song.files.mscz, true);
+                          const isLoading = downloading[url];
+                          return (
+                            <a
+                              href={url}
+                              download={`${song.title}.mscz`}
+                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
+                            >
+                              <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
+                              <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
+                            </a>
+                          );
+                        })()}
+                        {song.files.mxl && (() => {
+                          const url = getSongFileUrl(song, song.files.mxl, true);
+                          const isLoading = downloading[url];
+                          return (
+                            <a
+                              href={url}
+                              download={`${song.title}.mxl`}
+                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
+                            >
+                              <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
+                              <span>{isLoading ? "Downloading..." : "MXL"}</span>
+                            </a>
+                          );
+                        })()}
                       </div>
                     </div>
-                    <button
-                      className="info-btn card-info-btn-lower"
-                      onClick={(e) => handleInfoClick(e, song)}
-                      aria-label="View song details and copyright"
-                      title="Song details & licensing"
-                    >
-                      <span className="info-icon-char">i</span>
-                    </button>
+                    <div className="card-lower-controls">
+                      {isAdmin && (
+                        <button
+                          className={`card-admin-btn ${song.archived ? "btn-admin-restore" : "btn-admin-archive"}`}
+                          onClick={(e) => { void handleToggleArchive(e, song); }}
+                          aria-label={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
+                          title={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
+                        >
+                          <span className="card-admin-btn-icon">{song.archived ? "♻️" : "📦"}</span>
+                        </button>
+                      )}
+                      <button
+                        className="info-btn"
+                        onClick={(e) => handleInfoClick(e, song)}
+                        aria-label="View song details and copyright"
+                        title="Song details & licensing"
+                      >
+                        <span className="info-icon-char">i</span>
+                      </button>
+                    </div>
                   </div>
                 ))
               ) : (

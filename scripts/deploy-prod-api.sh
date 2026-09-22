@@ -8,6 +8,21 @@ WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NAMESPACE="mvet-songbook"
 KUBECTL_CONTEXT="vps-production"
 
+# Safety Check: Verify the target context exists in kubectl config
+if ! kubectl config get-contexts | grep -q "${KUBECTL_CONTEXT}"; then
+  echo "❌ Error: Target context '${KUBECTL_CONTEXT}' not found in kubectl config!"
+  exit 1
+fi
+
+# Preflight: Check certificate health
+REFRESH_CERTS_SCRIPT="${WORKSPACE_DIR}/.agents/skills/local-testing-and-deployment/scripts/refresh-vps-certs.sh"
+if [ -f "$REFRESH_CERTS_SCRIPT" ]; then
+  if ! bash "$REFRESH_CERTS_SCRIPT" --check-only; then
+    echo "🔄 Attempting automatic VPS certificate refresh..."
+    bash "$REFRESH_CERTS_SCRIPT"
+  fi
+fi
+
 echo "📁 Creating production namespace '${NAMESPACE}' on context '${KUBECTL_CONTEXT}'..."
 kubectl --context "$KUBECTL_CONTEXT" create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl --context "$KUBECTL_CONTEXT" apply -f -
 

@@ -22,6 +22,9 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - **Modularity:** Break components into `src/components`.
 - **Accessibility:** Ensure ARIA labels and WCAG 2.1 compliance.
 - **Verification:** Use headless browser testing to verify interactivity after builds.
+- **VPS Isolation & Testing:** When modifying VPS routing, ingress, or container network configurations, always test legacy/side-by-side websites and services (e.g. mail interfaces) over public IP networks using loopback or external check tools to verify that host ports (80/443) remain untouched and un-hijacked.
+- **Pre-Production Local Testing Gate:** ALWAYS test songbook assets and API updates against the local test server (`k3s-local`) at `http://mvet-api.test` and in the local browser at `http://localhost:5173/songbook/` prior to pushing to `vps-production`. Never bypass local verification.
+- **K3s Certificate Maintenance:** K3s client certificates expire yearly. If `k3s-local` requests credentials or fails auth, run `bash .agents/skills/local-testing-and-deployment/scripts/refresh-k3s-certs.sh` to sync renewed certificates from `/etc/rancher/k3s/k3s.yaml` into `~/.kube/config`.
 
 ## Current Project Status
 - [x] Project Initialization
@@ -78,6 +81,13 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 - [x] Optional Instrumental Rehearsal Track Part Support with automatic pattern discovery and local k3s deployment verification (v1.3.0)
 - [x] Local API routing protection and friendly score loading error page handler (v1.3.3)
 - [x] Explicit PWA Service Worker scope alignment for DevTools Application visibility (v1.3.4)
+- [x] Battle Hymn of the Republic Asset Ingestion & Copyright Configuration (v1.3.5-prep)
+- [x] K3s Client Certificate Health & Auto-Refresh Script (scripts/refresh-k3s-certs.sh)
+- [x] Local Pre-Production Testing SOP, Agent Skill & Knowledge Base (.agents/skills/local-testing-and-deployment)
+- [x] Battle Hymn of the Republic Local K3s Ingestion & 16-Checkpoint Verification Passed
+- [x] Smart Part Names & Abbreviations Rendering for Multi-Staff SATB Scores (v1.3.5-prep)
+- [x] OpenSpec Toolchain Initialization & Modular Living Specs Migration (openspec v1.2.0)
+- [x] OpenSpec Agent Governance Rules, Spec Management Skill, and Change Workflow (.agents/rules/openspec.md)
 
 ## Key Context Points
 - **Domain**: Veteran music, SATB vocal arrangements, MusicXML.
@@ -93,7 +103,7 @@ To create the premier digital resource for veteran-focused vocal arrangements, e
 2. Segment the modular stylesheets for isolated components from `Songbook.css`.
 
 ---
-*Last updated by Antigravity on 2026-06-09 (v1.3.4 / pwa-sw-scope-fix)*
+*Last updated by Antigravity on 2026-09-22 (v1.3.5-prep / local-testing-sop)*
 
 
 

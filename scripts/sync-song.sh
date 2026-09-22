@@ -27,6 +27,7 @@ fi
 # Run the rsync command
 rsync -av --delete \
   --include="${SONG}-SATB.pdf" \
+  --exclude="*(Master)*" \
   --include="*.mscz" \
   --include="*.mxl" \
   --include="*.mp3" \

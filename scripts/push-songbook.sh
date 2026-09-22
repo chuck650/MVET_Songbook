@@ -10,11 +10,20 @@ set -euo pipefail
 TARGET="${1:-local}"
 WORKSPACE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+CURRENT_CONTEXT="$(kubectl config current-context 2>/dev/null || echo 'unknown')"
+echo "🌐 Active Kubectl Context: ${CURRENT_CONTEXT}"
+
 echo "🔄 Running generate-manifest to build fresh songs.json and extract any new thumbnails..."
 node "${WORKSPACE_DIR}/scripts/generate-manifest.cjs"
 
 if [ "$TARGET" = "local" ]; then
   echo "📂 Target: Local Development (k3s-local)"
+  
+  REFRESH_CERTS_SCRIPT="${WORKSPACE_DIR}/.agents/skills/local-testing-and-deployment/scripts/refresh-k3s-certs.sh"
+  if [ -f "$REFRESH_CERTS_SCRIPT" ]; then
+    bash "$REFRESH_CERTS_SCRIPT" --check-only || true
+  fi
+
   echo "📂 Checking local volume directory /var/data/mvet-songbook/..."
   if [ ! -d "/var/data/mvet-songbook" ]; then
     echo "⚠️  Volume directory /var/data/mvet-songbook does not exist. Creating..."

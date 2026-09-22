@@ -3,7 +3,7 @@ export const openApiSpec: object = {
   info: {
     title: "MVET Songbook API",
     description: "Stateless TypeScript Express Gateway for Secure MusicXML and Audio Access Control",
-    version: "1.0.0"
+    version: "1.1.0"
   },
   servers: [
     {
@@ -18,8 +18,8 @@ export const openApiSpec: object = {
   paths: {
     "/api/v1/auth/token": {
       post: {
-        summary: "Exchange Choral Preshared Key (PSK) for a signed JWT",
-        description: "Validates Choral PSK and returns secure cryptographically signed 90-day JWT. Legacy `/api/auth/token` endpoint is also supported for backward compatibility.",
+        summary: "Exchange Choral or Admin Preshared Key (PSK) for a signed JWT",
+        description: "Validates Choral Member PSK or Admin PSK and returns secure cryptographically signed 90-day JWT with role claims ('member' or 'admin'). Legacy `/api/auth/token` endpoint is also supported for backward compatibility.",
         requestBody: {
           required: true,
           content: {
@@ -29,7 +29,7 @@ export const openApiSpec: object = {
                 properties: {
                   psk: {
                     type: "string",
-                    description: "Active choir preshared key"
+                    description: "Active choir preshared key or administrative preshared key"
                   }
                 },
                 required: ["psk"]
@@ -46,7 +46,8 @@ export const openApiSpec: object = {
                   type: "object",
                   properties: {
                     token: { type: "string" },
-                    expires_at: { type: "string", format: "date-time" }
+                    expires_at: { type: "string", format: "date-time" },
+                    role: { type: "string", enum: ["member", "admin"] }
                   }
                 }
               }
@@ -60,7 +61,7 @@ export const openApiSpec: object = {
     "/api/v1/songs": {
       get: {
         summary: "Fetch songs catalog",
-        description: "Returns metadata of all active arrangements. If authenticated, serves full media URLs. If anonymous, obfuscates protected assets. Legacy `/api/songs` endpoint is also supported.",
+        description: "Returns metadata of arrangements. By default, archived selections are omitted unless `include_archived=true` is requested. If authenticated, serves full media URLs. If anonymous, obfuscates protected assets.",
         parameters: [
           {
             name: "Authorization",
@@ -68,6 +69,13 @@ export const openApiSpec: object = {
             required: false,
             description: "Bearer <JWT_TOKEN>",
             schema: { type: "string" }
+          },
+          {
+            name: "include_archived",
+            in: "query",
+            required: false,
+            description: "Pass 'true' to include archived repertoire in the catalog response",
+            schema: { type: "boolean" }
           }
         ],
         responses: {
@@ -97,6 +105,40 @@ export const openApiSpec: object = {
           200: { description: "File data stream" },
           401: { description: "Unauthorized" },
           404: { description: "Not Found" }
+        }
+      }
+    },
+    "/api/v1/songs/{song_id}/archive": {
+      post: {
+        summary: "Archive song from public/default repertoire view",
+        description: "Sets `archived: true` on the target song in catalog metadata. Requires either Bearer JWT with `role: 'admin'` or administrative `x-admin-key` header.",
+        parameters: [
+          { name: "song_id", in: "path", required: true, schema: { type: "string" } },
+          { name: "Authorization", in: "header", required: false, description: "Bearer <ADMIN_JWT_TOKEN>", schema: { type: "string" } },
+          { name: "x-admin-key", in: "header", required: false, description: "Administrative preshared key fallback", schema: { type: "string" } }
+        ],
+        responses: {
+          200: { description: "Song archived successfully." },
+          401: { description: "Missing or invalid administrative credentials." },
+          403: { description: "Forbidden: Requires administrator privileges." },
+          404: { description: "Song not found in catalog." }
+        }
+      }
+    },
+    "/api/v1/songs/{song_id}/restore": {
+      post: {
+        summary: "Restore archived song to public/default repertoire view",
+        description: "Removes `archived` flag from the target song in catalog metadata. Requires either Bearer JWT with `role: 'admin'` or administrative `x-admin-key` header.",
+        parameters: [
+          { name: "song_id", in: "path", required: true, schema: { type: "string" } },
+          { name: "Authorization", in: "header", required: false, description: "Bearer <ADMIN_JWT_TOKEN>", schema: { type: "string" } },
+          { name: "x-admin-key", in: "header", required: false, description: "Administrative preshared key fallback", schema: { type: "string" } }
+        ],
+        responses: {
+          200: { description: "Song restored successfully." },
+          401: { description: "Missing or invalid administrative credentials." },
+          403: { description: "Forbidden: Requires administrator privileges." },
+          404: { description: "Song not found in catalog." }
         }
       }
     }

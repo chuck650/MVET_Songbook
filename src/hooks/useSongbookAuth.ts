@@ -11,31 +11,37 @@ interface TokenLifespan {
   totalDuration: number;
 }
 
-function parseTokenLifespan(token: string): TokenLifespan | null {
+function parseTokenPayload(token: string): { lifespan: TokenLifespan | null; role: 'member' | 'admin' } {
   try {
     const payloadStr = atob(token.split('.')[1]);
     const payload = JSON.parse(payloadStr);
+    const role: 'member' | 'admin' = payload.role === 'admin' ? 'admin' : 'member';
+    let lifespan: TokenLifespan | null = null;
     if (payload && payload.exp && payload.iat) {
       const issuedAt = payload.iat * 1000; // to ms
       const expiresAt = payload.exp * 1000; // to ms
-      return {
+      lifespan = {
         issuedAt,
         expiresAt,
         totalDuration: expiresAt - issuedAt
       };
     }
+    return { lifespan, role };
   } catch (e) {
-    console.warn('Failed to parse JWT token lifespans', e);
+    console.warn('Failed to parse JWT token payload', e);
   }
-  return null;
+  return { lifespan: null, role: 'member' };
 }
 
 export function useSongbookAuth() {
   const [psk, setPsk] = useState<string>('');
   const [token, setToken] = useState<string>('');
+  const [role, setRole] = useState<'member' | 'admin' | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isAdmin = isAuthenticated && role === 'admin';
 
   // Use refs to access active states in the background timer without re-triggering the effect
   const activePskRef = useRef<string>('');
@@ -47,6 +53,12 @@ export function useSongbookAuth() {
 
   useEffect(() => {
     activeTokenRef.current = token;
+    if (token) {
+      const { role: parsedRole } = parseTokenPayload(token);
+      setRole(parsedRole);
+    } else {
+      setRole(null);
+    }
   }, [token]);
 
   // Background refresh method
@@ -112,7 +124,7 @@ export function useSongbookAuth() {
         setToken(auth.token);
       }
 
-      const lifespan = parseTokenLifespan(auth.token);
+      const { lifespan } = parseTokenPayload(auth.token);
       const now = Date.now();
       const expiresTime = lifespan ? lifespan.expiresAt : new Date(auth.expiresAt).getTime();
       const issuedTime = lifespan ? lifespan.issuedAt : (expiresTime - 7 * 24 * 60 * 60 * 1000);
@@ -147,7 +159,7 @@ export function useSongbookAuth() {
           console.log('✅ Transparent DHCP lease renewal succeeded.');
           
           // Re-schedule based on the fresh lease
-          const freshLifespan = parseTokenLifespan(newToken);
+          const { lifespan: freshLifespan } = parseTokenPayload(newToken);
           if (freshLifespan) {
             const nextDelay = freshLifespan.totalDuration / 2;
             console.log(`⏰ Scheduled next T1 renewal in ${(nextDelay / 3600000).toFixed(2)} hours.`);
@@ -238,6 +250,8 @@ export function useSongbookAuth() {
   return {
     psk,
     token,
+    role,
+    isAdmin,
     isAuthenticated,
     isVerifying,
     error,

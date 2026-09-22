@@ -1,6 +1,6 @@
 {
   "name": "mvet-songbook-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Stateless TypeScript Express Gateway for Secure MusicXML and Audio Access Control",
   "main": "dist/index.js",
   "type": "module",

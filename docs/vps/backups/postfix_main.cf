@@ -1,0 +1,153 @@
+myhostname = mail.cminfosec.com
+
+#mydomain = $sender_domain 
+#myhostname = mail.$sender_domain 
+
+smtpd_banner = $myhostname ESMTP $mail_name
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+compatibility_level = 3.6
+
+#Enable TLS Encryption when Postfix receives incoming emails
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.cminfosec.com/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.cminfosec.com/privkey.pem
+smtpd_tls_security_level = may 
+smtpd_tls_loglevel = 1
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+
+#Enable TLS Encryption when Postfix sends outgoing emails
+smtp_tls_security_level = may
+smtp_tls_loglevel = 1
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+#Enforce TLSv1.3 or TLSv1.2
+smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
+smtpd_tls_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
+smtp_tls_mandatory_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
+smtp_tls_protocols = !SSLv2, !SSLv3, !TLSv1, !TLSv1.1
+
+# Setup virtual domain lookups via proxy:mysql:
+virtual_mailbox_base = /var/mail/vmail
+virtual_mailbox_limit = 536870912
+virtual_minimum_uid = 5000
+# virtual_transport = virtual
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/sql/mysql_virtual_domains_maps.cf
+virtual_alias_maps =
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_maps.cf,
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_maps.cf,
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_catchall_maps.cf
+virtual_mailbox_maps =
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_mailbox_maps.cf,
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_mailbox_maps.cf
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+
+# For transport map support, also use the following configuration:
+relay_domains = proxy:mysql:/etc/postfix/sql/mysql_relay_domains.cf
+transport_maps = proxy:mysql:/etc/postfix/sql/mysql_transport_maps.cf
+tls_server_sni_maps = hash:/etc/postfix/ssl/domain_ssl.map
+
+# Configure postfix defaults
+home_mailbox = Maildir/
+
+smtpd_relay_restrictions = 
+	permit_mynetworks 
+	permit_sasl_authenticated 
+	defer_unauth_destination
+
+# myhostname = titanium
+# mydomain = localdomain
+# myorigin = $myhostname
+local_transport = local:localhost
+local_recipient_maps = proxy:unix:passwd.byname $alias_maps
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+mydestination = $myhostname, localhost.$mydomain, localhost
+# relayhost = localhost
+# relay_domains = $mydestination
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mynetworks_style = host
+# default_transport = error: outside mail is not deliverable
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = ipv4
+message_size_limit=10485760
+mailbox_transport = lmtp:unix:private/dovecot-lmtp
+smtputf8_enable = no
+smtp_header_checks = regexp:/etc/postfix/smtp_header_checks
+smtp_host_lookup = dns, native
+
+policyd-spf_time_limit = 3600
+#smtpd_recipient_restrictions =
+#   reject_sender_login_mismatch,
+#   permit_mynetworks,
+#   permit_sasl_authenticated,
+#   reject_unauth_destination,
+##   reject_rbl_client zen.spamhaus.org,
+#   check_policy_service unix:private/policyd-spf
+
+# Milter configuration
+#milter_macro_defaults = dkimsign=yes
+milter_default_action = accept
+milter_protocol = 6
+smtpd_milters = local:opendkim/opendkim.sock,local:opendmarc/opendmarc.sock,local:spamass/spamass.sock
+non_smtpd_milters = $smtpd_milters
+
+# authorized_submit_users = root,www-data,chuck,roundcube
+
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+
+# smtpd_sasl_security_options = noanonymous, noplaintext
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_tls_security_options = noanonymous
+# smtpd_tls_auth_only = yes
+smtpd_sender_login_maps = 
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_maps.cf,
+   proxy:mysql:/etc/postfix/sql/mysql_virtual_alias_domain_maps.cf
+queue_directory = /var/spool/postfix
+smtpd_client_auth_rate_limit = 6
+smtpd_client_connection_count_limit = 5
+smtpd_client_connection_rate_limit = 25
+
+smtpd_restriction_classes = 
+   mua_client_restrictions, 
+   mua_sender_restrictions, 
+   mua_recipient_restrictions, 
+   mua_helo_restrictions
+
+mua_client_restrictions = 
+   permit_sasl_authenticated, 
+   reject
+
+mua_helo_restrictions = 
+   permit_mynetworks 
+   permit_sasl_authenticated 
+   check_helo_access hash:/etc/postfix/helo_access 
+   reject_invalid_helo_hostname 
+   reject_non_fqdn_helo_hostname 
+   reject_unknown_helo_hostname
+
+mua_sender_restrictions =
+   permit_mynetworks
+   permit_sasl_authenticated
+   reject_unknown_sender_domain
+   reject_unknown_reverse_client_hostname
+   reject_unknown_client_hostname
+
+
+mua_recipient_restrictions =
+   permit_mynetworks
+   permit_sasl_authenticated
+   reject_unauth_destination
+   check_policy_service unix:private/policyd-spf
+   reject_rbl_client zen.spamhaus.org=127.0.0.[2..11]
+   reject_rhsbl_sender dbl.spamhaus.org=127.0.1.[2..99]
+   reject_rhsbl_helo dbl.spamhaus.org=127.0.1.[2..99]
+   reject_rhsbl_reverse_client dbl.spamhaus.org=127.0.1.[2..99]
+   warn_if_reject reject_rbl_client zen.spamhaus.org=127.255.255.[1..255]
+
+header_checks = pcre:/etc/postfix/header_checks

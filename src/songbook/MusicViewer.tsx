@@ -61,6 +61,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
   useEffect(() => {
     if (!containerRef.current) return;
     
+    const shouldDrawPartNames = activePartKey === 'full' && !isPerformanceMode;
+
     if (!osmdRef.current) {
       osmdRef.current = new OpenSheetMusicDisplay(containerRef.current, { 
         autoResize: true, 
@@ -68,8 +70,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
         drawLyrics: true, 
         coloringEnabled: true, 
         followCursor: false,
-        drawPartNames: false,
-        drawPartAbbreviations: false,
+        drawPartNames: shouldDrawPartNames,
+        drawPartAbbreviations: shouldDrawPartNames,
         renderSingleHorizontalStaffline: isPerformanceMode
       });
     }
@@ -77,8 +79,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
     const osmd = osmdRef.current;
     
     // Set all EngravingRules before loading to ensure they are respected during parsing
-    osmd.EngravingRules.RenderPartNames = false;
-    osmd.EngravingRules.RenderPartAbbreviations = false;
+    osmd.EngravingRules.RenderPartNames = shouldDrawPartNames;
+    osmd.EngravingRules.RenderPartAbbreviations = shouldDrawPartNames;
 
     try {
       if (!osmd) return;
@@ -111,8 +113,8 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
           drawComposer: false,
           drawCredits: false,    // Suppress arranger/lyricist credits to prevent overlapping with system text
           drawLyrics: true,
-          drawPartNames: false,
-          drawPartAbbreviations: false,
+          drawPartNames: shouldDrawPartNames,
+          drawPartAbbreviations: shouldDrawPartNames,
           renderSingleHorizontalStaffline: false
         });
       }

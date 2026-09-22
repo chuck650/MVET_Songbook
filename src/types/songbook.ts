@@ -38,6 +38,7 @@ export interface Song {
   copyrightInfo?: CopyrightInfo;
   mtime?: string;
   thumbnail?: string;
+  archived?: boolean;
   files: RehearsalFiles;
   parts?: {
     soprano?: VocalPart;

@@ -10,6 +10,7 @@ export interface Settings {
   compactMode: boolean;
   highContrast: boolean;
   modernKeyChanges: boolean;
+  includeArchived: boolean;
   songSettings: Record<string, unknown>;
 }
 
@@ -31,6 +32,7 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
       compactMode: false,
       highContrast: false,
       modernKeyChanges: true,
+      includeArchived: false,
       songSettings: {},
     };
     

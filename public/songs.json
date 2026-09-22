@@ -130,6 +130,128 @@
     "thumbnail": "/songs/Armed_Forces_Medley_72/thumbnail.png"
   },
   {
+    "id": "Battle_Hymn_of_the_Republic",
+    "title": "Battle Hymn of the Republic",
+    "subtitle": "Words by Julia Ward Howe",
+    "composer": "William Steffe",
+    "arranger": "Peter J. Wilhousky",
+    "engraver": "Chuck Nelson",
+    "copyright": "© Carl Fischer, LLC.",
+    "copyrightInfo": {
+      "type": "copyrighted",
+      "holder": "Carl Fischer, LLC",
+      "statement": "Arrangement by Peter J. Wilhousky, words by Julia Ward Howe. Copyright © Carl Fischer, LLC. All Rights Reserved. Used by Permission.",
+      "links": [
+        "https://www.carlfischer.com"
+      ]
+    },
+    "key": "Bb major",
+    "mtime": "2026-09-01 10:12",
+    "files": {
+      "mscz": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.mscz",
+      "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.mxl",
+      "osmd": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mxl",
+      "pdf": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.pdf",
+      "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mp3",
+      "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.flac",
+      "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mp4"
+    },
+    "parts": {
+      "soprano": {
+        "name": "Soprano",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mp4"
+        }
+      },
+      "alto": {
+        "name": "Alto",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mp4"
+        }
+      },
+      "tenor": {
+        "name": "Tenor",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mp4"
+        }
+      },
+      "bass": {
+        "name": "Bass",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mp4"
+        }
+      },
+      "women": {
+        "name": "Women",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mp4"
+        }
+      },
+      "men": {
+        "name": "Men",
+        "files": {
+          "mxl": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mxl",
+          "mp3": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mp3",
+          "flac": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.flac",
+          "mp4": "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mp4"
+        }
+      }
+    },
+    "hashes": {
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.flac": "3012dda4c134f01c121af5b5f5789b83fcda2af6215725146b19c7a4b7971347",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mp3": "80a366f2476bbbcd5269088cf1fa60125449b228d8b9f3124ac7c9e80d77c333",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mp4": "b7d0dcdb7e7ed96060cb788698f3d9a5d2c9ffcc012b2544dae63ae19d20810e",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Alto.mxl": "e70cc762256f600ad256e6f22d0a82896966518c7c2c5f298af18578e979ab50",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.flac": "a544f25d0a19debc2b6c4f70e5a201e2832a63f7cc5e6e95ad16c95958979a9f",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mp3": "dd80043056184eaa75525bc8c046c50193d3a709fc1a4be3f68c9fd0a313db88",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mp4": "8260e72b343147373280fc3c5a760f73f1dcffd00a6564358c2a9bf0a47fec3e",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Bass.mxl": "af2857e74b31066e7e2088026a4076f78ba3cd8468fbc499c87d755824a1e79a",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.flac": "837711be655dff3b6c7f0eb13a52beb54574bdcefb4c0be43c3ce9a575c9e051",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mp3": "29dab9ada5566ddeaca4c878328a6c0a4330eb519560a76a7394a4948adb7270",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mp4": "1fe42582ac47214153df406b833c9f92d29b228aa8f7f059b98cbd38feefb056",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Men.mxl": "569fd507f4e407cfb73590a645d4709a3dac7b602d2f3a94b48f182503c07ec0",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.flac": "23c07eda87d524b0a65d21e7f892ccb29537e6ca43432d4a0d279cb63df1e452",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mp3": "9f093996025d3b8711dc04c7acb2d7decb70b3b7eed708451f9d1e03402bab03",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mp4": "4765d48f0b0c0d490c8c620a99ee74c23f6147a85e550bdaef234e75eedae875",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.mxl": "b0fa3be7136e74c6ffa9c531f50ea164944498398e1e9220fbc7f8f6e87ab438",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-SATB.pdf": "633da0bd4b238503d1e7716a69e71cd96e4408f54c299b28e24ff16e152d31c2",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.flac": "7130077f49ddfdd9e58c1aef41abe40997354365a5f1d26808ff714c8504ef4f",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mp3": "db20a1c3826093c1a38dcb7fc1b09085648720dba80e5e7ba888a79318c468f5",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mp4": "8a0b3ede52665674a6ed19bfc87466e41f5163c952cee1d004d407789e09a3f6",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Soprano.mxl": "0da6a12cf223c1b0e10ecfcea8776d97951c64901fd79c48db878ae027113868",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.flac": "800deb2ef817d2c91a7f629b022fefdc352e66b97c14287ba0af911bf8d3b2ad",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mp3": "e6e6e5ae3aaa9ea1b16fc10a98f56bcbd79a6ffeb0d88971f2220323d9edf2e3",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mp4": "da5fdd55794640eccee1872eede586bcc39094f5faa17dc83325ce9465896cc7",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Tenor.mxl": "2edd17f3193d26b5cfadf3bb57433e466501bb2ee696a5e012186319cabab9f9",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.flac": "c9cb72ca7ee4f0238d70509636614bc263d3de4c8e48dc086e019cc1d48e2678",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mp3": "a0d4f640dd15b8b4b251a81a8113d44f8cc68c59fa86dd1087230d211fa07256",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mp4": "78e0a886152fd13fa3a3e146521117950bf7d547325ea6ac7ccbb0eae5fbda16",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic-Women.mxl": "9e98e64d8675a5a5a668f79ac3f8eb477791488828f77fd24c400247c258d600",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.flac": "2ff301318abf03c5f2a7003bc85fa81fbe33fbb7d25ea3bf7c1ae90e8f9403c7",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.mp3": "9d279ca7b21e4b729e408bdc955b5d4384a818da31f71f89f87b2240396d22b1",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.mscz": "d893128f354eed441cf74d98dd4462982841e43f1a758cb06a1dc3ac03157884",
+      "/songs/Battle_Hymn_of_the_Republic/Battle_Hymn_of_the_Republic.mxl": "90cbf8cfa7d758b46cfe08d77ec049b9f2fdbe81b4f643ced5ce83652cd4bd21",
+      "/songs/Battle_Hymn_of_the_Republic/metadata.json": "4c688d5927b85d85777c6ed2cbf36094861d6deab226061329cd87647ff0f28c",
+      "/songs/Battle_Hymn_of_the_Republic/thumbnail.png": "f9d41d1c948f31e42da6ddfc977d41f347b6a24dfd3a1327d08c405a0a5aa190"
+    },
+    "thumbnail": "/songs/Battle_Hymn_of_the_Republic/thumbnail.png"
+  },
+  {
     "id": "God_Bless_America",
     "title": "God Bless America",
     "subtitle": "Irving Berlin",

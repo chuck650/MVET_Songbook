@@ -5,6 +5,8 @@ import { useSongbookAuth } from '../hooks/useSongbookAuth';
 interface AuthContextType {
   psk: string;
   token: string;
+  role: 'member' | 'admin' | null;
+  isAdmin: boolean;
   isAuthenticated: boolean;
   isVerifying: boolean;
   error: string | null;

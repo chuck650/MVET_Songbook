@@ -9,6 +9,7 @@ const providedPsk = args[1];
 
 let API_BASE = 'http://mvet-api.test';
 let DEFAULT_PSK = '';
+let DEFAULT_ADMIN_PSK = '';
 
 // Load .env.secrets if it exists
 function loadEnvSecrets() {
@@ -35,6 +36,7 @@ const secrets = loadEnvSecrets();
 if (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'production') {
   API_BASE = 'https://mvet-api.cminfosec.com';
   DEFAULT_PSK = providedPsk || '';
+  DEFAULT_ADMIN_PSK = secrets?.ADMIN_PSK || '';
 } else {
   if (providedPsk) {
     DEFAULT_PSK = providedPsk;
@@ -43,6 +45,7 @@ if (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'productio
   } else {
     DEFAULT_PSK = 'mvet-local-key';
   }
+  DEFAULT_ADMIN_PSK = secrets?.ADMIN_PSK || 'e3b0c442-98fc-1c14-9afb-4c8996fb9242';
 }
 
 const isHttps = API_BASE.startsWith('https');
@@ -104,6 +107,7 @@ async function runTests() {
 
   const results = [];
   let jwtToken = '';
+  let adminJwtToken = '';
 
   function logTestResult(name, endpoint, method, expectedStatus, actualStatus, pass, details = '') {
     const statusText = pass ? '✅ PASS' : '❌ FAIL';
@@ -133,11 +137,13 @@ async function runTests() {
     let details = '';
     if (res.statusCode === 200) {
       const payload = JSON.parse(res.body);
-      if (payload.token) {
+      if (payload.token && payload.role === 'member') {
         jwtToken = payload.token;
         tokenAcquired = true;
-      } else {
+      } else if (!payload.token) {
         details = 'Response body did not contain token property.';
+      } else {
+        details = `Expected role: 'member', received: ${payload.role}`;
       }
     } else {
       details = `Server returned body: ${res.body}`;
@@ -517,6 +523,246 @@ async function runTests() {
   }
 
   // -------------------------------------------------------------
+  // Test 17: POST /api/v1/songs/:id/archive (Missing or Invalid x-admin-key)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/archive`, {
+      method: 'POST',
+      headers: { 'x-admin-key': 'invalid-admin-key' }
+    });
+    logTestResult(
+      'Archive song mutation blocked with invalid admin key',
+      '/api/v1/songs/:id/archive',
+      'POST',
+      403,
+      res.statusCode,
+      res.statusCode === 403
+    );
+  } catch (err) {
+    logTestResult('Archive song mutation blocked with invalid admin key', '/api/v1/songs/:id/archive', 'POST', 403, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 18: POST /api/v1/songs/:id/archive (Valid Admin Key)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/archive`, {
+      method: 'POST',
+      headers: { 'x-admin-key': DEFAULT_ADMIN_PSK }
+    });
+    let pass = false;
+    if (res.statusCode === 200) {
+      const body = JSON.parse(res.body);
+      if (body.success && body.song && body.song.archived === true) {
+        pass = true;
+      }
+    }
+    logTestResult(
+      'Archive song mutation with valid admin key',
+      '/api/v1/songs/:id/archive',
+      'POST',
+      200,
+      res.statusCode,
+      pass
+    );
+  } catch (err) {
+    logTestResult('Archive song mutation with valid admin key', '/api/v1/songs/:id/archive', 'POST', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 19: GET /api/v1/songs (Default excludes archived song)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs`);
+    let pass = false;
+    let details = '';
+    if (res.statusCode === 200) {
+      const catalog = JSON.parse(res.body);
+      const medley = catalog.find(s => s.id === 'Armed_Forces_Medley_72');
+      if (!medley) {
+        pass = true;
+      } else {
+        details = 'Archived song was unexpectedly returned in default catalog response.';
+      }
+    }
+    logTestResult(
+      'Default catalog retrieval omits archived song',
+      '/api/v1/songs',
+      'GET',
+      200,
+      res.statusCode,
+      pass,
+      details
+    );
+  } catch (err) {
+    logTestResult('Default catalog retrieval omits archived song', '/api/v1/songs', 'GET', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 20: GET /api/v1/songs?include_archived=true (Includes archived song)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs?include_archived=true`);
+    let pass = false;
+    let details = '';
+    if (res.statusCode === 200) {
+      const catalog = JSON.parse(res.body);
+      const medley = catalog.find(s => s.id === 'Armed_Forces_Medley_72');
+      if (medley && medley.archived === true) {
+        pass = true;
+      } else {
+        details = 'Archived song was not found with archived=true when include_archived=true was passed.';
+      }
+    }
+    logTestResult(
+      'Catalog retrieval with ?include_archived=true includes archived song',
+      '/api/v1/songs?include_archived=true',
+      'GET',
+      200,
+      res.statusCode,
+      pass,
+      details
+    );
+  } catch (err) {
+    logTestResult('Catalog retrieval with ?include_archived=true includes archived song', '/api/v1/songs?include_archived=true', 'GET', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 21: POST /api/v1/songs/:id/restore (Valid Admin Key - Repertoire Restored)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/restore`, {
+      method: 'POST',
+      headers: { 'x-admin-key': DEFAULT_ADMIN_PSK }
+    });
+    let pass = false;
+    if (res.statusCode === 200) {
+      const body = JSON.parse(res.body);
+      if (body.success && body.song && !body.song.archived) {
+        pass = true;
+      }
+    }
+    logTestResult(
+      'Restore song mutation with valid admin key',
+      '/api/v1/songs/:id/restore',
+      'POST',
+      200,
+      res.statusCode,
+      pass
+    );
+  } catch (err) {
+    logTestResult('Restore song mutation with valid admin key', '/api/v1/songs/:id/restore', 'POST', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 22: POST /api/v1/auth/token (Admin PSK Exchange)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/auth/token`, {
+      method: 'POST',
+      body: JSON.stringify({ psk: DEFAULT_ADMIN_PSK })
+    });
+    let pass = false;
+    let details = '';
+    if (res.statusCode === 200) {
+      const payload = JSON.parse(res.body);
+      if (payload.token && payload.role === 'admin') {
+        adminJwtToken = payload.token;
+        pass = true;
+      } else {
+        details = `Expected token and role: 'admin', received role: ${payload.role}`;
+      }
+    } else {
+      details = `Server returned status ${res.statusCode}: ${res.body}`;
+    }
+    logTestResult(
+      'Admin token exchange with valid Admin PSK',
+      '/api/v1/auth/token',
+      'POST',
+      200,
+      res.statusCode,
+      pass,
+      details
+    );
+  } catch (err) {
+    logTestResult('Admin token exchange with valid Admin PSK', '/api/v1/auth/token', 'POST', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 23: POST /api/v1/songs/:id/archive (Member Bearer JWT - Forbidden)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/archive`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${jwtToken}` }
+    });
+    logTestResult(
+      'Archive song mutation blocked with member JWT token',
+      '/api/v1/songs/:id/archive',
+      'POST',
+      403,
+      res.statusCode,
+      res.statusCode === 403
+    );
+  } catch (err) {
+    logTestResult('Archive song mutation blocked with member JWT token', '/api/v1/songs/:id/archive', 'POST', 403, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 24: POST /api/v1/songs/:id/archive (Admin Bearer JWT Mutation)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/archive`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${adminJwtToken}` }
+    });
+    let pass = false;
+    if (res.statusCode === 200) {
+      const body = JSON.parse(res.body);
+      if (body.success && body.song && body.song.archived === true) {
+        pass = true;
+      }
+    }
+    logTestResult(
+      'Archive song mutation with Admin Bearer JWT',
+      '/api/v1/songs/:id/archive',
+      'POST',
+      200,
+      res.statusCode,
+      pass
+    );
+  } catch (err) {
+    logTestResult('Archive song mutation with Admin Bearer JWT', '/api/v1/songs/:id/archive', 'POST', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
+  // Test 25: POST /api/v1/songs/:id/restore (Admin Bearer JWT Mutation)
+  // -------------------------------------------------------------
+  try {
+    const res = await makeRequest(`${API_BASE}/api/v1/songs/Armed_Forces_Medley_72/restore`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${adminJwtToken}` }
+    });
+    let pass = false;
+    if (res.statusCode === 200) {
+      const body = JSON.parse(res.body);
+      if (body.success && body.song && !body.song.archived) {
+        pass = true;
+      }
+    }
+    logTestResult(
+      'Restore song mutation with Admin Bearer JWT',
+      '/api/v1/songs/:id/restore',
+      'POST',
+      200,
+      res.statusCode,
+      pass
+    );
+  } catch (err) {
+    logTestResult('Restore song mutation with Admin Bearer JWT', '/api/v1/songs/:id/restore', 'POST', 200, 'ERROR', false, err.message);
+  }
+
+  // -------------------------------------------------------------
   // Statistics and Audit Report Generation
   // -------------------------------------------------------------
   const elapsedMs = Date.now() - startTime;
@@ -530,6 +776,8 @@ async function runTests() {
     '/api/v1/auth/token (POST)',
     '/api/v1/songs (GET)',
     '/api/v1/songs/:id/files/:file_type (GET)',
+    '/api/v1/songs/:id/archive (POST)',
+    '/api/v1/songs/:id/restore (POST)',
     '/openapi.json (GET)',
     '/docs/ (GET)'
   ];
@@ -554,12 +802,12 @@ This report details the comprehensive audit results for all endpoints and access
 
 ## 1. Executive Summary
 
-- **Total Endpoints Audited:** 5
+- **Total Endpoints Audited:** ${endpointsTargeted.length}
 - **Scenarios Checked:** ${totalTests}
 - **Pass Rate:** ${successPercentage}%
 - **Status:** **${failedTests === 0 ? 'Fully Secure & Operational' : 'Deficient / Review Required'}**
 
-All path traversal protections, zero-trust token exchange algorithms, and silent catalog obfuscation layers are active and function in strict accordance with the project security architecture.
+All path traversal protections, zero-trust token exchange algorithms, silent catalog obfuscation layers, and administrative repertoire archival endpoints are active and function in strict accordance with the project security architecture.
 
 ---
 
@@ -626,8 +874,8 @@ All path traversal protections, zero-trust token exchange algorithms, and silent
 ### 2.3 Catalog Retrieval
 
 #### Endpoint: \`GET /api/v1/songs\`
-* **Access Level:** Public / Dynamic (Silent Obfuscation)
-* **Goal:** Serves metadata manifest. If authorized, serves full file URLs. If unauthorized, hides protected media assets and signatures to prevent leaking private structure.
+* **Access Level:** Public / Dynamic (Silent Obfuscation & Archival Filtering)
+* **Goal:** Serves metadata manifest. If authorized, serves full media URLs. If unauthorized, hides protected media assets. By default, omits archived repertoire unless requested.
 * **Scenarios Audited:**
 
   6. **Anonymous Request:**
@@ -724,6 +972,78 @@ All path traversal protections, zero-trust token exchange algorithms, and silent
       * **Expected Status:** \`404 Not Found\`
       * **Verified Output:** Returns standard 404 response.
       * **Status:** ${results[13].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+---
+
+### 2.6 Repertoire Archival & Administrative Control
+
+#### Endpoint: \`POST /api/v1/songs/:id/archive\` & \`POST /api/v1/songs/:id/restore\`
+* **Access Level:** Administrative (Requires \`x-admin-key\` matching \`ADMIN_PSK\`)
+* **Goal:** Allow authorized administrators to mark songs as archived (retiring from default view) or restore them back to active rotation without filesystem deletion.
+* **Scenarios Audited:**
+
+  17. **Archive Mutation Blocked with Invalid Admin Key:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/archive\` with invalid key
+      * **Expected Status:** \`403 Forbidden\`
+      * **Verified Output:** Mutation blocked.
+      * **Status:** ${results[16].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  18. **Archive Mutation with Valid Admin Key:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/archive\` with valid \`x-admin-key\`
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Returns success with \`archived: true\` on song metadata.
+      * **Status:** ${results[17].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  19. **Default Catalog Omits Archived Song:**
+
+      * **Request:** \`GET http://mvet-api.test/api/v1/songs\`
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Archived song is completely omitted from the default catalog list.
+      * **Status:** ${results[18].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  20. **Catalog with \`?include_archived=true\` Includes Archived Song:**
+
+      * **Request:** \`GET http://mvet-api.test/api/v1/songs?include_archived=true\`
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Archived song is returned with \`archived: true\` tag intact.
+      * **Status:** ${results[19].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  21. **Restore Mutation with Valid Admin Key:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/restore\` with valid \`x-admin-key\`
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Target song is restored to active status (\`archived\` flag cleared).
+      * **Status:** ${results[20].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  22. **Admin Token Exchange with Admin PSK:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/auth/token\` with Admin PSK
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Returns signed JWT with \`role: 'admin'\`.
+      * **Status:** ${results[21].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  23. **Archive Mutation Blocked with Member JWT:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/archive\` with member Bearer token
+      * **Expected Status:** \`403 Forbidden\`
+      * **Verified Output:** Archival attempt blocked for member role.
+      * **Status:** ${results[22].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  24. **Archive Mutation with Admin Bearer JWT:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/archive\` with admin Bearer token
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Target song archived successfully via Bearer token authorization.
+      * **Status:** ${results[23].pass ? '✅ **PASS**' : '❌ **FAIL**'}
+
+  25. **Restore Mutation with Admin Bearer JWT:**
+
+      * **Request:** \`POST http://mvet-api.test/api/v1/songs/Armed_Forces_Medley_72/restore\` with admin Bearer token
+      * **Expected Status:** \`200 OK\`
+      * **Verified Output:** Target song restored to active repertoire via Bearer token authorization.
+      * **Status:** ${results[24].pass ? '✅ **PASS**' : '❌ **FAIL**'}
 
 ---
 

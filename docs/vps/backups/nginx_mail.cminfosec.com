@@ -1,0 +1,58 @@
+server {
+
+  server_name mail.cminfosec.com;
+
+  root /srv/roundcube/webmail;
+  index index.php index.html;
+
+  error_log  /var/log/nginx/com.cminfosec.mail-error.log;
+  access_log /var/log/nginx/com.cminfosec.mail-access.log;
+
+  location / {
+    try_files $uri /index.php?$query_string;
+  }
+
+  location ~* index\.php$ {
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php/php-fpm.sock;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $request_filename;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+  }
+
+  listen 0.0.0.0:443 ssl; # managed by Certbot
+  ssl_certificate /etc/letsencrypt/live/mail.cminfosec.com/fullchain.pem; # managed by Certbot
+  ssl_certificate_key /etc/letsencrypt/live/mail.cminfosec.com/privkey.pem; # managed by Certbot
+  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+  ssl_trusted_certificate /etc/letsencrypt/live/mail.cminfosec.com/chain.pem; # managed by Certbot
+  ssl_stapling on; # managed by Certbot
+  ssl_stapling_verify on; # managed by Certbot
+
+  ##
+  # Security headers implementing tight defaults.
+  # Allow fonts from self and Google.
+  ##
+  add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload';
+  add_header Content-Security-Policy "default-src 'self'; font-src 'self' data: fonts.gstatic.com www.slant.co; img-src 'self' secure.gravatar.com data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; object-src 'self'" always;
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Frame-Options "SAMEORIGIN" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header Referrer-Policy "no-referrer-when-downgrade";
+}
+
+server {
+    if ($host = mail.cminfosec.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+  listen 80;
+
+  server_name mail.cminfosec.com;
+    return 404; # managed by Certbot
+
+}
