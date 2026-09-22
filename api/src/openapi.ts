@@ -3,7 +3,7 @@ export const openApiSpec: object = {
   info: {
     title: "MVET Songbook API",
     description: "Stateless TypeScript Express Gateway for Secure MusicXML and Audio Access Control",
-    version: "1.1.0"
+    version: "1.1.1"
   },
   servers: [
     {
@@ -139,6 +139,31 @@ export const openApiSpec: object = {
           401: { description: "Missing or invalid administrative credentials." },
           403: { description: "Forbidden: Requires administrator privileges." },
           404: { description: "Song not found in catalog." }
+        }
+      }
+    },
+    "/api/v1/repertoire-state": {
+      get: {
+        summary: "Retrieve runtime repertoire state overrides",
+        description: "Returns the persistent runtime catalog state overrides (such as archival status changes) that survive git and rsync re-deployments.",
+        responses: {
+          200: {
+            description: "Repertoire state map successfully returned.",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  additionalProperties: {
+                    type: "object",
+                    properties: {
+                      archived: { type: "boolean" },
+                      updatedAt: { type: "string", format: "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

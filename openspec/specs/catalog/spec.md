@@ -47,3 +47,16 @@ The system SHALL support marking songs as archived to hide them from the default
 - **WHEN** `node scripts/generate-manifest.cjs` runs
 - **THEN** the generator SHALL include `"archived": true` in the output record in `songs.json`
 
+#### Scenario: Persistent Repertoire State Overrides
+- **GIVEN** an admin changes a song's archival status via `POST /api/v1/songs/:id/archive` or `POST /api/v1/songs/:id/restore`
+- **WHEN** the mutation succeeds
+- **THEN** the API MUST persist the state change to `/app/data/repertoire_state.json` on the server volume
+- **AND** subsequent catalog requests MUST overlay `repertoire_state.json` on top of `songs.json`, ensuring admin archival mutations survive future manifest re-deployments (`push-songbook`)
+- **AND** `GET /api/v1/repertoire-state` SHALL return the complete persistent state override mapping
+
+#### Scenario: Automated Orphan State Pruning
+- **GIVEN** a song has a recorded state override in `repertoire_state.json`
+- **WHEN** the song is subsequently removed from the library catalog (`songs.json`)
+- **THEN** the API MUST automatically prune the orphaned song ID from `repertoire_state.json` upon loading the catalog
+- **AND** write the sanitized repertoire state back to `/app/data/repertoire_state.json` to prevent state drift
+

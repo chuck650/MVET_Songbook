@@ -42,6 +42,13 @@ export interface Song {
   hashes?: Record<string, string> | { protected: boolean };
 }
 
+export interface SongRuntimeState {
+  archived?: boolean;
+  updatedAt?: string;
+}
+
+export type RepertoireState = Record<string, SongRuntimeState>;
+
 export interface PSKRequest {
   psk: string;
 }

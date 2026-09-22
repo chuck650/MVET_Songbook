@@ -121,9 +121,29 @@ To support complex choral scores (such as multi-stave arrangements like *Battle 
 
 ---
 
+## 🎼 Music Notation & Typography Standards
+
+**Never use ASCII letters or regular symbols as substitutes for music notation.**
+In particular, flats, sharps, and naturals MUST always use their official Unicode equivalents across all metadata, UI labels, scripts, documentation, and agent responses:
+
+- **Flat symbol (`♭`)**: `U+266D` (e.g. `B♭ major`, `E♭`, `A♭`) — *Never `Bb`, `Eb`, `Ab`, or `-flat`*.
+- **Sharp symbol (`♯`)**: `U+266F` (e.g. `F♯ minor`, `C♯`, `G♯`) — *Never `F#`, `C#`, `G#`, or `-sharp`*.
+- **Natural symbol (`♮`)**: `U+266E` (e.g. `B♮`, `F♮`) — *Never `Bn`, `B natural`*.
+
+Rule definition: [`.agents/rules/music-notation.md`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/rules/music-notation.md)
+
+---
+
 ## 📋 OpenSpec Spec-Driven Development Toolchain
 
 The project utilizes the **OpenSpec** CLI toolchain (`openspec`, version 1.2.0) to maintain formal living specifications and govern change proposals.
+
+### 🚨 Mandatory Spec-First Rule: Spec Before Code
+**Never implement code changes before the specification has been authored/updated and verified.**
+Every feature addition, modification, or removal MUST follow this strict sequence:
+1. Author or update the living spec in [`openspec/specs/`](file:///home/chuck/Projects/www/MVET_Songbook/openspec/specs/) (or proposal delta).
+2. Run `openspec validate --specs` and verify 100% pass rate.
+3. Only then implement the application code changes.
 
 - **Living Specifications**: Located in [`openspec/specs/`](file:///home/chuck/Projects/www/MVET_Songbook/openspec/specs/) (`architecture`, `auth`, `score-rendering`, `audio-sync`, `catalog`).
 - **Validate Specifications**:
@@ -138,11 +158,31 @@ The project utilizes the **OpenSpec** CLI toolchain (`openspec`, version 1.2.0) 
 
 ---
 
+## 🧰 Agent Skills & Workflows (Preferred Over Raw Scripts)
+
+Agents must prefer invoking specialized skills and rules rather than executing ad-hoc raw scripts. All executable logic is housed in and documented by corresponding agent skills:
+
+1. **[`local-testing-and-deployment`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/SKILL.md)**:
+   - Manages `k3s-local` and `vps-production` clusters.
+   - Scripts: `build-and-import.sh`, `deploy-local.sh`, `deploy-prod-api.sh`, `push-songbook.sh`, `test-api.js`, `pull-repertoire-state.cjs`, `refresh-k3s-certs.sh`, `refresh-vps-certs.sh`, `check-vps-redirect.sh`.
+2. **[`song-catalog-management`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/song-catalog-management/SKILL.md)**:
+   - Ingests song assets from MuseScore repository, normalizes merged AV, extracts metadata, enforces Unicode music standards, generates thumbnails, and builds `public/songs.json`.
+   - Scripts: `sync-song.sh`, `sync-all-songs.sh`, `generate-manifest.cjs`.
+3. **[`release-management`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/release-management/SKILL.md)**:
+   - Governs semantic versioning, version synchronization across `package.json` and `src/version.ts`, and release tagging.
+   - Script: `bump-version.cjs`.
+4. **[`openspec-spec-management`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/openspec-spec-management/SKILL.md)**:
+   - Enforces the Mandatory Spec-First Rule, manages living specs in `openspec/specs/`, and runs `openspec validate --specs`.
+
+---
+
 ## 📚 Related Documentation
 - Master Spec Index: [OPENSPEC.md](file:///home/chuck/Projects/www/MVET_Songbook/OPENSPEC.md)
 - Design Architecture: [DESIGN.md](file:///home/chuck/Projects/www/MVET_Songbook/DESIGN.md)
 - Project Context & Log: [GEMINI.md](file:///home/chuck/Projects/www/MVET_Songbook/GEMINI.md)
 - Local Deployment Skill: [.agents/skills/local-testing-and-deployment/SKILL.md](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/SKILL.md)
+- Catalog Skill: [.agents/skills/song-catalog-management/SKILL.md](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/song-catalog-management/SKILL.md)
+- Release Skill: [.agents/skills/release-management/SKILL.md](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/release-management/SKILL.md)
 - OpenSpec Living Specs: [openspec/specs/](file:///home/chuck/Projects/www/MVET_Songbook/openspec/specs/)
 
 

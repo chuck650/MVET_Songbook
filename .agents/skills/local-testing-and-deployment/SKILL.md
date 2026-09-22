@@ -96,43 +96,37 @@ When developing or testing other local services, a local forwarding tunnel or fi
 
 Whenever a new song is added or updated from the Music project (`~/Projects/Music/MVET/`):
 
-### Step 1: Asset Ingestion
-Sync the song assets into the web application repository:
+### Step 1: Asset Ingestion & Manifest Generation
+Follow the [`song-catalog-management`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/song-catalog-management/SKILL.md) skill to sync song files and generate the manifest:
 ```bash
-# For a specific song:
-bash scripts/sync-song.sh <Song_Directory_Name>
-
-# For all catalog songs:
-bash scripts/sync-all-songs.sh
-```
-*Note: `sync-song.sh` automatically swaps the direct-stream-copied merged video (`*-Merged.mp4`) to the main video name.*
-
-### Step 2: Manifest Generation
-Scan `public/songs/`, compute SHA-256 hashes, and generate `public/songs.json`:
-```bash
-node scripts/generate-manifest.cjs
+# Sync song(s):
+bash .agents/skills/song-catalog-management/scripts/sync-song.sh <Song_ID>
+# Generate manifest:
+node .agents/skills/song-catalog-management/scripts/generate-manifest.cjs
 ```
 
-### Step 3: Context Check
+### Step 2: Context Check
 Ensure the active context is `k3s-local`:
 ```bash
 kubectl config current-context
 ```
 
-### Step 4: Push to Local Storage Volume
+### Step 3: Push to Local Storage Volume
 Rsync `public/songs.json` and `public/songs/` into the local hostPath mount `/var/data/mvet-songbook/`:
 ```bash
+bash .agents/skills/local-testing-and-deployment/scripts/push-songbook.sh local
+# Or via npm shortcut:
 npm run push-songbook local
 ```
 
-### Step 5: Run Automated API Integration Tests
-Execute the 16-point integration test suite against the local API gateway (`http://mvet-api.test`):
+### Step 4: Run Automated API Integration Tests
+Execute the 27-point integration test suite against the local API gateway (`http://mvet-api.test`):
 ```bash
-node scripts/test-api.js dev
+node .agents/skills/local-testing-and-deployment/scripts/test-api.js dev
 ```
-Verify that all checkpoints pass with a 100% success rate.
+Verify that all 27 checkpoints pass with a 100% success rate. The test runner will automatically generate an audit report at `docs/API Endpoint Audit Report: k3s-local.md`.
 
-### Step 6: Browser Verification
+### Step 5: Browser Verification
 Start the development server:
 ```bash
 npm run dev
@@ -145,18 +139,38 @@ Open [http://localhost:5173/songbook/](http://localhost:5173/songbook/) in the l
 5. Smart Part Labels: In multi-staff scores, system 1 shows full names and subsequent systems show abbreviations (e.g., Unison/U., Women/W., Men/M.); isolated practice parts suppress labels.
 6. Gated downloads (MSCZ, MXL, PDF) succeed with valid session tokens.
 
-### Step 7: Production Release (Only After User Approval)
+### Step 6: Production Release (Only After User Approval)
 Only after the user reviews and confirms everything is working locally:
 ```bash
 # Push song files to production VPS volume:
-npm run push-songbook prod
+bash .agents/skills/local-testing-and-deployment/scripts/push-songbook.sh prod
 
 # If API code changes occurred:
-npm run deploy-prod-api
+bash .agents/skills/local-testing-and-deployment/scripts/deploy-prod-api.sh
+
+# If repertoire status overrides exist:
+node .agents/skills/local-testing-and-deployment/scripts/pull-repertoire-state.cjs prod --apply
 
 # Commit changes, tag release, and push to GitHub:
 git add .
-git commit -m "feat(catalog): add <Song Title> to songbook"
+git commit -m "feat(catalog): update songbook repertoire"
 npm run bump:minor # or bump:build
 git push origin main --tags
 ```
+
+---
+
+## 4. Scripts Inventory
+
+| Script | Purpose |
+|:---|:---|
+| [`scripts/build-and-import.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/build-and-import.sh) | Builds Docker container image `mvet-songbook-api:latest` and imports into K3s containerd |
+| [`scripts/deploy-local.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/deploy-local.sh) | Applies K8s manifests, injects `.env.secrets`, and restarts deployment on `k3s-local` |
+| [`scripts/deploy-prod-api.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/deploy-prod-api.sh) | Deploys API from GHCR to `vps-production` cluster over SSH with redirect guard |
+| [`scripts/push-songbook.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/push-songbook.sh) | Rsyncs `songs.json` and `songs/` to local K3s volume or production VPS volume |
+| [`scripts/test-api.js`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/test-api.js) | Comprehensive 27-checkpoint integration test runner for `dev` and `prod`, outputs Markdown audit reports |
+| [`scripts/pull-repertoire-state.cjs`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/pull-repertoire-state.cjs) | Inspects or syncs runtime repertoire overrides from server volume into local git metadata |
+| [`scripts/refresh-k3s-certs.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/refresh-k3s-certs.sh) | Checks and auto-refreshes expired `k3s-local` client credentials in `~/.kube/config` |
+| [`scripts/refresh-vps-certs.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/refresh-vps-certs.sh) | Checks and auto-refreshes expired `vps-production` client credentials in `~/.kube/config` over SSH |
+| [`scripts/check-vps-redirect.sh`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/skills/local-testing-and-deployment/scripts/check-vps-redirect.sh) | Preflight check for local SSH tunnel/firewalld port redirect before connecting to VPS |
+

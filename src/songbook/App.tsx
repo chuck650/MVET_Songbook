@@ -13,7 +13,12 @@ import ReloadPrompt from "./ReloadPrompt";
 function AppContent() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<"browser" | "settings" | "about" | "player">("browser");
+  const [activeTab, setActiveTab] = useState<"browser" | "settings" | "about" | "player">(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("tab") === "settings" || window.location.hash === "#settings") return "settings";
+    if (params.get("tab") === "about" || window.location.hash === "#about") return "about";
+    return "browser";
+  });
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [infoSong, setInfoSong] = useState<Song | null>(null);
@@ -390,20 +395,68 @@ function AppContent() {
                   >
                     {/* Top Right Badges */}
                     <div className="song-card-badges">
-                      {song.archived && (
-                        <span className="badge-archived">Archived</span>
-                      )}
                       {song.key && (
                         <span className="key-badge">{song.key}</span>
                       )}
-                      {song.copyrightInfo && (
-                        <span className={`copyright-badge ${song.copyrightInfo.type}`}>
-                          {song.copyrightInfo.license || (
-                            song.copyrightInfo.type === 'public_domain' ? 'Public Domain' :
-                            song.copyrightInfo.type === 'copyrighted' ? 'Copyrighted' :
-                            song.copyrightInfo.type === 'creative_commons' ? 'Creative Commons' : 'Permissive'
+                      {(song.archived || song.copyrightInfo) && (
+                        <div className="song-status-icons">
+                          {song.archived && (
+                            <span className="badge-archived-icon" title="Archived Repertoire" aria-label="Archived">
+                              <span className="badge-emoji">📦</span>
+                            </span>
                           )}
-                        </span>
+                          {song.copyrightInfo && (() => {
+                            const type = song.copyrightInfo.type;
+                            if (type === 'public_domain') {
+                              return (
+                                <span
+                                  className="copyright-badge-icon public_domain"
+                                  title="Public Domain – Open Sheet Music"
+                                  aria-label="Public Domain"
+                                >
+                                  <svg viewBox="0 0 24 24" className="badge-svg" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                                    <path d="M14.8 8.5a4.4 4.4 0 1 0 0 7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                                    <line x1="5.5" y1="18.5" x2="18.5" y2="5.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                                  </svg>
+                                </span>
+                              );
+                            } else if (type === 'copyrighted') {
+                              return (
+                                <span
+                                  className="copyright-badge-icon copyrighted"
+                                  title="Copyrighted Repertoire (Choir Gated)"
+                                  aria-label="Copyrighted"
+                                >
+                                  <svg viewBox="0 0 24 24" className="badge-svg" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" strokeWidth="2.2" />
+                                    <path d="M14.8 8.5a4.4 4.4 0 1 0 0 7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                                  </svg>
+                                </span>
+                              );
+                            } else if (type === 'creative_commons') {
+                              return (
+                                <span
+                                  className="copyright-badge-icon creative_commons"
+                                  title={song.copyrightInfo.license || "Creative Commons"}
+                                  aria-label="Creative Commons"
+                                >
+                                  <span className="badge-abbr">CC</span>
+                                </span>
+                              );
+                            } else {
+                              return (
+                                <span
+                                  className="copyright-badge-icon permissive_license"
+                                  title={song.copyrightInfo.license || "Permissive License"}
+                                  aria-label="Permissive License"
+                                >
+                                  <span className="badge-abbr">PL</span>
+                                </span>
+                              );
+                            }
+                          })()}
+                        </div>
                       )}
                     </div>
 
@@ -423,102 +476,105 @@ function AppContent() {
                         <h3>{song.title}</h3>
                       </div>
                       <p>{song.subtitle || "Traditional SATB"}</p>
-                      <div className="song-card-actions">
-                        {song.files.pdf && (() => {
-                          const url = getSongFileUrl(song, song.files.pdf, true);
-                          const isLoading = downloading[url];
-                          return (
-                            <button
-                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
-                              disabled={isLoading}
-                              onClick={(e) => {
-                                e.stopPropagation(); // Prevent card select click
-                                if (isLoading) return;
-                                
-                                const loadPdf = async () => {
-                                  setDownloading((prev) => ({ ...prev, [url]: true }));
-                                  try {
-                                    const headers: Record<string, string> = {};
-                                    if (token) {
-                                      headers["Authorization"] = `Bearer ${token}`;
+                      {(song.files.pdf || song.files.mscz || song.files.mxl) && (
+                        <div className="song-card-actions">
+                          {song.files.pdf && (() => {
+                            const url = getSongFileUrl(song, song.files.pdf, true);
+                            const isLoading = downloading[url];
+                            return (
+                              <button
+                                className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                                disabled={isLoading}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent card select click
+                                  if (isLoading) return;
+                                  
+                                  const loadPdf = async () => {
+                                    setDownloading((prev) => ({ ...prev, [url]: true }));
+                                    try {
+                                      const headers: Record<string, string> = {};
+                                      if (token) {
+                                        headers["Authorization"] = `Bearer ${token}`;
+                                      }
+                                      
+                                      console.log(`Fetching secure PDF: ${url}`);
+                                      const response = await fetch(url, { headers });
+                                      if (!response.ok) {
+                                        throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+                                      }
+                                      
+                                      const blob = await response.blob();
+                                      const blobUrl = URL.createObjectURL(blob);
+                                      setActivePdfUrl(blobUrl);
+                                      setActivePdfTitle(song.title);
+                                    } catch (error) {
+                                      console.error("Secure PDF load failed:", error);
+                                      alert("Failed to load secure PDF. Please check your Access Key or connection.");
+                                    } finally {
+                                      setDownloading((prev) => ({ ...prev, [url]: false }));
                                     }
-                                    
-                                    console.log(`Fetching secure PDF: ${url}`);
-                                    const response = await fetch(url, { headers });
-                                    if (!response.ok) {
-                                      throw new Error(`Failed to fetch PDF: ${response.statusText}`);
-                                    }
-                                    
-                                    const blob = await response.blob();
-                                    const blobUrl = URL.createObjectURL(blob);
-                                    setActivePdfUrl(blobUrl);
-                                    setActivePdfTitle(song.title);
-                                  } catch (error) {
-                                    console.error("Secure PDF load failed:", error);
-                                    alert("Failed to load secure PDF. Please check your Access Key or connection.");
-                                  } finally {
-                                    setDownloading((prev) => ({ ...prev, [url]: false }));
-                                  }
-                                };
-                                void loadPdf();
-                              }}
-                            >
-                              <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
-                              <span>{isLoading ? "Loading..." : "PDF"}</span>
-                            </button>
-                          );
-                        })()}
-                        {song.files.mscz && (() => {
-                          const url = getSongFileUrl(song, song.files.mscz, true);
-                          const isLoading = downloading[url];
-                          return (
-                            <a
-                              href={url}
-                              download={`${song.title}.mscz`}
-                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
-                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
-                            >
-                              <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
-                              <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
-                            </a>
-                          );
-                        })()}
-                        {song.files.mxl && (() => {
-                          const url = getSongFileUrl(song, song.files.mxl, true);
-                          const isLoading = downloading[url];
-                          return (
-                            <a
-                              href={url}
-                              download={`${song.title}.mxl`}
-                              className={`btn-secondary ${isLoading ? "loading" : ""}`}
-                              onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
-                            >
-                              <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
-                              <span>{isLoading ? "Downloading..." : "MXL"}</span>
-                            </a>
-                          );
-                        })()}
-                      </div>
-                    </div>
-                    <div className="card-lower-controls">
-                      {isAdmin && (
-                        <button
-                          className={`card-admin-btn ${song.archived ? "btn-admin-restore" : "btn-admin-archive"}`}
-                          onClick={(e) => { void handleToggleArchive(e, song); }}
-                          aria-label={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
-                          title={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
-                        >
-                          <span className="card-admin-btn-icon">{song.archived ? "♻️" : "📦"}</span>
-                        </button>
+                                  };
+                                  void loadPdf();
+                                }}
+                              >
+                                <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
+                                <span>{isLoading ? "Loading..." : "PDF"}</span>
+                              </button>
+                            );
+                          })()}
+                          {song.files.mscz && (() => {
+                            const url = getSongFileUrl(song, song.files.mscz, true);
+                            const isLoading = downloading[url];
+                            return (
+                              <a
+                                href={url}
+                                download={`${song.title}.mscz`}
+                                className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                                onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
+                              >
+                                <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
+                                <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
+                              </a>
+                            );
+                          })()}
+                          {song.files.mxl && (() => {
+                            const url = getSongFileUrl(song, song.files.mxl, true);
+                            const isLoading = downloading[url];
+                            return (
+                              <a
+                                href={url}
+                                download={`${song.title}.mxl`}
+                                className={`btn-secondary ${isLoading ? "loading" : ""}`}
+                                onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
+                              >
+                                <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
+                                <span>{isLoading ? "Downloading..." : "MXL"}</span>
+                              </a>
+                            );
+                          })()}
+                        </div>
                       )}
-                      <button
-                        className="info-btn"
-                        onClick={(e) => handleInfoClick(e, song)}
-                        aria-label="View song details and copyright"
-                        title="Song details & licensing"
-                      >
-                        <span className="info-icon-char">i</span>
-                      </button>
+
+                      <div className="card-lower-controls">
+                        {isAdmin && (
+                          <button
+                            className={`card-admin-btn ${song.archived ? "btn-admin-restore" : "btn-admin-archive"}`}
+                            onClick={(e) => { void handleToggleArchive(e, song); }}
+                            aria-label={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
+                            title={song.archived ? "Restore to active repertoire" : "Archive from active repertoire"}
+                          >
+                            <span className="card-admin-btn-icon">{song.archived ? "♻️" : "📦"}</span>
+                          </button>
+                        )}
+                        <button
+                          className="info-btn"
+                          onClick={(e) => handleInfoClick(e, song)}
+                          aria-label="View song details and copyright"
+                          title="Song details & licensing"
+                        >
+                          <span className="info-icon-char">i</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))

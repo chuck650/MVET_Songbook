@@ -5,7 +5,7 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import swaggerUi from 'swagger-ui-express';
 import { openApiSpec } from './openapi.js';
-import { Song, PSKRequest, TokenResponse, JWTPayload } from './types.js';
+import { Song, PSKRequest, TokenResponse, JWTPayload, RepertoireState } from './types.js';
 
 // Extend Request interface to support custom auth properties safely
 interface AuthenticatedRequest extends Request {
@@ -38,16 +38,70 @@ const JWT_EXPIRATION_DAYS = parseInt(process.env.JWT_EXPIRATION_DAYS || '90', 10
 const ADMIN_PSK = process.env.ADMIN_PSK?.trim();
 const DATA_DIR = process.env.DATA_DIR || '/app/data';
 const SONGS_JSON_PATH = path.join(DATA_DIR, 'songs.json');
+const REPERTOIRE_STATE_PATH = path.join(DATA_DIR, 'repertoire_state.json');
 
 // Memory Cache
 let catalogCache: Song[] | null = null;
+
+function loadRepertoireState(): RepertoireState {
+  if (!fs.existsSync(REPERTOIRE_STATE_PATH)) {
+    return {};
+  }
+  try {
+    const rawData = fs.readFileSync(REPERTOIRE_STATE_PATH, 'utf-8');
+    return JSON.parse(rawData) as RepertoireState;
+  } catch (err: any) {
+    console.warn(`[repertoire_state] Failed to parse ${REPERTOIRE_STATE_PATH}: ${err.message}`);
+    return {};
+  }
+}
+
+function saveRepertoireState(state: RepertoireState): void {
+  try {
+    fs.writeFileSync(REPERTOIRE_STATE_PATH, JSON.stringify(state, null, 2), 'utf-8');
+  } catch (err: any) {
+    console.error(`[repertoire_state] Failed to write ${REPERTOIRE_STATE_PATH}: ${err.message}`);
+  }
+}
 
 function loadCatalog(): Song[] {
   if (!fs.existsSync(SONGS_JSON_PATH)) {
     throw new Error(`songs.json catalog not found at: ${SONGS_JSON_PATH}`);
   }
   const rawData = fs.readFileSync(SONGS_JSON_PATH, 'utf-8');
-  catalogCache = JSON.parse(rawData) as Song[];
+  const baseCatalog = JSON.parse(rawData) as Song[];
+
+  // Dynamic overlay: Runtime repertoire state (e.g. admin archival mutations)
+  // overrides songs.json, guaranteeing persistence across git/rsync pushes
+  const repState = loadRepertoireState();
+  const validSongIds = new Set(baseCatalog.map(s => s.id));
+  let stateModified = false;
+
+  // 1. Automated Orphan State Pruning: purge records for songs removed from catalog
+  for (const songId of Object.keys(repState)) {
+    if (!validSongIds.has(songId)) {
+      console.log(`[repertoire_state] Pruning orphaned state for removed song: ${songId}`);
+      delete repState[songId];
+      stateModified = true;
+    }
+  }
+
+  if (stateModified) {
+    saveRepertoireState(repState);
+  }
+
+  // 2. Dynamic Overlay: Apply active repertoire state onto catalog
+  for (const song of baseCatalog) {
+    if (repState[song.id] && repState[song.id].archived !== undefined) {
+      if (repState[song.id].archived) {
+        song.archived = true;
+      } else {
+        delete song.archived;
+      }
+    }
+  }
+
+  catalogCache = baseCatalog;
   return catalogCache;
 }
 
@@ -357,6 +411,15 @@ apiRouter.post('/songs/:song_id/archive', requireAdminAuth, (req: Request, res: 
       return res.status(404).json({ error: 'Song not found in catalog.' });
     }
 
+    // Persist runtime repertoire state override
+    const repState = loadRepertoireState();
+    repState[song_id] = {
+      ...(repState[song_id] || {}),
+      archived: true,
+      updatedAt: new Date().toISOString()
+    };
+    saveRepertoireState(repState);
+
     // Update in-memory and write to songs.json
     catalog[songIndex].archived = true;
     saveCatalog(catalog);
@@ -390,6 +453,15 @@ apiRouter.post('/songs/:song_id/restore', requireAdminAuth, (req: Request, res: 
       return res.status(404).json({ error: 'Song not found in catalog.' });
     }
 
+    // Persist runtime repertoire state override (clear archived flag)
+    const repState = loadRepertoireState();
+    repState[song_id] = {
+      ...(repState[song_id] || {}),
+      archived: false,
+      updatedAt: new Date().toISOString()
+    };
+    saveRepertoireState(repState);
+
     // Update in-memory and write to songs.json
     delete catalog[songIndex].archived;
     saveCatalog(catalog);
@@ -407,6 +479,17 @@ apiRouter.post('/songs/:song_id/restore', requireAdminAuth, (req: Request, res: 
     }
 
     res.json({ success: true, message: `Song '${song_id}' restored successfully.`, song: catalog[songIndex] });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Repertoire State: Fetch persistent runtime state overrides
+apiRouter.get('/repertoire-state', (req: Request, res: Response) => {
+  try {
+    loadCatalog(); // triggers automated orphan state pruning if any songs were removed
+    const state = loadRepertoireState();
+    res.json(state);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

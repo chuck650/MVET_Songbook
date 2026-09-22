@@ -138,14 +138,14 @@ const SettingsView: React.FC = () => {
 
   return (
     <div className="settings-view">
-      <header className="view-header">
+      <header className="settings-header">
         <h2>App Settings</h2>
         <p>Configure your personal songbook and rehearsal preferences.</p>
       </header>
 
       <section className="settings-section">
         <h3>Offline Storage</h3>
-        <div className="setting-control">
+        <div className="setting-control setting-control-stacked">
           <div className="setting-info">
             <label>Library Offline Sync</label>
             <span>Download all scores for use without internet.</span>
@@ -188,46 +188,20 @@ const SettingsView: React.FC = () => {
         <h3>Choir Access Credentials</h3>
 
         {isAuthenticated ? (
-          <div
-            className="setting-control"
-            style={{
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "0.75rem",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-              }}
-            >
-              <div className="setting-info">
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    fontWeight: 600,
-                  }}
-                >
+          <div className="setting-control auth-control-card">
+            <div className="auth-status-container">
+              <div className="setting-info auth-info">
+                <label className="auth-badge-label">
                   <span>🛡️</span> {isAdmin ? "Access Granted (Administrator)" : "Access Granted (Choir Member)"}
                 </label>
-                <span>
+                <span className="auth-desc">
                   {isAdmin
                     ? "Your device has full administrative permissions for repertoire curation and secure arrangements."
                     : "Your device is successfully authorized for secure arrangements."}
                 </span>
               </div>
               <button
-                className="sync-btn"
-                style={{
-                  background: "rgba(239, 68, 68, 0.2)",
-                  border: "1px solid rgba(239, 68, 68, 0.4)",
-                  color: "#f87171",
-                }}
+                className="auth-revoke-btn"
                 onClick={() => {
                   void logout();
                   setAccessKeyInput("");
@@ -243,66 +217,32 @@ const SettingsView: React.FC = () => {
               e.preventDefault();
               void submitPSK(accessKeyInput);
             }}
-            className="setting-control"
-            style={{
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "0.75rem",
-            }}
+            className="setting-control auth-control-card"
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-                gap: "1rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <div
-                className="setting-info"
-                style={{ flex: 1, minWidth: "200px" }}
-              >
+            <div className="auth-status-container">
+              <div className="setting-info auth-info">
                 <label>Enter Access Key</label>
                 <span>Enter the preshared key to unlock protected scores.</span>
               </div>
-              <div
-                style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
-              >
+              <div className="auth-input-group">
                 <input
                   type="password"
                   placeholder="Enter PSK..."
                   value={accessKeyInput}
                   onChange={(e) => setAccessKeyInput(e.target.value)}
-                  style={{
-                    padding: "0.5rem 0.75rem",
-                    borderRadius: "6px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "rgba(0,0,0,0.2)",
-                    color: "#fff",
-                    outline: "none",
-                    fontSize: "0.9rem",
-                  }}
+                  className="auth-key-input"
                 />
                 <button
                   type="submit"
-                  className="sync-btn"
+                  className="auth-unlock-btn"
                   disabled={isVerifying}
-                  style={{ whiteSpace: "nowrap" }}
                 >
                   {isVerifying ? "Verifying..." : "Unlock"}
                 </button>
               </div>
             </div>
             {error && (
-              <span
-                style={{
-                  fontSize: "0.8rem",
-                  color: "#f87171",
-                  marginTop: "0.25rem",
-                }}
-              >
+              <span className="auth-error-msg">
                 ❌ {error}
               </span>
             )}
@@ -403,7 +343,7 @@ const SettingsView: React.FC = () => {
 
       <section className="settings-section">
         <h3>Display Calibration</h3>
-        <div className="setting-control">
+        <div className="setting-control setting-control-stacked">
           <div className="setting-info">
             <label>Default Zoom</label>
             <span>Base scaling level for all sheet music.</span>

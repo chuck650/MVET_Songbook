@@ -2,6 +2,11 @@
 
 These rules govern how AI agents must interact with and maintain OpenSpec specifications and changes in this repository.
 
+## 0. Mandatory Spec-First Rule: Spec Before Code
+- **Never implement code before the specification is defined and verified.**
+- For every feature addition, modification, or removal, the agent MUST first author or update the corresponding OpenSpec specification in [`openspec/specs/`](file:///home/chuck/Projects/www/MVET_Songbook/openspec/specs/).
+- The agent MUST execute and verify `openspec validate --specs` BEFORE writing or modifying any implementation code.
+
 ---
 
 ## 1. Specification Ground Truth
