@@ -302,6 +302,116 @@ const SettingsView: React.FC = () => {
             {settings.modernKeyChanges ? "On" : "Off"}
           </button>
         </div>
+
+        <div className="setting-control setting-control-stacked">
+          <div className="setting-info">
+            <label>Score Zoom (Desktop)</label>
+            <span>Default score scaling for desktop screens and laptops (&gt; 600px).</span>
+          </div>
+          <div className="zoom-controls">
+            <button
+              type="button"
+              className="zoom-btn"
+              disabled={(settings.zoomDesktop ?? 1.0) <= 0.3}
+              onClick={() =>
+                updateSetting(
+                  "zoomDesktop",
+                  Math.max(
+                    0.3,
+                    Math.round(((settings.zoomDesktop ?? 1.0) - 0.05) * 20) / 20,
+                  ),
+                )
+              }
+            >
+              −
+            </button>
+            <input
+              type="range"
+              min="0.3"
+              max="2.0"
+              step="0.05"
+              value={settings.zoomDesktop ?? 1.0}
+              onChange={(e) =>
+                updateSetting("zoomDesktop", parseFloat(e.target.value))
+              }
+              className="zoom-slider"
+            />
+            <button
+              type="button"
+              className="zoom-btn"
+              disabled={(settings.zoomDesktop ?? 1.0) >= 2.0}
+              onClick={() =>
+                updateSetting(
+                  "zoomDesktop",
+                  Math.min(
+                    2.0,
+                    Math.round(((settings.zoomDesktop ?? 1.0) + 0.05) * 20) / 20,
+                  ),
+                )
+              }
+            >
+              +
+            </button>
+            <span className="zoom-value">
+              {Math.round((settings.zoomDesktop ?? 1.0) * 100)}%
+            </span>
+          </div>
+        </div>
+
+        <div className="setting-control setting-control-stacked">
+          <div className="setting-info">
+            <label>Score Zoom (Mobile Device)</label>
+            <span>Default score scaling for mobile devices and small screens (≤ 600px).</span>
+          </div>
+          <div className="zoom-controls">
+            <button
+              type="button"
+              className="zoom-btn"
+              disabled={(settings.zoomMobile ?? 0.75) <= 0.3}
+              onClick={() =>
+                updateSetting(
+                  "zoomMobile",
+                  Math.max(
+                    0.3,
+                    Math.round(((settings.zoomMobile ?? 0.75) - 0.05) * 20) / 20,
+                  ),
+                )
+              }
+            >
+              −
+            </button>
+            <input
+              type="range"
+              min="0.3"
+              max="2.0"
+              step="0.05"
+              value={settings.zoomMobile ?? 0.75}
+              onChange={(e) =>
+                updateSetting("zoomMobile", parseFloat(e.target.value))
+              }
+              className="zoom-slider"
+            />
+            <button
+              type="button"
+              className="zoom-btn"
+              disabled={(settings.zoomMobile ?? 0.75) >= 2.0}
+              onClick={() =>
+                updateSetting(
+                  "zoomMobile",
+                  Math.min(
+                    2.0,
+                    Math.round(((settings.zoomMobile ?? 0.75) + 0.05) * 20) / 20,
+                  ),
+                )
+              }
+            >
+              +
+            </button>
+            <span className="zoom-value">
+              {Math.round((settings.zoomMobile ?? 0.75) * 100)}%
+            </span>
+          </div>
+        </div>
       </section>
 
       <section className="settings-section">
@@ -338,64 +448,6 @@ const SettingsView: React.FC = () => {
           >
             {settings.highContrast ? "Active" : "Inactive"}
           </button>
-        </div>
-      </section>
-
-      <section className="settings-section">
-        <h3>Display Calibration</h3>
-        <div className="setting-control setting-control-stacked">
-          <div className="setting-info">
-            <label>Default Zoom</label>
-            <span>Base scaling level for all sheet music.</span>
-          </div>
-          <div className="zoom-controls">
-            <button
-              type="button"
-              className="zoom-btn"
-              disabled={(settings.zoomLevel || 1.0) <= 0.5}
-              onClick={() =>
-                updateSetting(
-                  "zoomLevel",
-                  Math.max(
-                    0.5,
-                    Math.round(((settings.zoomLevel || 1.0) - 0.1) * 20) / 20,
-                  ),
-                )
-              }
-            >
-              −
-            </button>
-            <input
-              type="range"
-              min="0.5"
-              max="2.0"
-              step="0.05"
-              value={settings.zoomLevel || 1.0}
-              onChange={(e) =>
-                updateSetting("zoomLevel", parseFloat(e.target.value))
-              }
-              className="zoom-slider"
-            />
-            <button
-              type="button"
-              className="zoom-btn"
-              disabled={(settings.zoomLevel || 1.0) >= 2.0}
-              onClick={() =>
-                updateSetting(
-                  "zoomLevel",
-                  Math.min(
-                    2.0,
-                    Math.round(((settings.zoomLevel || 1.0) + 0.1) * 20) / 20,
-                  ),
-                )
-              }
-            >
-              +
-            </button>
-            <span className="zoom-value">
-              {Math.round((settings.zoomLevel || 1.0) * 100)}%
-            </span>
-          </div>
         </div>
       </section>
     </div>

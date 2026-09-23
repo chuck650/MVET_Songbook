@@ -134,6 +134,20 @@ Rule definition: [`.agents/rules/music-notation.md`](file:///home/chuck/Projects
 
 ---
 
+## 🛡️ TypeScript Strict Typing & No `any` Standards
+
+**Never use `any` or `as any` type assertions in TypeScript code.**
+Compile-time type safety guards the application against runtime initialization failures. All unknown data must be validated defensively:
+
+- **No `any`**: Never write `: any` or `as any`.
+- **Unknown with Narrowing**: Use `unknown` for arbitrary inputs (JSON parsing, localStorage) and apply runtime type guards (`typeof`, `instanceof`).
+- **Defensive Catch Blocks**: Always use `catch (err: unknown)`.
+- **Interface Extension**: Augment third-party interfaces rather than casting to `any`.
+
+Rule definition: [`.agents/rules/typescript-strict-types.md`](file:///home/chuck/Projects/www/MVET_Songbook/.agents/rules/typescript-strict-types.md)
+
+---
+
 ## 📋 OpenSpec Spec-Driven Development Toolchain
 
 The project utilizes the **OpenSpec** CLI toolchain (`openspec`, version 1.2.0) to maintain formal living specifications and govern change proposals.

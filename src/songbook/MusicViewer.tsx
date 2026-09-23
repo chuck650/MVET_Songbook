@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import { useSettings } from './SettingsContext';
 import { useWebAudio } from './useWebAudio';
-import { useAuth } from './AuthContext';
 import { resolvePath } from '../utils/resolvePath';
 import { Song, RehearsalFiles } from '../types/songbook';
 import { getTokenOnly } from '../utils/authStorage';
@@ -26,13 +25,12 @@ interface MusicViewerProps {
 }
 
 const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = false }) => {
-  const { token } = useAuth();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const osmdRef = useRef<OpenSheetMusicDisplay | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { settings, updateSetting } = useSettings();
+  const { settings, updateSetting, getEffectiveZoom, hasSongCustomZoom, updateSongZoom, resetSongZoom } = useSettings();
   
   const [activePartKey, setActivePartKey] = useState<string>('full');
   const [showSettings, setShowSettings] = useState<boolean>(false);
@@ -43,16 +41,27 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
   // Media Player State
   const [activeTrack, setActiveTrack] = useState<ActiveTrack | null>(null);
 
-  const [zoomLevel, setZoomLevel] = useState<number>(window.innerWidth <= 600 ? 0.75 : 1.0);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const isMobile = windowWidth <= 600;
 
+  const [zoomLevel, setZoomLevel] = useState<number>(() => {
+    return getEffectiveZoom(song.id, window.innerWidth <= 600);
+  });
+
+  // Track whether this song has a custom zoom for the active device mode
+  const isCustomizedForCurrentMode = hasSongCustomZoom(song.id, isMobile);
+
+  // Responsive breakpoint tracking: when viewport size or mode changes, resolve effective zoom for that mode
   useEffect(() => {
     const handleResize = () => {
-      setWindowWidth(window.innerWidth);
+      const newWidth = window.innerWidth;
+      const newIsMobile = newWidth <= 600;
+      setWindowWidth(newWidth);
+      setZoomLevel(getEffectiveZoom(song.id, newIsMobile));
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [song.id, getEffectiveZoom]);
 
   const webAudio = useWebAudio(activeTrack?.type === 'audio' ? activeTrack.url : undefined, true);
   const [measureMap, setMeasureMap] = useState<Array<{ index: number; x: number }>>([]);
@@ -426,7 +435,31 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
                 </label>
               </div>
               <div className="setting-group">
-                <label>Score Zoom</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label style={{ margin: 0 }}>Score Zoom</label>
+                  {isCustomizedForCurrentMode && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        resetSongZoom(song.id, isMobile);
+                        const fallbackZoom = isMobile ? (settings.zoomMobile ?? 0.75) : (settings.zoomDesktop ?? 1.0);
+                        setZoomLevel(fallbackZoom);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--color-primary)',
+                        fontSize: '0.72rem',
+                        cursor: 'pointer',
+                        padding: '0 2px',
+                        textDecoration: 'underline',
+                      }}
+                      title="Reset this song's zoom to the global app default for this device mode"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
                 <div className="slider-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <input 
                     type="range" 
@@ -434,7 +467,11 @@ const MusicViewer: React.FC<MusicViewerProps> = ({ song, onBack, isOffline = fal
                     max="1.5" 
                     step="0.05" 
                     value={zoomLevel} 
-                    onChange={(e) => setZoomLevel(parseFloat(e.target.value))} 
+                    onChange={(e) => {
+                      const newZoom = parseFloat(e.target.value);
+                      setZoomLevel(newZoom);
+                      updateSongZoom(song.id, newZoom, isMobile);
+                    }} 
                     style={{ flex: 1 }}
                   />
                   <span>{Math.round(zoomLevel * 100)}%</span>

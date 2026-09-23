@@ -28,7 +28,7 @@ function AppContent() {
   const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
   const [activePdfTitle, setActivePdfTitle] = useState<string>("");
   const [isOffline, setIsOffline] = useState<boolean>(!navigator.onLine);
-  const { settings } = useSettings();
+  const { settings, pruneOrphanSongSettings } = useSettings();
   const { token, isAuthenticated, isAdmin } = useAuth();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -62,6 +62,7 @@ function AppContent() {
         const displayedSongs = settings.includeArchived ? data : data.filter(s => !s.archived);
         setSongs(displayedSongs);
         localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
+        pruneOrphanSongSettings(data.map(s => s.id));
         setLoading(false);
         
         // Auto-open selected song if we just authenticated
@@ -86,6 +87,7 @@ function AppContent() {
             const displayedSongs = settings.includeArchived ? data : data.filter(s => !s.archived);
             setSongs(displayedSongs);
             localStorage.setItem('mvet_cached_songs', JSON.stringify(data));
+            pruneOrphanSongSettings(data.map(s => s.id));
             setLoading(false);
           })
           .catch((localErr) => {
@@ -97,6 +99,7 @@ function AppContent() {
                 const parsed: Song[] = JSON.parse(cached);
                 const displayedSongs = settings.includeArchived ? parsed : parsed.filter(s => !s.archived);
                 setSongs(displayedSongs);
+                pruneOrphanSongSettings(parsed.map(s => s.id));
                 console.log("Loaded offline library from local storage.");
               } catch (e) {
                 console.error("Failed to parse cached songs:", e);
@@ -109,7 +112,7 @@ function AppContent() {
     return () => {
       active = false;
     };
-  }, [token, isAuthenticated, settings.includeArchived]);
+  }, [token, isAuthenticated, settings.includeArchived, pruneOrphanSongSettings]);
 
   // Handle browser back button
   useEffect(() => {
