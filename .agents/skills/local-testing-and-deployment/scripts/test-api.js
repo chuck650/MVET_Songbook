@@ -122,6 +122,31 @@ async function runTests() {
   console.log(`   Target Base URL    : ${API_BASE}`);
   console.log(`================================================================\n`);
 
+  // -------------------------------------------------------------
+  // Preflight Connectivity Probe
+  // -------------------------------------------------------------
+  try {
+    process.stdout.write(`🔍 Performing preflight connectivity check against ${API_BASE}... `);
+    await makeRequest(`${API_BASE}/openapi.json`, { method: 'GET' });
+    console.log(`[CONNECTED]\n`);
+  } catch (err) {
+    console.log(`[FAILED]\n`);
+    console.error(`❌ Preflight Connectivity Error: Unable to reach ${API_BASE}`);
+    console.error(`   Error Details : ${err.message || err}`);
+    console.error(`\n👉 Troubleshooting Guidance:`);
+    if (targetEnv.toLowerCase() === 'prod' || targetEnv.toLowerCase() === 'production') {
+      console.error(`   1. Verify your network or DNS resolution to mvet-api.cminfosec.com.`);
+      console.error(`   2. Ensure the production VPS cluster and ingress route are healthy.`);
+      console.error(`   3. Check check-vps-redirect.sh to ensure SSH tunnel redirects are clear.`);
+    } else {
+      console.error(`   1. Verify the local k3s cluster is running (kubectl get pods -n mvet-songbook).`);
+      console.error(`   2. Verify /etc/hosts contains '127.0.0.1 mvet-api.test'.`);
+      console.error(`   3. If running inside a sandboxed environment, ensure BypassSandbox: true is enabled.`);
+    }
+    console.error(`\n⚠️  Aborting test suite run. Existing audit report will NOT be overwritten with invalid data.\n`);
+    process.exit(1);
+  }
+
   const results = [];
   let jwtToken = '';
   let adminJwtToken = '';
