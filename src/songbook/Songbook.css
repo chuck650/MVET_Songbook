@@ -3185,10 +3185,35 @@
 
 @media (max-width: 600px) {
   .reload-prompt-container {
-    left: var(--spacing-md);
-    right: var(--spacing-md);
-    bottom: var(--spacing-md);
-    max-width: none;
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    max-width: calc(100vw - 24px);
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .reload-prompt-content {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .reload-prompt-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .prompt-update-btn,
+  .prompt-close-btn {
+    width: 100%;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 0.9rem !important;
   }
 }
 

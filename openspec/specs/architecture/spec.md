@@ -43,3 +43,19 @@ The system MUST enforce strict isolation between development, home lab, and live
 - **GIVEN** pending songbook or API updates
 - **WHEN** a release to `vps-production` is requested
 - **THEN** the changes MUST first pass automated API testing and local browser verification on `k3s-local`
+
+### Requirement: Mobile Responsive Dialogs & Informational Views
+The system SHALL ensure modals, prompt dialogs, and legal documentation views adapt fluidly to small-screen and mobile portrait viewports without content truncation, margin overflow, or button clipping.
+
+#### Scenario: PWA Upgrade Notification Prompt Responsiveness
+- **GIVEN** an update prompt is displayed (`ReloadPrompt`) on a mobile screen (`<= 600px` width)
+- **WHEN** the prompt is positioned above the viewport edge
+- **THEN** the container width SHALL fit dynamically within the screen boundaries with symmetric padding
+- **AND** action buttons (`Upgrade Now` and `Dismiss`) SHALL wrap or stack vertically with full-width tap targets to prevent horizontal overflow
+
+#### Scenario: About & Legal View Small-Screen Optimization
+- **GIVEN** the About & Legal view on a mobile device in portrait or landscape orientation
+- **WHEN** rendered on viewports `<= 640px`
+- **THEN** the container and content cards SHALL constrain padding and enforce word-break and overflow wrapping on email addresses, names, links, and license identifiers
+- **AND** contact cards SHALL stack label-value pairs vertically or wrap cleanly to prevent horizontal boundary overflow
+
