@@ -68,4 +68,5 @@ The application build pipeline SHALL bundle and fingerprint core UI icons and vi
 - **THEN** the icons SHALL be imported as modular bundled assets within `src/assets/`
 - **AND** emitted into the build output with unique content hashes in their filenames
 - **AND** the Service Worker precache manifest SHALL reference the fingerprinted asset filenames rather than unhashed static paths to guarantee immediate cache updates upon asset revision
+- **AND** monochrome or transparent music notation icons (such as MusicXML `.icon-mxl`) SHALL provide a solid high-contrast white backing (`background: #ffffff`, subtle rounding) to guarantee clear legibility against dark theme action buttons
 

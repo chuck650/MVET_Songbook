@@ -428,6 +428,12 @@
   box-shadow: none !important;
 }
 
+.icon-mxl {
+  background: #ffffff !important;
+  border-radius: 3px;
+  padding: 1.5px;
+}
+
 .btn-secondary:hover .btn-icon {
   transform: none;
 }

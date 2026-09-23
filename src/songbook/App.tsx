@@ -553,7 +553,7 @@ function AppContent() {
                                 className={`btn-secondary ${isLoading ? "loading" : ""}`}
                                 onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
                               >
-                                <img src={mxlIcon} className="btn-icon" alt="" />
+                                <img src={mxlIcon} className="btn-icon icon-mxl" alt="" />
                                 <span>{isLoading ? "Downloading..." : "MXL"}</span>
                               </a>
                             );
