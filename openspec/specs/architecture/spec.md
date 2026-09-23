@@ -59,3 +59,13 @@ The system SHALL ensure modals, prompt dialogs, and legal documentation views ad
 - **THEN** the container and content cards SHALL constrain padding and enforce word-break and overflow wrapping on email addresses, names, links, and license identifiers
 - **AND** contact cards SHALL stack label-value pairs vertically or wrap cleanly to prevent horizontal boundary overflow
 
+### Requirement: UI Asset Bundling & Content Hashing
+The application build pipeline SHALL bundle and fingerprint core UI icons and visual action assets with unique cryptographic content hashes to ensure deterministic Service Worker cache invalidation across versions.
+
+#### Scenario: Format Action Icons Bundling
+- **GIVEN** UI format action icons for PDF, MSCZ, and MXL downloads on song cards
+- **WHEN** the application is compiled for production via the bundler
+- **THEN** the icons SHALL be imported as modular bundled assets within `src/assets/`
+- **AND** emitted into the build output with unique content hashes in their filenames
+- **AND** the Service Worker precache manifest SHALL reference the fingerprinted asset filenames rather than unhashed static paths to guarantee immediate cache updates upon asset revision
+

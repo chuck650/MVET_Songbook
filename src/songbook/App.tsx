@@ -8,6 +8,9 @@ import { Song } from "../types/songbook";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { ChoirAuthModal } from "./ChoirAuthModal";
 import ReloadPrompt from "./ReloadPrompt";
+import pdfIcon from "../assets/icons/pdf.svg";
+import msczIcon from "../assets/icons/mscz.svg";
+import mxlIcon from "../assets/icons/mxl.svg";
 
 
 function AppContent() {
@@ -520,7 +523,7 @@ function AppContent() {
                                   void loadPdf();
                                 }}
                               >
-                                <img src={resolvePath("/assets/icons/pdf.svg")} className="btn-icon" alt="" />
+                                <img src={pdfIcon} className="btn-icon" alt="" />
                                 <span>{isLoading ? "Loading..." : "PDF"}</span>
                               </button>
                             );
@@ -535,7 +538,7 @@ function AppContent() {
                                 className={`btn-secondary ${isLoading ? "loading" : ""}`}
                                 onClick={(e) => { void handleDownload(e, url, `${song.title}.mscz`); }}
                               >
-                                <img src={resolvePath("/assets/icons/mscz.svg")} className="btn-icon" alt="" />
+                                <img src={msczIcon} className="btn-icon" alt="" />
                                 <span>{isLoading ? "Downloading..." : "MSCZ"}</span>
                               </a>
                             );
@@ -550,7 +553,7 @@ function AppContent() {
                                 className={`btn-secondary ${isLoading ? "loading" : ""}`}
                                 onClick={(e) => { void handleDownload(e, url, `${song.title}.mxl`); }}
                               >
-                                <img src={resolvePath("/assets/icons/mxl.svg")} className="btn-icon icon-mxl" alt="" />
+                                <img src={mxlIcon} className="btn-icon" alt="" />
                                 <span>{isLoading ? "Downloading..." : "MXL"}</span>
                               </a>
                             );
